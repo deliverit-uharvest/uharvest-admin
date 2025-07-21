@@ -17,8 +17,42 @@ import {
   fetchCategories,
 } from "../../app/services/CategoryService";
 import { toast } from "react-toastify";
-// category/
+import { useNavigate } from "react-router-dom";
+
 const CategoryPage = () => {
+  const navigate = useNavigate();
+
+  const handleAddCategory = () => {
+    navigate("/addcategory");
+  };
+
+  const rows = [
+    {
+      id: 1,
+      name: "Kitchen Equipment's",
+      rank: 0,
+      status: true,
+      image:
+        "https://img.freepik.com/free-photo/abstract-digital-grid-black-background_53876-97647.jpg",
+    },
+    {
+      id: 2,
+      name: "Beverage & Cooler",
+      rank: 0,
+      status: true,
+      image:
+        "https://img.freepik.com/free-photo/abstract-digital-grid-black-background_53876-97647.jpg",
+    },
+    {
+      id: 3,
+      name: "Edible Oil",
+      rank: 1,
+      status: false,
+      image:
+        "https://img.freepik.com/free-photo/abstract-digital-grid-black-background_53876-97647.jpg",
+    },
+  ];
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   
@@ -109,6 +143,7 @@ const CategoryPage = () => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
+          onClick={handleAddCategory}
           sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
         >
           Add Category

@@ -8,7 +8,8 @@ import RequireAuth from "./RequireAuth";
 import DashboardLayout from "../layout/Dashboard";
 import AuthLayout from "../layout/Auth";
 import Root from "../layout/Root";
-import CategoryPage from "../../features/catalogCategory"; // ✅ Make sure this is correct
+import CategoryPage from "../../features/catalogCategory"; // 
+import AddCategory from "../../features/addcategory";
 
 export const routes: RouteObject[] = [
   {
@@ -34,6 +35,7 @@ export const routes: RouteObject[] = [
                  
                 ],
               },
+              { path: "addcategory", element: <AddCategory /> }, // /category/add
             ],
             
           },
