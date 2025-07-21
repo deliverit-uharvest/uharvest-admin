@@ -16,6 +16,7 @@ import 'simplebar-react/dist/simplebar.min.css';
 import './assets/third-party/apex-chart.css';
 import './assets/third-party/react-table.css';
 
+//fonts
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/300.css';
