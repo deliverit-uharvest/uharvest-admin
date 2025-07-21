@@ -11,8 +11,15 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-// category/
+import { useNavigate } from "react-router-dom";
+
 const CategoryPage = () => {
+  const navigate = useNavigate();
+
+  const handleAddCategory = () => {
+    navigate("/addcategory");
+  };
+
   const rows = [
     {
       id: 1,
@@ -38,7 +45,6 @@ const CategoryPage = () => {
       image:
         "https://img.freepik.com/free-photo/abstract-digital-grid-black-background_53876-97647.jpg",
     },
-    // Add more rows as needed
   ];
 
   const columns: GridColDef[] = [
@@ -88,6 +94,7 @@ const CategoryPage = () => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
+          onClick={handleAddCategory}
           sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
         >
           Add Category
@@ -106,7 +113,6 @@ const CategoryPage = () => {
         pageSizeOptions={[20, 50, 100]}
         checkboxSelection={false}
         disableRowSelectionOnClick
-
         sx={{
           backgroundColor: "#fff",
           borderRadius: 2,
