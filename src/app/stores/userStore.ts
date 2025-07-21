@@ -6,6 +6,7 @@ export default class UserStore {
 
   constructor() {
     makeAutoObservable(this);
+     this.token = localStorage.getItem("token");
   }
 
   get isLoggedIn() {
@@ -33,6 +34,7 @@ export default class UserStore {
       this.loading = false;
       return;
     }
+    console.log("token before");
 
     try {
       const resData = await fetch(`${baseApiUrl}/auth/profile`, {
@@ -40,7 +42,7 @@ export default class UserStore {
       });
 
       const resJson = await resData.json();
-
+      console.log("token after data", resJson);
       if (resJson.status == "success") {
         runInAction(() => {
           this.user = resJson.data.user;
@@ -49,7 +51,6 @@ export default class UserStore {
       } else {
         this.logout();
       }
-
     } catch (err) {
       this.logout();
     } finally {

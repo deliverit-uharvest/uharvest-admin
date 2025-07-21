@@ -83,6 +83,12 @@ const User = {
   current: () => requests.get("/auth/profile"),
 };
 
+const Category = {
+  get: () =>
+    requests.get<ApiResponse<LoginResponse>>("/category"),
+  delete: (id: number) => axios.delete(`/category/${id}`),
+};
+
 // const Cart = {
 //   addToCart: (productId: number) => {
 //     return requests.post("/cart/add-to-cart", { product_id: productId ,device_id:"temp"});
@@ -103,6 +109,7 @@ const agent = {
   Product,
   Customer,
   User,
+  Category
   // Cart,
   // Orders,
 };

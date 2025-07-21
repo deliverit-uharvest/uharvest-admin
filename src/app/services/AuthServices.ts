@@ -13,7 +13,7 @@ export const handleLogin = async (
     const response: ApiResponse<LoginResponse> = await agent.User.login(
       credentials
     );
-
+console.log('response user',response);
     if (response.status === "error") {
       throw new Error(response.message || "Login failed");
     }

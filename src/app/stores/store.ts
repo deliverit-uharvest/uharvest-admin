@@ -18,8 +18,6 @@ interface Store {
   commonStore: CommonStore;
   couponStore: CouponStore;
   customerStore: CustomerStore;
-
- 
   userStore: UserStore;
   productStore: ProductStore;
 }
