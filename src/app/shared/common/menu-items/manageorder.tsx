@@ -12,7 +12,7 @@ const manageorder = {
           id: 'order-mgnt',
           title: 'Manage Orders',
           type: 'item',
-          url: '/dashboard/overview'
+          url: 'group-manageorder/'
         },
         {
           id: 'sales-return',
