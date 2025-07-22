@@ -1,23 +1,41 @@
-// material-ui
-import Button from '@mui/material/Button';
-import CardMedia from '@mui/material/CardMedia';
-import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useStore } from "../../../../stores/store" // adjust this path if needed
 
-// project import
-import MainCard from '../../../../shared/common/MainCard';
+const LogoutButton = () => {
+  const navigate = useNavigate();
+  const { userStore } = useStore();
 
-// assets
-import avatar from 'assets/images/users/avatar-group.png';
-import AnimateButton from '../../../../shared/common/@extended/AnimateButton';
+  const handleLogout = () => {
+    userStore.logout(); // Clear user state/token
+    navigate("/login"); // Redirect to login
+  };
 
-// ==============================|| DRAWER CONTENT - NAVIGATION CARD ||============================== //
-
-export default function NavCard() {
   return (
-    <>
-   <h2>nagivation-navigationcard</h2>
-    </>
+    <Button
+  variant="contained"
+  onClick={handleLogout}
+  sx={{
+    width: "250px",           
+    height: "40px",            
+    backgroundColor: "#FFD700", 
+    color: "#000",             
+    fontSize: "14px",          
+    textTransform: "uppercase", 
+    fontWeight: "bold",
+    borderRadius: "20px",    
+    padding: "10px 20px",
+    marginLeft:"5px",
+    boxShadow: 2,
+    '&:hover': {
+      backgroundColor: "#FFC107", 
+    },
+  }}
+>
+  Logout
+</Button>
+
   );
-}
+};
+
+export default LogoutButton;
