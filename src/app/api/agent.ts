@@ -83,6 +83,11 @@ const User = {
   current: () => requests.get("/auth/profile"),
 };
 
+const Category = {
+  get: () =>
+    requests.get<ApiResponse<LoginResponse>>("/category"),
+};
+
 // const Cart = {
 //   addToCart: (productId: number) => {
 //     return requests.post("/cart/add-to-cart", { product_id: productId ,device_id:"temp"});

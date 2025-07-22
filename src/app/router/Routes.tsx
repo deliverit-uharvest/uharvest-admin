@@ -10,6 +10,11 @@ import AuthLayout from "../layout/Auth";
 import Root from "../layout/Root";
 import CategoryPage from "../../features/catalogCategory"; // 
 import AddCategory from "../../features/addcategory";
+import ProductList from "../../features/manageProduct";
+import Productmatch from "../../features/product/Index";
+import AddProduct from "../../features/addProduct";
+
+
 
 export const routes: RouteObject[] = [
   {
@@ -22,20 +27,23 @@ export const routes: RouteObject[] = [
           {
             element: <RequireAuth />,
             children: [
+              { path: "test", element: <div>✅ Route Test Success</div> },
               { path: "customer", element: <Customer /> },
               { path: "product", element: <Product /> },
               { path: "profile", element: <Profile /> },
-
-             
 
               {
                 path: "catalog",
                 children: [
                   { path: "category", element: <CategoryPage /> },
+                  { path: "manageproduct", element: <ProductList /> },
                  
                 ],
               },
-              { path: "addcategory", element: <AddCategory /> }, // /category/add
+              { path: "addcategory", element: <AddCategory /> },
+              { path: "addproduct", element: <AddProduct /> }, // /category/add
+             
+              
             ],
             
           },

@@ -1,18 +1,21 @@
+import Breadcrumbs from '../@extended/Breadcrumbs';
 const catalog = {
   id: 'catalog',
   title: '', // This is the group heading (optional)
   type: 'group',
+  breadcrumbs:false,
   children: [
     {
       id: 'catalog-collapse',
       title: 'Catalog', // The visible text
-      type: 'collapse',   // ⬅️ Make it collapsible
+      type: 'collapse',   // Make it collapsible
+      breadcrumbs:false,
       children: [
         {
           id: 'category',
           title: 'Category',
           type: 'item',
-          url: 'catalog/category',
+          url: '/catalog/category',
           breadcrumbs:false,
         },
         {
@@ -34,10 +37,11 @@ const catalog = {
           url: '/dashboard/performance'
         },
         {
-          id: 'manage-product',
+          id: 'manageproduct',
           title: 'Manage Product',
           type: 'item',
-          url: '/dashboard/activity'
+          url: '/catalog/manageproduct',
+          breadcrumbs:false,
         },
         {
           id: 'manage-stock',
