@@ -9,7 +9,6 @@ import Toolbar from '@mui/material/Toolbar';
 import AppBarStyled from './AppBarStyled';
 import HeaderContent from './HeaderContent';
 import IconButton from '../../../shared/common/@extended/IconButton';
-
 import { handlerDrawerOpen, useGetMenuMaster } from '../../../api/menu';
 import { DRAWER_WIDTH, MINI_DRAWER_WIDTH } from '../../../shared/constants/config';
 

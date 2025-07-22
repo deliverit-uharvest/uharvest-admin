@@ -14,7 +14,7 @@ import UpdateCategory from "../../features/updateCategory";
 import ProductList from "../../features/manageProduct";
 import Productmatch from "../../features/product/Index";
 import AddProduct from "../../features/addProduct";
-
+ 
 export const routes: RouteObject[] = [
   {
     path: "/",
@@ -26,11 +26,11 @@ export const routes: RouteObject[] = [
           {
             element: <RequireAuth />,
             children: [
-              { path: "test", element: <div>✅ Route Test Success</div> },
+              
               { path: "customer", element: <Customer /> },
               { path: "product", element: <Product /> },
               { path: "profile", element: <Profile /> },
-
+ 
               {
                 path: "catalog",
                 children: [
@@ -48,7 +48,7 @@ export const routes: RouteObject[] = [
               },
             ],
           },
-
+ 
           { path: "not-found", element: <NotFound /> },
           { path: "server-error", element: <ServerError /> },
           { path: "*", element: <Navigate replace to="/not-found" /> },
@@ -58,5 +58,5 @@ export const routes: RouteObject[] = [
     ],
   },
 ];
-
+ 
 export const router = createBrowserRouter(routes);
