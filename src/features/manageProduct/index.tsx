@@ -23,10 +23,14 @@ import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { fetchCategories } from "../../app/services/CategoryService";
 import { toast } from "react-toastify";
+import {
+  changeStatus,
+  deleteProduct,
+  fetchProducts,
+} from "../../app/services/ProductService";
 
 interface Image {
   id: number;
@@ -41,6 +45,7 @@ interface Product {
   category_id: string;
   is_active: boolean;
   images: Image[];
+  category: Category;
 }
 
 interface Category {
@@ -56,28 +61,40 @@ const ProductList: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const res = await fetchCategories();
-        if (res.status === "success") {
-          setCategories(res.data);
-        } else {
-          toast.error("Something went wrong");
-        }
-      } catch (error) {
-        toast.error("Failed to fetch categories");
+  const getCategories = async () => {
+    try {
+      const res = await fetchCategories();
+      if ((res as any).status === "success") {
+        setCategories((res as any).data);
+      } else {
+        toast.error("Something went wrong");
       }
-    };
+    } catch (error) {
+      toast.error("Failed to fetch categories");
+    }
+  };
 
+  const getProducts = async () => {
+    try {
+      const res = await fetchProducts();
+      if ((res as any).status === "success") {
+        setProducts((res as any).data);
+      } else {
+        toast.error((res as any).data?.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error("Something went wrong?");
+    }
+  };
+  useEffect(() => {
     getCategories();
+    getProducts();
   }, []);
 
   const handleNavigate = (path: string) => {
     navigate(path);
   };
 
-  //  Filter by search and category
   useEffect(() => {
     const filtered = products.filter((product) => {
       const matchesSearch = product.name
@@ -85,7 +102,8 @@ const ProductList: React.FC = () => {
         .includes(searchTerm.toLowerCase());
 
       const matchesCategory =
-        !selectedCategory || product.category_id === selectedCategory;
+        !selectedCategory ||
+        Number(product.category_id) === Number(selectedCategory);
 
       return matchesSearch && matchesCategory;
     });
@@ -93,9 +111,42 @@ const ProductList: React.FC = () => {
     setFilteredProducts(filtered);
   }, [searchTerm, selectedCategory, products]);
 
+  const handleToggleStatus = async (productId: number) => {
+    try {
+      await changeStatus(productId);
+
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === productId ? { ...p, is_active: !p.is_active } : p
+        )
+      );
+      toast("Status changed successfully");
+    } catch (error) {
+      toast.error("Error updating product status");
+    }
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteProduct(id);
+      setProducts((prev) => prev.filter((product) => product.id !== id));
+      toast("Product Deleted");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message || "Failed to Delete product");
+      } else {
+        toast.error("Failed to Delete product");
+      }
+    }
+  };
+
   return (
     <Box p={3}>
-      {/*  Search + Add Product Button */}
       <Box
         display="flex"
         justifyContent="space-between"
@@ -190,11 +241,14 @@ const ProductList: React.FC = () => {
                     sx={{ width: 48, height: 48 }}
                   />
                 </TableCell>
-                <TableCell>{product.category_id}</TableCell>
+                <TableCell>{product.category?.name}</TableCell>
                 <TableCell>--</TableCell>{" "}
                 {/* Replace with actual stock from backend if available */}
                 <TableCell>
-                  <Checkbox checked={product.is_active} />
+                  <Checkbox
+                    checked={product.is_active}
+                    onChange={() => handleToggleStatus(product.id)}
+                  />
                 </TableCell>
                 <TableCell>
                   <IconButton color="primary">
@@ -203,7 +257,10 @@ const ProductList: React.FC = () => {
                   <IconButton color="info">
                     <EditIcon />
                   </IconButton>
-                  <IconButton color="error">
+                  <IconButton
+                    color="error"
+                    onClick={() => handleDeleteProduct(product.id)}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>

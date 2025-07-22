@@ -1,7 +1,7 @@
 // src/app/stores/productStore.ts
 import { makeAutoObservable, runInAction } from "mobx";
 import { toast } from "react-toastify";
-import { getProducts } from "../services/ProductService";
+import { fetchProducts } from "../services/ProductService";
 import CategoryFilter from "../interfaces/filters";
 
 interface ProductResponse {
@@ -23,7 +23,7 @@ export default class productStore {
   loadProducts = async () => {
     this.loading = true;
     try {
-      const res = (await getProducts()) as ProductResponse; // ✅ proper type
+      const res = (await fetchProducts()) as ProductResponse; // ✅ proper type
       if (res.status === "success") {
         runInAction(() => {
           this.products = res.data;

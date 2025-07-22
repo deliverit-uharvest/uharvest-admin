@@ -65,6 +65,9 @@ const requests = {
     axios.post<T>(url, body).then(responseBody),
   put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
   del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
+  patch: <T>(url: string, body?: {}) =>
+    axios.patch<T>(url, body).then(responseBody),
+  delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
 const Product = {
@@ -75,6 +78,9 @@ const Product = {
       name?: string;
     } = {}
   ) => requests.post("/product", filters),
+
+  updateStatus: (productId: number) => requests.patch(`/product/${productId}`),
+  delete: (productId: number) => requests.delete(`/product/${productId}`),
 };
 
 const Customer = {};

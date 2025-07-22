@@ -8,7 +8,8 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import axios from "axios";
+import { Category, fetchCategories } from "../../app/services/CategoryService";
+import { toast } from "react-toastify";
 
 interface Option {
   id: number;
@@ -33,35 +34,27 @@ const AddProduct: React.FC = () => {
   });
 
   const [brands, setBrands] = useState<Option[]>([]);
-  const [categories, setCategories] = useState<Option[]>([]);
   const [units, setUnits] = useState<Option[]>([]);
   const [packagingTypes, setPackagingTypes] = useState<Option[]>([]);
-
-  // // 👉 Replace with your actual API URLs
-  // useEffect(() => {
-  //   const fetchDropdowns = async () => {
-  //     try {
-  //       const [brandsRes, categoriesRes, unitsRes, packagingRes] = await Promise.all([
-  //         axios.get("http://localhost:5001/api/brands"),
-  //         axios.get("http://localhost:5001/api/categories"),
-  //         axios.get("http://localhost:5001/api/units"),
-  //         axios.get("http://localhost:5001/api/packaging"),
-  //       ]);
-  //       setBrands(brandsRes.data.data);
-  //       setCategories(categoriesRes.data.data);
-  //       setUnits(unitsRes.data.data);
-  //       setPackagingTypes(packagingRes.data.data);
-  //     } catch (err) {
-  //       console.error("Error loading dropdowns", err);
-  //     }
-  //   };
-
-  //   fetchDropdowns();
-  // }, []);
-
+const [categories, setCategories] = useState<Category[]>([]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+   const getCategories = async () => {
+      try {
+        const res = await fetchCategories();
+        if ((res as any).status === "success") {
+          setCategories((res as any).data);
+        } else {
+          toast.error("Something went wrong");
+        }
+      } catch (error) {
+        toast.error("Failed to fetch categories");
+      }
+    };
+
+
 
   const handleReset = () => {
     setFormData({
@@ -86,6 +79,10 @@ const AddProduct: React.FC = () => {
     console.log(formData);
     // 👉 Submit API: POST to backend here
   };
+
+  useEffect(()=>{
+    getCategories();
+  },[])
 
   return (
     <Box p={3}>
