@@ -56,7 +56,6 @@ const ProductList: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  //  Fetch categories
   useEffect(() => {
     const getCategories = async () => {
       try {
