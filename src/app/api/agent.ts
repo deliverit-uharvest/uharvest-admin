@@ -94,7 +94,7 @@ const Category = {
         "Content-Type": "multipart/form-data",
       },
     }),
-  update: (data: FormData) => axios.post('/category', data),
+  update: (data: FormData) => axios.post("/category", data),
   getById: (id: number) => requests.get(`/category/${id}`),
 };
 

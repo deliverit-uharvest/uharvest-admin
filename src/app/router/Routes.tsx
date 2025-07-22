@@ -15,8 +15,6 @@ import ProductList from "../../features/manageProduct";
 import Productmatch from "../../features/product/Index";
 import AddProduct from "../../features/addProduct";
 
-
-
 export const routes: RouteObject[] = [
   {
     path: "/",
@@ -36,13 +34,18 @@ export const routes: RouteObject[] = [
               {
                 path: "catalog",
                 children: [
-                  { path: "category", element: <CategoryPage /> },
-                  { path: "manageproduct", element: <ProductList /> },
-                 
+                  {
+                    path: "category",
+                    children: [
+                      { index: true, element: <CategoryPage /> },
+                      { path: "add", element: <AddCategory /> },
+                      { path: ":id", element: <UpdateCategory /> },
+                    ],
+                  },
+                  { path: "manage-product", element: <ProductList /> },
+                  { path: "add-product", element: <AddProduct /> },
                 ],
               },
-              { path: "catalog/category/add", element: <AddCategory /> },
-              { path: "catalog/category/:id", element: <UpdateCategory /> },
             ],
           },
 

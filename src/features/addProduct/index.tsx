@@ -37,27 +37,27 @@ const AddProduct: React.FC = () => {
   const [units, setUnits] = useState<Option[]>([]);
   const [packagingTypes, setPackagingTypes] = useState<Option[]>([]);
 
-  // 👉 Replace with your actual API URLs
-  useEffect(() => {
-    const fetchDropdowns = async () => {
-      try {
-        const [brandsRes, categoriesRes, unitsRes, packagingRes] = await Promise.all([
-          axios.get("http://localhost:5001/api/brands"),
-          axios.get("http://localhost:5001/api/categories"),
-          axios.get("http://localhost:5001/api/units"),
-          axios.get("http://localhost:5001/api/packaging"),
-        ]);
-        setBrands(brandsRes.data.data);
-        setCategories(categoriesRes.data.data);
-        setUnits(unitsRes.data.data);
-        setPackagingTypes(packagingRes.data.data);
-      } catch (err) {
-        console.error("Error loading dropdowns", err);
-      }
-    };
+  // // 👉 Replace with your actual API URLs
+  // useEffect(() => {
+  //   const fetchDropdowns = async () => {
+  //     try {
+  //       const [brandsRes, categoriesRes, unitsRes, packagingRes] = await Promise.all([
+  //         axios.get("http://localhost:5001/api/brands"),
+  //         axios.get("http://localhost:5001/api/categories"),
+  //         axios.get("http://localhost:5001/api/units"),
+  //         axios.get("http://localhost:5001/api/packaging"),
+  //       ]);
+  //       setBrands(brandsRes.data.data);
+  //       setCategories(categoriesRes.data.data);
+  //       setUnits(unitsRes.data.data);
+  //       setPackagingTypes(packagingRes.data.data);
+  //     } catch (err) {
+  //       console.error("Error loading dropdowns", err);
+  //     }
+  //   };
 
-    fetchDropdowns();
-  }, []);
+  //   fetchDropdowns();
+  // }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

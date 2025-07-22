@@ -40,14 +40,14 @@ const catalog = {
           id: 'manageproduct',
           title: 'Manage Product',
           type: 'item',
-          url: '/catalog/manageproduct',
+          url: '/catalog/manage-product',
           breadcrumbs:false,
         },
         {
           id: 'manage-stock',
           title: 'Manage Stock',
           type: 'item',
-          url: '/dashboard/activity'
+          url: '/dashboard/manage-stock'
         },
         // {
         //   id: 'req-product',

@@ -24,6 +24,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { fetchCategories } from "../../app/services/CategoryService";
+import { toast } from "react-toastify";
 
 interface Image {
   id: number;
@@ -46,40 +49,34 @@ interface Category {
 }
 
 const ProductList: React.FC = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  //  Fetch products
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const res = await axios.get("http://localhost:5001/products"); // Replace with actual product API
-  //       setProducts(res.data.data);
-  //       setFilteredProducts(res.data.data);
-  //     } catch (error) {
-  //       console.error("Failed to fetch products", error);
-  //     }
-  //   };
-
-  //   fetchProducts();
-  // }, []);
-
   //  Fetch categories
   useEffect(() => {
-    const fetchCategories = async () => {
+    const getCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:5001/category"); //  Replace with actual category API
-        setCategories(res.data.data);
+        const res = await fetchCategories();
+        if (res.status === "success") {
+          setCategories(res.data);
+        } else {
+          toast.error("Something went wrong");
+        }
       } catch (error) {
-        console.error("Failed to fetch categories", error);
+        toast.error("Failed to fetch categories");
       }
     };
 
-    fetchCategories();
+    getCategories();
   }, []);
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
 
   //  Filter by search and category
   useEffect(() => {
@@ -100,7 +97,12 @@ const ProductList: React.FC = () => {
   return (
     <Box p={3}>
       {/*  Search + Add Product Button */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
         <TextField
           variant="outlined"
           placeholder="Search by Name..."
@@ -120,7 +122,7 @@ const ProductList: React.FC = () => {
           variant="contained"
           startIcon={<AddIcon />}
           sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
-          // onClick={() => navigate("/add-product")} // <-- Optional
+          onClick={() => handleNavigate("/catalog/add-product")}
         >
           Add Product
         </Button>
@@ -153,13 +155,28 @@ const ProductList: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell><strong>Name</strong></TableCell>
-              <TableCell><strong>SKU</strong></TableCell>
-              <TableCell><strong>Image</strong></TableCell>
-              <TableCell><strong>Category</strong></TableCell>
-              <TableCell><strong>Stock</strong></TableCell> {/* Placeholder */}
-              <TableCell><strong>Status</strong></TableCell>
-              <TableCell><strong>Action</strong></TableCell>
+              <TableCell>
+                <strong>Name</strong>
+              </TableCell>
+              <TableCell>
+                <strong>SKU</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Image</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Category</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Stock</strong>
+              </TableCell>{" "}
+              {/* Placeholder */}
+              <TableCell>
+                <strong>Status</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Action</strong>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -175,7 +192,8 @@ const ProductList: React.FC = () => {
                   />
                 </TableCell>
                 <TableCell>{product.category_id}</TableCell>
-                <TableCell>--</TableCell> {/* Replace with actual stock from backend if available */}
+                <TableCell>--</TableCell>{" "}
+                {/* Replace with actual stock from backend if available */}
                 <TableCell>
                   <Checkbox checked={product.is_active} />
                 </TableCell>
@@ -207,4 +225,3 @@ const ProductList: React.FC = () => {
 };
 
 export default ProductList;
-
