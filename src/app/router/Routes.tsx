@@ -14,6 +14,7 @@ import UpdateCategory from "../../features/updateCategory";
 import ProductList from "../../features/manageProduct";
 import Productmatch from "../../features/product/Index";
 import AddProduct from "../../features/addProduct";
+import OrderManagement from "../../features/orderManagement";
 
 
 
@@ -43,6 +44,13 @@ export const routes: RouteObject[] = [
               },
               { path: "catalog/category/add", element: <AddCategory /> },
               { path: "catalog/category/:id", element: <UpdateCategory /> },
+              {
+                path: "manageorder",
+                children: [
+                  { path: "orders", element: <OrderManagement /> },
+                                   
+                ],
+              }
             ],
           },
 

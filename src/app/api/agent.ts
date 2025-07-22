@@ -98,6 +98,22 @@ const Category = {
   getById: (id: number) => requests.get(`/category/${id}`),
 };
 
+const Orders = {
+  get: () => requests.get<ApiResponse<LoginResponse>>("/orders"),
+  getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
+  delete: (id: number) => axios.delete(`/orders/${id}`),
+  create: (data: FormData) =>
+    axios.post("/orders/create", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  update: (data: FormData) => axios.post('/orders', data),
+  getById: (id: number) => requests.get(`/orders/${id}`),
+  changeStatus: (payload: { order_id: string; status_id: number }) =>
+    requests.post<ApiResponse<any>>("/orders/change-status", payload),
+};
+
 // const Cart = {
 //   addToCart: (productId: number) => {
 //     return requests.post("/cart/add-to-cart", { product_id: productId ,device_id:"temp"});
@@ -119,6 +135,7 @@ const agent = {
   Customer,
   User,
   Category,
+  Orders,
   // Cart,
   // Orders,
 };

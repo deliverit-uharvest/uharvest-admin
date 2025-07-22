@@ -1,5 +1,5 @@
 const manageorder = {
-  id: 'group-manageorder',
+  id: 'manageorder',
   title: '', // This is the group heading (optional)
   type: 'group',
   children: [
@@ -9,10 +9,10 @@ const manageorder = {
       type: 'collapse',   // ⬅️ Make it collapsible
       children: [
         {
-          id: 'order-mgnt',
-          title: 'Manage Orders',
+          id: 'orders',
+          title: 'orders',
           type: 'item',
-          url: 'group-manageorder/'
+          url: 'manageorder/orders'
         },
         {
           id: 'sales-return',
