@@ -10,6 +10,8 @@ import {
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Category, fetchCategories } from "../../app/services/CategoryService";
 import { toast } from "react-toastify";
+import { createProduct } from "../../app/services/ProductService";
+import { useNavigate } from "react-router-dom";
 
 interface Option {
   id: number;
@@ -17,6 +19,7 @@ interface Option {
 }
 
 const AddProduct: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     productName: "",
     sku: "",
@@ -32,11 +35,18 @@ const AddProduct: React.FC = () => {
     description: "",
     keywords: "",
   });
-
-  const [brands, setBrands] = useState<Option[]>([]);
-  const [units, setUnits] = useState<Option[]>([]);
-  const [packagingTypes, setPackagingTypes] = useState<Option[]>([]);
+const [loading, setLoading] = useState(false);
+const [brands, setBrands] = useState<Option[]>([]);
+const [units, setUnits] = useState<Option[]>([]);
+const [packagingTypes, setPackagingTypes] = useState<Option[]>([]);
 const [categories, setCategories] = useState<Category[]>([]);
+const [images, setImages] = useState<FileList | null>(null);
+
+const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setImages(e.target.files);
+};
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -74,9 +84,41 @@ const [categories, setCategories] = useState<Category[]>([]);
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+    const data = new FormData();
+    data.append("name", formData.productName);
+    data.append("sku", formData.sku);
+    data.append("base_mrp", formData.mrp);
+    data.append("hsn_code", formData.hsnCode);
+    data.append("quantity", formData.weight);
+    data.append("brand_id", formData.brand);
+    data.append("category_id", formData.category);
+    data.append("unit", formData.unit);
+    data.append("packaging_type", formData.packaging);
+    data.append("tax", formData.gst);
+    data.append("cess", formData.cess);
+    data.append("description", formData.description);
+    data.append("keywords", formData.keywords);
+
+    if (images) {
+      Array.from(images).forEach((file) => data.append("product_images", file));
+    }
+
+    const res = await createProduct(data);
+
+    if ((res as any).status === "success") {
+      toast.success("Product created successfully");
+      handleReset();
+      navigate("catalog/manage-product");
+    } else {
+      toast.error("Something went wrong");
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to create product");
+  }
   };
 
   useEffect(()=>{
@@ -145,7 +187,7 @@ const [categories, setCategories] = useState<Category[]>([]);
           <Typography fontWeight={500} mb={1}>Upload Images</Typography>
           <Button variant="outlined" component="label" startIcon={<CloudUploadIcon />}>
             Upload
-            <input hidden accept="image/*" multiple type="file" />
+            <input hidden accept="image/*" multiple type="file" onChange={handleImageChange}/>
           </Button>
         </Box>
 

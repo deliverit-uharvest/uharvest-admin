@@ -81,6 +81,7 @@ const Product = {
 
   updateStatus: (productId: number) => requests.patch(`/product/${productId}`),
   delete: (productId: number) => requests.delete(`/product/${productId}`),
+  createProduct: (data: FormData) => requests.post("/product", data),
 };
 
 const Customer = {};
