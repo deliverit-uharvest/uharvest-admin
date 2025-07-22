@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -22,36 +22,9 @@ import { useNavigate } from "react-router-dom";
 const CategoryPage = () => {
   const navigate = useNavigate();
 
-  const handleAddCategory = () => {
-    navigate("/addcategory");
-  };
-
-  const rows = [
-    {
-      id: 1,
-      name: "Kitchen Equipment's",
-      rank: 0,
-      status: true,
-      image:
-        "https://img.freepik.com/free-photo/abstract-digital-grid-black-background_53876-97647.jpg",
-    },
-    {
-      id: 2,
-      name: "Beverage & Cooler",
-      rank: 0,
-      status: true,
-      image:
-        "https://img.freepik.com/free-photo/abstract-digital-grid-black-background_53876-97647.jpg",
-    },
-    {
-      id: 3,
-      name: "Edible Oil",
-      rank: 1,
-      status: false,
-      image:
-        "https://img.freepik.com/free-photo/abstract-digital-grid-black-background_53876-97647.jpg",
-    },
-  ];
+  const handleNavigate = (path:string)=>{
+     navigate(path);
+  }
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -79,8 +52,8 @@ const CategoryPage = () => {
       flex: 1,
       renderCell: (params) => (
         <Box display="flex" gap={1}>
-          <IconButton size="small" color="primary">
-            <EditIcon />
+          <IconButton size="small" color="primary" onClick={()=>handleNavigate(`/catalog/category/${params.row.id}`)}>
+            <EditIcon/>
           </IconButton>
           <IconButton
             size="small"
@@ -143,7 +116,7 @@ const CategoryPage = () => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={handleAddCategory}
+          onClick={()=>{handleNavigate("/catalog/category/add")}}
           sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
         >
           Add Category

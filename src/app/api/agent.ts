@@ -68,11 +68,13 @@ const requests = {
 };
 
 const Product = {
-  getAll: (filters: {
-    category_id?: number;
-    sub_category_id?: number;
-    name?: string;
-  } = {}) => requests.post("/product", filters),
+  getAll: (
+    filters: {
+      category_id?: number;
+      sub_category_id?: number;
+      name?: string;
+    } = {}
+  ) => requests.post("/product", filters),
 };
 
 const Customer = {};
@@ -84,9 +86,16 @@ const User = {
 };
 
 const Category = {
-  get: () =>
-    requests.get<ApiResponse<LoginResponse>>("/category"),
+  get: () => requests.get<ApiResponse<LoginResponse>>("/category"),
   delete: (id: number) => axios.delete(`/category/${id}`),
+  create: (data: FormData) =>
+    axios.post("/category/create", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  update: (data: FormData) => axios.post('/category', data),
+  getById: (id: number) => requests.get(`/category/${id}`),
 };
 
 // const Cart = {
@@ -109,7 +118,7 @@ const agent = {
   Product,
   Customer,
   User,
-  Category
+  Category,
   // Cart,
   // Orders,
 };

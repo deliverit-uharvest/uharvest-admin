@@ -15,24 +15,24 @@ const catalog = {
           url: 'catalog/category',
           breadcrumbs:false,
         },
-        {
-          id: 'sub-category',
-          title: 'Sub Category',
-          type: 'item',
-          url: '/sub-category'
-        },
-        {
-          id: 'child-category',
-          title: 'Child Category',
-          type: 'item',
-          url: '/dashboard/analytics'
-        },
-        {
-          id: 'brands',
-          title: 'Brands',
-          type: 'item',
-          url: '/dashboard/performance'
-        },
+        // {
+        //   id: 'sub-category',
+        //   title: 'Sub Category',
+        //   type: 'item',
+        //   url: '/sub-category'
+        // },
+        // {
+        //   id: 'child-category',
+        //   title: 'Child Category',
+        //   type: 'item',
+        //   url: '/dashboard/analytics'
+        // },
+        // {
+        //   id: 'brands',
+        //   title: 'Brands',
+        //   type: 'item',
+        //   url: '/dashboard/performance'
+        // },
         {
           id: 'manage-product',
           title: 'Manage Product',
@@ -45,12 +45,12 @@ const catalog = {
           type: 'item',
           url: '/dashboard/activity'
         },
-        {
-          id: 'req-product',
-          title: 'Request New Product',
-          type: 'item',
-          url: '/dashboard/activity'
-        },
+        // {
+        //   id: 'req-product',
+        //   title: 'Request New Product',
+        //   type: 'item',
+        //   url: '/dashboard/activity'
+        // },
         
       ]
     }

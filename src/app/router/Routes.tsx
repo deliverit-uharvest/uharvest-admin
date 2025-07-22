@@ -8,8 +8,9 @@ import RequireAuth from "./RequireAuth";
 import DashboardLayout from "../layout/Dashboard";
 import AuthLayout from "../layout/Auth";
 import Root from "../layout/Root";
-import CategoryPage from "../../features/catalogCategory"; // 
+import CategoryPage from "../../features/catalogCategory"; //
 import AddCategory from "../../features/addcategory";
+import UpdateCategory from "../../features/updateCategory";
 
 export const routes: RouteObject[] = [
   {
@@ -26,18 +27,13 @@ export const routes: RouteObject[] = [
               { path: "product", element: <Product /> },
               { path: "profile", element: <Profile /> },
 
-             
-
               {
                 path: "catalog",
-                children: [
-                  { path: "category", element: <CategoryPage /> },
-                 
-                ],
+                children: [{ path: "category", element: <CategoryPage /> }],
               },
-              { path: "addcategory", element: <AddCategory /> }, // /category/add
+              { path: "catalog/category/add", element: <AddCategory /> },
+              { path: "catalog/category/:id", element: <UpdateCategory /> },
             ],
-            
           },
 
           { path: "not-found", element: <NotFound /> },

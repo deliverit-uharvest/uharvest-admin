@@ -15,7 +15,22 @@ export const fetchCategories = async (): Promise<any> => {
   return response;
 };
 
+export const getCategoryById = async (id:number): Promise<any> => {
+  const response = await agent.Category.getById(id);
+  return response;
+};
+
 export const deleteCategory = async (id: number): Promise<any> => {
   const response = await agent.Category.delete(id);
   return response.data;
+};
+
+export const addCategory = async (formData: FormData): Promise<any> => {
+  const response = await agent.Category.create(formData);
+  return response;
+};
+
+export const updateCategory = async (formData: FormData): Promise<any> => {
+  const response = await agent.Category.update(formData);
+  return response;
 };

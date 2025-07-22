@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -8,19 +8,36 @@ import {
   Paper,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { addCategory } from "../../app/services/CategoryService";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import agent from "../../app/api/agent";
+import {
+  getCategoryById,
+  updateCategory,
+} from "../../app/services/CategoryService";
 
-const AddCategory = () => {
-  const [categoryName, setCategoryName] = useState("");
+const UpdateCategory = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  // const [rank, setRank] = useState("");
+  const [categoryName, setCategoryName] = useState("");
   const [image, setImage] = useState<File | null>(null);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const res = await getCategoryById(Number(id));
+        setCategoryName(res.data.name || "");
+      } catch (error) {
+        toast("Failed to fetch category");
+        navigate("/catalog/category");
+      }
+    };
+
+    if (id) fetchCategory();
+  }, [id, navigate]);
 
   const handleReset = () => {
     setCategoryName("");
-    // setRank("");
     setImage(null);
   };
 
@@ -32,21 +49,22 @@ const AddCategory = () => {
 
     const formData = new FormData();
     formData.append("name", categoryName);
+    formData.append("category_id", String(id));
     if (image) {
       formData.append("image", image);
     }
 
     try {
-      const response = await addCategory(formData);
+      const response = await updateCategory(formData);
+
       if (response.data.status === "success") {
-        toast("Category saved successfully!");
-        handleReset();
+        toast("Category updated successfully!");
         navigate("/catalog/category");
       } else {
-        toast(response.data.message);
+        toast(response.data.message || "Failed to update category");
       }
-    } catch (error) {
-      toast("Failed to save category.");
+    } catch (error: any) {
+      toast(error?.response?.data?.message || "Failed to update category.");
     }
   };
 
@@ -56,7 +74,7 @@ const AddCategory = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      bgcolor="#f9f9f9" // Optional background for contrast
+      bgcolor="#f9f9f9"
     >
       <Paper
         elevation={3}
@@ -65,7 +83,7 @@ const AddCategory = () => {
           borderRadius: 4,
           p: 5,
           width: "100%",
-          maxWidth: 900, // Increased width
+          maxWidth: 900,
         }}
       >
         <Typography
@@ -75,10 +93,9 @@ const AddCategory = () => {
           color="primary"
           textAlign="center"
         >
-          Add New Category
+          Update Category
         </Typography>
 
-        {/* Category Name */}
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
             Category Name <span style={{ color: "red" }}>*</span>
@@ -92,24 +109,9 @@ const AddCategory = () => {
           />
         </Box>
 
-        {/* Rank */}
-        {/* <Box mb={3}>
-        <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-          Rank <span style={{ color: "red" }}>*</span>
-        </InputLabel>
-        <TextField
-          fullWidth
-          size="medium"
-          placeholder="Enter rank"
-          value={rank}
-          onChange={(e) => setRank(e.target.value)}
-        />
-      </Box> */}
-
-        {/* Image Upload */}
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-            Upload Image <span style={{ color: "red" }}>*</span>
+            Upload Image
           </InputLabel>
           <Button
             component="label"
@@ -135,7 +137,6 @@ const AddCategory = () => {
           )}
         </Box>
 
-        {/* Buttons */}
         <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
           <Button
             variant="outlined"
@@ -168,7 +169,7 @@ const AddCategory = () => {
               },
             }}
           >
-            Save
+            Update
           </Button>
         </Box>
       </Paper>
@@ -176,4 +177,4 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default UpdateCategory;
