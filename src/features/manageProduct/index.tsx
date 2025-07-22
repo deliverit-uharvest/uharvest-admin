@@ -67,7 +67,7 @@ const ProductList: React.FC = () => {
   //   fetchProducts();
   // }, []);
 
-  //  Fetch categories
+  //  Fetch categories api call
   useEffect(() => {
     const fetchCategories = async () => {
       try {
