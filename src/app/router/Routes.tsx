@@ -14,7 +14,10 @@ import UpdateCategory from "../../features/updateCategory";
 import ProductList from "../../features/manageProduct";
 import Productmatch from "../../features/product/Index";
 import AddProduct from "../../features/addProduct";
- 
+import OrderManagement from "../../features/orderManagement";
+
+
+
 export const routes: RouteObject[] = [
   {
     path: "/",
@@ -30,7 +33,6 @@ export const routes: RouteObject[] = [
               { path: "customer", element: <Customer /> },
               { path: "product", element: <Product /> },
               { path: "profile", element: <Profile /> },
- 
               {
                 path: "catalog",
                 children: [
@@ -46,6 +48,13 @@ export const routes: RouteObject[] = [
                   { path: "add-product", element: <AddProduct /> },
                 ],
               },
+              {
+                path: "manageorder",
+                children: [
+                  { path: "orders", element: <OrderManagement /> },
+                                   
+                ],
+              }
             ],
           },
  
