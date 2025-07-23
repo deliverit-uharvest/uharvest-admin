@@ -12,7 +12,6 @@ import CategoryPage from "../../features/catalogCategory"; //
 import AddCategory from "../../features/addcategory";
 import UpdateCategory from "../../features/updateCategory";
 import ProductList from "../../features/manageProduct";
-import Productmatch from "../../features/product/Index";
 import AddProduct from "../../features/addProduct";
 import OrderManagement from "../../features/orderManagement";
 
@@ -57,7 +56,6 @@ export const routes: RouteObject[] = [
               }
             ],
           },
- 
           { path: "not-found", element: <NotFound /> },
           { path: "server-error", element: <ServerError /> },
           { path: "*", element: <Navigate replace to="/not-found" /> },
