@@ -15,7 +15,7 @@ import configuration from './configuration';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [system,dashboard,promotions,catalog,manageorder,customer,location,userMgnt,miscellaneos,configuration ] //support
+  items: [system,dashboard,catalog,manageorder,customer,location,userMgnt,miscellaneos,configuration ] //support
 };
 
 export default menuItems;

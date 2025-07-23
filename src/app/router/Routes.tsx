@@ -14,6 +14,7 @@ import UpdateCategory from "../../features/updateCategory";
 import ProductList from "../../features/manageProduct";
 import Productmatch from "../../features/product/Index";
 import AddProduct from "../../features/addProduct";
+import DashboardHome from "../../features/dashboard";
  
 export const routes: RouteObject[] = [
   {
@@ -26,7 +27,7 @@ export const routes: RouteObject[] = [
           {
             element: <RequireAuth />,
             children: [
-              
+               { path: "dashboard", element: <DashboardHome /> }, // ✅ Add this
               { path: "customer", element: <Customer /> },
               { path: "product", element: <Product /> },
               { path: "profile", element: <Profile /> },
