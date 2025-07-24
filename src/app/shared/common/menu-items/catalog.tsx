@@ -18,12 +18,12 @@ const catalog = {
           url: '/catalog/category',
           Breadcrumbs:false,
         },
-        // {
-        //   id: 'sub-category',
-        //   title: 'Sub Category',
-        //   type: 'item',
-        //   url: '/sub-category'
-        // },
+        {
+          id: 'subcategory',
+          title: 'Sub Category',
+          type: 'item',
+          url: 'catalog/subcategory'
+        },
         // {
         //   id: 'child-category',
         //   title: 'Child Category',

@@ -16,6 +16,9 @@ import AddProduct from "../../features/addProduct";
 import OrderManagement from "../../features/orderManagement";
 import CustomerList from "../../features/customerOnboard/CustomerList";
 import AddCustomer from "../../features/customerOnboard/Addcustomer";
+import SubCategoryList from "../../features/subCategory";
+import DashboardHome from "../../features/dashboard";
+import AddSubCategory from "../../features/subCategory/Addsubcategory";
 
 
 
@@ -30,7 +33,7 @@ export const routes: RouteObject[] = [
           {
             element: <RequireAuth />,
             children: [
-              
+              { path: "dashboard", element: <DashboardHome /> },
               { path: "customer", element: <Customer /> },
               { path: "product", element: <Product /> },
               { path: "profile", element: <Profile /> },
@@ -40,22 +43,28 @@ export const routes: RouteObject[] = [
                   {
                     path: "category",
                     children: [
+                      
                       { index: true, element: <CategoryPage /> },
                       { path: "add", element: <AddCategory /> },
                       { path: ":id", element: <UpdateCategory /> },
+          
                     ],
+                    
                   },
+                  { path: "subcategory", element: <SubCategoryList /> },
+                  { path: "addsub", element: <AddSubCategory /> },
                   { path: "manage-product", element: <ProductList /> },
                   { path: "add-product", element: <AddProduct /> },
+                  
                 ],
               },
+
               {
                 path: "manageorder",
                 children: [
-                  { path: "orders", element: <OrderManagement /> },
-                                   
+                  { path: "orders", element: <OrderManagement /> },                  
                 ],
-              },
+              },  
                {
                     path: "customerOnboard",
                     children: [

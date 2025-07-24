@@ -7,6 +7,7 @@ export default class UserStore {
   constructor() {
     makeAutoObservable(this);
      this.token = localStorage.getItem("token");
+     
   }
 
   get isLoggedIn() {

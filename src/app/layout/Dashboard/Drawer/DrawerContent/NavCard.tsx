@@ -26,6 +26,7 @@ const LogoutButton = () => {
     borderRadius: "20px",    
     padding: "10px 20px",
     marginLeft:"5px",
+    marginBottom:"10px",
     boxShadow: 2,
     '&:hover': {
       backgroundColor: "#FFC107", 

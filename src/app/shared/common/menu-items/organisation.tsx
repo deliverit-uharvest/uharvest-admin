@@ -5,7 +5,7 @@ const customer = {
   children: [
     {
       id: 'customer-collapse',
-      title: 'Customer', // The visible text
+      title: 'Organisation', // The visible text
       type: 'collapse',   // ⬅️ Make it collapsible
       children: [
         {

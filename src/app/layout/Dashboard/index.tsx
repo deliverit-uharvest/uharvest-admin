@@ -13,6 +13,7 @@ import Loader from '../../shared/common/Loader';
 import Breadcrumbs from '../../shared/common/@extended/Breadcrumbs';
 
 import { handlerDrawerOpen, useGetMenuMaster } from '../../api/menu';
+import { useStore } from '../../stores/store'; // ✅ import your MobX store
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
@@ -45,7 +46,7 @@ export default function DashboardLayout() {
             flexDirection: 'column'
           }}
         >
-          {pathname !== '/apps/profiles/account/my-account' && <Breadcrumbs />}
+          {pathname !== '/apps/profiles/account/my-account' }
           <Outlet />
           <Footer />
         </Box>

@@ -5,6 +5,8 @@ export default function RequireAuth() {
     const {userStore: {isLoggedIn}} = useStore();
     const location = useLocation();
     console.log('islogged',isLoggedIn);
+
+
     if (!isLoggedIn) {
         return <Navigate to='/login' state={{from: location}} />
     }

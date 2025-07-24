@@ -13,7 +13,7 @@ import { APP_DEFAULT_PATH } from '../../constants/config';
 
 export default function LogoSection({ reverse, isIcon, sx, to }: any) {
   return (
-    <ButtonBase disableRipple component={Link} to={to || APP_DEFAULT_PATH} sx={sx}>
+    <ButtonBase disableRipple component={Link} to={"/dashboard"} sx={sx}>
       {/* @ts-ignore */}
       {isIcon ? <LogoIcon /> : <Logo reverse={reverse} />}
     </ButtonBase>

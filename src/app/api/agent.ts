@@ -120,6 +120,24 @@ const Orders = {
     requests.post<ApiResponse<any>>("/orders/change-status", payload),
 };
 
+// ============= SAubcarergory=========//
+
+const subcategory = {
+  get: () => requests.get<ApiResponse<LoginResponse>>("/sub-category"),
+//   getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
+//   delete: (id: number) => axios.delete(`/orders/${id}`),
+//   create: (data: FormData) =>
+//     axios.post("/orders/create", data, {
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//       },
+//     }),
+//   update: (data: FormData) => axios.post('/orders', data),
+//   getById: (id: number) => requests.get(`/orders/${id}`),
+//   changeStatus: (payload: { order_id: string; status_id: number }) =>
+//     requests.post<ApiResponse<any>>("/orders/change-status", payload),
+// };
+
 // const Cart = {
 //   addToCart: (productId: number) => {
 //     return requests.post("/cart/add-to-cart", { product_id: productId ,device_id:"temp"});
@@ -134,7 +152,7 @@ const Orders = {
 // const Orders = {
 //   getorders: () => requests.get("/orders"),
 //   createOrder: () => requests.post("/orders/create", {}),
-// };
+};
 
 const agent = {
   Product,
@@ -142,6 +160,7 @@ const agent = {
   User,
   Category,
   Orders,
+  subcategory
   // Cart,
   // Orders,
 };

@@ -7,13 +7,13 @@ const customerOnboard = {
   children: [
     {
       id: 'customer-collapse',
-      title: 'Customer', // The visible text
+      title: 'Organisation', // The visible text
       type: 'collapse',   //Make it collapsible
       Breadcrumbs:false,
       children: [
         {
           id: 'customer',
-          title: 'Customer Catalog',
+          title: 'Outlet',
           type: 'item',
           url: '/dashboard/overview',
           Breadcrumbs:false,
