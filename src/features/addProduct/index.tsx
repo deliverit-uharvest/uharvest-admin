@@ -32,14 +32,14 @@ const AddProduct: React.FC = () => {
     description: "",
     keywords: "",
   });
-
+  
   const [brands, setBrands] = useState<Option[]>([]);
   const [units, setUnits] = useState<Option[]>([]);
   const [packagingTypes, setPackagingTypes] = useState<Option[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
-  const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]); // SELECTED IMAGES
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);// IMAGE PREVIEWS
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
