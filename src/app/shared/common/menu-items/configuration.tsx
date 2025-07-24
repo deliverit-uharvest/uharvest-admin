@@ -1,3 +1,4 @@
+import Breadcrumbs from "../@extended/Breadcrumbs";
 const configuration = {
   id: 'config',
   title: '', // This is the group heading (optional)
@@ -7,18 +8,21 @@ const configuration = {
       id: 'configuration-collapse',
       title: 'Configuration', // The visible text
       type: 'collapse',   // ⬅️ Make it collapsible
+      Breadcrumbs:false,
       children: [
         {
           id: 'shipping-charge',
-          title: 'Shipping Charge',
+          title: '',
           type: 'item',
-          url: '/dashboard/overview'
+          url: '/dashboard/overview',
+          Breadcrumbs:false,
         },
         {
           id: 'small-cart',
           title: 'Small Cart Charge',
           type: 'item',
-          url: '/dashboard/sales'
+          url: '/dashboard/sales',
+          Breadcrumbs:false,
         },
         {
           id: 'quick-delivery-config',

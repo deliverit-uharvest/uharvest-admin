@@ -16,7 +16,7 @@ const catalog = {
           title: 'Category',
           type: 'item',
           url: '/catalog/category',
-          breadcrumbs:false,
+          Breadcrumbs:false,
         },
         // {
         //   id: 'sub-category',
