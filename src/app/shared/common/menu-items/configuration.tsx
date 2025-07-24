@@ -1,3 +1,5 @@
+import Breadcrumbs from "../@extended/Breadcrumbs";
+
 const configuration = {
   id: 'config',
   title: '', // This is the group heading (optional)
@@ -10,9 +12,10 @@ const configuration = {
       children: [
         {
           id: 'shipping-charge',
-          title: 'Shipping Charge',
+          title: '',
           type: 'item',
-          url: '/dashboard/overview'
+          url: '/dashboard/overview',
+          Breadcrumbs:false
         },
         {
           id: 'small-cart',

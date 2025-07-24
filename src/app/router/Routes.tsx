@@ -12,10 +12,12 @@ import CategoryPage from "../../features/catalogCategory"; //
 import AddCategory from "../../features/addcategory";
 import UpdateCategory from "../../features/updateCategory";
 import ProductList from "../../features/manageProduct";
-import Productmatch from "../../features/product/Index";
 import AddProduct from "../../features/addProduct";
 import DashboardHome from "../../features/dashboard";
- 
+import CustomerList from "../../features/customerOnboard/CustomerList";
+import AddCustomer from "../../features/customerOnboard/Addcustomer";
+import subcategory from "../../features/subCategory/index";
+
 export const routes: RouteObject[] = [
   {
     path: "/",
@@ -27,11 +29,11 @@ export const routes: RouteObject[] = [
           {
             element: <RequireAuth />,
             children: [
-               { path: "dashboard", element: <DashboardHome /> }, // ✅ Add this
+              { path: "dashboard", element: <DashboardHome /> }, // Add this
               { path: "customer", element: <Customer /> },
               { path: "product", element: <Product /> },
               { path: "profile", element: <Profile /> },
- 
+
               {
                 path: "catalog",
                 children: [
@@ -41,15 +43,27 @@ export const routes: RouteObject[] = [
                       { index: true, element: <CategoryPage /> },
                       { path: "add", element: <AddCategory /> },
                       { path: ":id", element: <UpdateCategory /> },
+                      
+
+                      
                     ],
                   },
+
                   { path: "manage-product", element: <ProductList /> },
                   { path: "add-product", element: <AddProduct /> },
                 ],
               },
+
+              {
+                path: "customerOnboard",
+                children: [
+                  { path: "customers", element: <CustomerList /> },
+                   { path: "addCustomer", element: <AddCustomer /> }, // 👈 Added route
+                ],
+              },
             ],
           },
- 
+
           { path: "not-found", element: <NotFound /> },
           { path: "server-error", element: <ServerError /> },
           { path: "*", element: <Navigate replace to="/not-found" /> },
@@ -59,5 +73,5 @@ export const routes: RouteObject[] = [
     ],
   },
 ];
- 
+
 export const router = createBrowserRouter(routes);

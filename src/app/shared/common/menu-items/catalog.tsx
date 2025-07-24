@@ -18,12 +18,12 @@ const catalog = {
           url: '/catalog/category',
           breadcrumbs:false,
         },
-        // {
-        //   id: 'sub-category',
-        //   title: 'Sub Category',
-        //   type: 'item',
-        //   url: '/sub-category'
-        // },
+        {
+          id: 'subcategory',
+          title: 'Sub Category',
+          type: 'item',
+          url: 'subcategory/Subcatergory'
+        },
         // {
         //   id: 'child-category',
         //   title: 'Child Category',
@@ -49,12 +49,7 @@ const catalog = {
           type: 'item',
           url: '/dashboard/manage-stock'
         },
-        // {
-        //   id: 'req-product',
-        //   title: 'Request New Product',
-        //   type: 'item',
-        //   url: '/dashboard/activity'
-        // },
+     
         
       ]
     }
