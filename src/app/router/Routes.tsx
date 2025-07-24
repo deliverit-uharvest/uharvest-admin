@@ -13,9 +13,10 @@ import AddCategory from "../../features/addcategory";
 import UpdateCategory from "../../features/updateCategory";
 import ProductList from "../../features/manageProduct";
 import AddProduct from "../../features/addProduct";
+import AddOrganisation from "../../features/addOrganisation";
 import OrderManagement from "../../features/orderManagement";
-import CustomerList from "../../features/customerOnboard/CustomerList";
-import AddCustomer from "../../features/customerOnboard/Addcustomer";
+import OrganisationList from "../../features/organisationOnboard/OrganisationList";
+import AddCustomer from "../../features/organisationOnboard/Addcustomer";
 
 
 
@@ -57,11 +58,11 @@ export const routes: RouteObject[] = [
                 ],
               },
                {
-                    path: "customerOnboard",
+                    path: "organisationOnboard",
                     children: [
                      
-                      { path: "customers", element: <CustomerList /> },
-                      { path: "addCustomer", element: <AddCustomer /> },
+                      { path: "organisation", element: <OrganisationList /> },
+                      { path: "add-organisation", element: <AddOrganisation /> },
                     ],
                   },
             ],

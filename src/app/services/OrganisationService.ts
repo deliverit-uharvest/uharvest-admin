@@ -1,6 +1,6 @@
 import agent from "../api/agent";
 
-export interface Orders {
+export interface Organisation {
   id: number;
   unique_id: string;
   created_at: string;
@@ -22,7 +22,7 @@ export interface Orders {
 }
 
 
-export const fetchOrders = async (filters?: {
+export const fetchOrganisation = async (filters?: {
   startDate?: string;
   endDate?: string;
   statusId?: number | "";
@@ -36,8 +36,8 @@ export const fetchOrders = async (filters?: {
     params.status_id = filters.statusId.toString();
   if (filters?.orderId) params.order_id = filters.orderId;
 
-  // 👇 fix: wrap `params` under `params` key for Axios config
-  const response = await agent.Orders.get({ params });
+  
+  const response = await agent.Organisation.get({ params });
   return response;
 };
 
@@ -56,8 +56,8 @@ export const deleteOrders = async (id: number): Promise<any> => {
   return response.data;
 };
 
-export const addOrders = async (formData: FormData): Promise<any> => {
-  const response = await agent.Orders.create(formData);
+export const addOrganisation = async (formData: FormData): Promise<any> => {
+  const response = await agent.Organisation.create(formData);
   return response;
 };
 

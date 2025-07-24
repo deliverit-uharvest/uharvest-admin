@@ -45,7 +45,7 @@ export default function DashboardLayout() {
             flexDirection: 'column'
           }}
         >
-          {pathname !== '/apps/profiles/account/my-account' && <Breadcrumbs />}
+          {pathname !== '/apps/profiles/account/my-account'}
           <Outlet />
           <Footer />
         </Box>
