@@ -11,11 +11,11 @@ import location from './locations';
 import userMgnt from './userMgnt';
 import miscellaneos from './miscellaneous';
 import configuration from './configuration';
-import customerOnboard from './customerOnboard';
+import organisationOnboard from './organisationOnboard';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [system,dashboard,promotions,catalog,manageorder,customerOnboard,location,userMgnt,miscellaneos,configuration ] //support
+  items: [system,dashboard,promotions,catalog,manageorder,organisationOnboard,location,userMgnt,miscellaneos,configuration ] //support
 };
 
 export default menuItems;

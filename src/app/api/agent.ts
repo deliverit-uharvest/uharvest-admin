@@ -122,13 +122,50 @@ const Orders = {
     requests.post<ApiResponse<any>>("/orders/change-status", payload),
 };
 
+
+const Organisation = {
+  get: (config = {}) => axios.get<ApiResponse<any>>("/organisation", config).then(responseBody),
+  getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
+  delete: (id: number) => axios.delete(`/orders/${id}`),
+  create: (data: FormData) =>
+    axios.post("/organisation", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  update: (data: FormData) => axios.post('/orders', data),
+  getById: (id: number) => requests.get(`/orders/${id}`),
+  changeStatus: (payload: { order_id: string; status_id: number }) =>
+    requests.post<ApiResponse<any>>("/orders/change-status", payload),
+};
+
+
+
+// const Cart = {
+//   addToCart: (productId: number) => {
+//     return requests.post("/cart/add-to-cart", { product_id: productId ,device_id:"temp"});
+//   },
+//   getCart: () => {
+//     return requests.get("/cart");
+//   },
+//   updateQuantity: (cartId: number, action: "increase" | "decrease") =>
+//     requests.post("/cart/update", { cart_id: cartId, action: action,device_id:"temp" }),
+// };
+
+// const Orders = {
+//   getorders: () => requests.get("/orders"),
+//   createOrder: () => requests.post("/orders/create", {}),
+// };
+
 const agent = {
   Product,
   Customer,
   User,
   Category,
   Orders,
-
+  Organisation,
+  // Cart,
+  // Orders,
 };
 
 export default agent;

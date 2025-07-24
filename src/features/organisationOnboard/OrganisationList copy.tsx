@@ -18,7 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 // Top of the file
 import { useNavigate } from "react-router-dom";
 
-interface Customer {
+interface OrganisationList {
   id: number;
   name: string;
   legalName: string;
@@ -28,7 +28,7 @@ interface Customer {
   status: boolean;
 }
 
-const CustomerList: React.FC = () => {
+const OrganisationList: React.FC = () => {
   const [filters, setFilters] = useState({
     orgId: "",
     orgName: "",
@@ -39,13 +39,13 @@ const CustomerList: React.FC = () => {
     outlet: "",
   });
 
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customers, setCustomers] = useState<OrganisationList[]>([]);
   const [cityList, setCityList] = useState<string[]>([]);
   const [outletList, setOutletList] = useState<string[]>([]);
 
   // Mock APIs
   const fetchCustomers = async () => {
-    const data: Customer[] = [
+    const data: OrganisationList[] = [
       {
         id: 1,
         name: "Tasty Bites",
@@ -273,4 +273,4 @@ const CustomerList: React.FC = () => {
   );
 };
 
-export default CustomerList;
+export default OrganisationList;
