@@ -15,7 +15,8 @@ import AddProduct from "../../features/addProduct";
 import AddOrganisation from "../../features/addOrganisation";
 import OrderManagement from "../../features/orderManagement";
 import OrganisationList from "../../features/organisationOnboard/OrganisationList";
-import AddCustomer from "../../features/organisationOnboard/Addcustomer";
+import SubCategoryList from "../../features/subCategory";
+import AddSubCategory from "../../features/subCategory/Addsubcategory";
 import UpdateProduct from "../../features/addProduct/updateProduct";
 
 export const routes: RouteObject[] = [
@@ -37,11 +38,16 @@ export const routes: RouteObject[] = [
                   {
                     path: "category",
                     children: [
+                      
                       { index: true, element: <CategoryPage /> },
                       { path: "add", element: <AddCategory /> },
                       { path: ":id", element: <UpdateCategory /> },
+          
                     ],
+                    
                   },
+                  { path: "subcategory", element: <SubCategoryList /> },
+                  { path: "addsub", element: <AddSubCategory /> },
                   {
                     path: "product",
                     children: [
@@ -52,6 +58,7 @@ export const routes: RouteObject[] = [
                   },
                 ],
               },
+
               {
                 path: "manageorder",
                 children: [{ path: "orders", element: <OrderManagement /> }],

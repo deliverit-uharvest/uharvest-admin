@@ -13,6 +13,7 @@ import Loader from '../../shared/common/Loader';
 import Breadcrumbs from '../../shared/common/@extended/Breadcrumbs';
 
 import { handlerDrawerOpen, useGetMenuMaster } from '../../api/menu';
+import { useStore } from '../../stores/store'; // ✅ import your MobX store
 
 // ==============================|| MAIN LAYOUT ||============================== //
 

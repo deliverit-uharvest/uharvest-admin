@@ -12,6 +12,10 @@ const Root = observer(() => {
     userStore.loadUser();
   }, []);
 
+  if (userStore.loading) {
+    return <div>Loading...</div>; // ✅ Show loading while verifying token
+  }
+
   return <Outlet />;
 });
 

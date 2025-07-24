@@ -10,7 +10,7 @@ const DrawerHeaderStyled = styled(Box, { shouldForwardProp: (prop) => prop !== '
   alignItems: 'center',
   justifyContent: 'center',
   paddingLeft: theme.spacing(0),
-  backgroundColor: '#051f20', // ✅ Add your desired background color here
+  backgroundColor: '#051f20', //  Add your desired background color here
   variants: [
     {
       // @ts-ignore

@@ -17,8 +17,7 @@ console.log('response user',response);
     if (response.status === "error") {
       throw new Error(response.message || "Login failed");
     }
-
-    store.userStore.setUser(response.data.user, response.data.token);
+      store.userStore.setUser(response.data.user, response.data.token);
 
     toast.success("Login successful");
     onSuccess();

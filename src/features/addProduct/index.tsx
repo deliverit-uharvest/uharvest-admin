@@ -37,11 +37,9 @@ const AddProduct: React.FC = () => {
   const [units, setUnits] = useState<Option[]>([]);
   const [packagingTypes, setPackagingTypes] = useState<Option[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [images, setImages] = useState<FileList | null>(null);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImages(e.target.files);
-  };
+  const [selectedImages, setSelectedImages] = useState<File[]>([]); // SELECTED IMAGES
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);// IMAGE PREVIEWS
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -62,6 +60,28 @@ const AddProduct: React.FC = () => {
     }
   };
 
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const fileArray = Array.from(files);
+
+    // Limit to 5 total images
+    const newFiles = [...selectedImages, ...fileArray].slice(0, 5);
+    const newPreviews = newFiles.map((file) =>
+      URL.createObjectURL(file)
+    );
+
+    if (newFiles.length > 5) {
+      toast.warn("You can upload a maximum of 5 images.");
+    }
+
+    setSelectedImages(newFiles);
+    setImagePreviews(newPreviews);
+  };
+
   const handleReset = () => {
     setFormData({
       productName: "",
@@ -79,6 +99,8 @@ const AddProduct: React.FC = () => {
       description: "",
       keywords: "",
     });
+    setSelectedImages([]);
+    setImagePreviews([]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,8 +135,8 @@ const AddProduct: React.FC = () => {
       data.append("description", formData.description);
       data.append("keywords", formData.keywords);
 
-      if (images) {
-        Array.from(images).forEach((file) => data.append("files", file));
+      if (selectedImages) {
+        Array.from(selectedImages).forEach((file) => data.append("files", file));
       }
 
       setLoading(true);
@@ -156,7 +178,6 @@ const AddProduct: React.FC = () => {
         flexDirection="column"
         gap={3}
       >
-        {/* 2 Column Layout */}
         <Box display="flex" flexWrap="wrap" gap={3}>
           <Box
             flex={1}
@@ -237,6 +258,7 @@ const AddProduct: React.FC = () => {
                 <MenuItem key={c.id} value={c.id}>
                   {c.name}
                 </MenuItem>
+               
               ))}
             </TextField>
            
@@ -300,6 +322,9 @@ const AddProduct: React.FC = () => {
           <Typography fontWeight={500} mb={1}>
             Description *
           </Typography>
+          <Typography fontWeight={500} mb={1}>
+            Description *
+          </Typography>
           <TextareaAutosize
             minRows={4}
             name="description"
@@ -314,7 +339,7 @@ const AddProduct: React.FC = () => {
         {/* Upload Images */}
         <Box>
           <Typography fontWeight={500} mb={1}>
-            Upload Images
+            Upload Images (Max 5)
           </Typography>
           <Button
             variant="outlined"
@@ -329,7 +354,38 @@ const AddProduct: React.FC = () => {
               type="file"
               onChange={handleImageChange}
             />
+            <input
+              hidden
+              accept="image/*"
+              multiple
+              type="file"
+              onChange={handleImageChange}
+            />
           </Button>
+
+          {/* Previews */}
+          {imagePreviews.length > 0 && (
+            <Box mt={2} display="flex" gap={2} flexWrap="wrap">
+              {imagePreviews.map((src, index) => (
+                <Box
+                  key={index}
+                  width={100}
+                  height={100}
+                  borderRadius={2}
+                  overflow="hidden"
+                  border="1px solid #ccc"
+                >
+                  <img
+                    src={src}
+                    alt={`preview-${index}`}
+                    width="100%"
+                    height="100%"
+                    style={{ objectFit: "cover" }}
+                  />
+                </Box>
+              ))}
+            </Box>
+          )}
         </Box>
 
         {/* Keywords */}
