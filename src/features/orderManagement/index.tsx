@@ -5,6 +5,8 @@ import {
   Select,
   MenuItem,
   FormControl,
+  TextField,
+  Button,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
@@ -29,6 +31,12 @@ const OrderManagement = () => {
   const [categories, setCategories] = useState<Orders[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [statusList, setStatusList] = useState<Status[]>([]);
+
+  // Filter states
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<number | "">("");
+  const [orderId, setOrderId] = useState("");
 
   const columns: GridColDef[] = [
     {
@@ -105,7 +113,7 @@ const OrderManagement = () => {
                           {
                             status: statusList.find((s) => s.id === newStatusId) || {
                               id: newStatusId,
-                              name: "Unknown", // fallback if not found
+                              name: "Unknown",
                             },
                           },
                         ],
@@ -134,7 +142,6 @@ const OrderManagement = () => {
                           width: 10,
                           height: 10,
                           borderRadius: "50%",
-                          //backgroundColor: "#1976d2",
                         }}
                       />
                       {status.name}
@@ -161,24 +168,29 @@ const OrderManagement = () => {
     }
   };
 
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        setLoading(true);
-        const res = await fetchOrders();
-        if (res.status === "success") {
-          setCategories(res.data);
-        } else {
-          toast(res.message);
-        }
-      } catch (err) {
-        toast("Failed to load orders.");
-      } finally {
-        setLoading(false);
+  const loadOrders = async () => {
+    try {
+      setLoading(true);
+      const res = await fetchOrders({
+        startDate,
+        endDate,
+        statusId: selectedStatus,
+        orderId,
+      });
+      if (res.status === "success") {
+        setCategories(res.data);
+      } else {
+        toast(res.message);
       }
-    };
+    } catch (err) {
+      toast("Failed to load orders.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    loadCategories();
+  useEffect(() => {
+    loadOrders();
   }, []);
 
   useEffect(() => {
@@ -203,6 +215,47 @@ const OrderManagement = () => {
           Orders
         </Typography>
       </Box>
+
+      {/* Filters */}
+      <Box display="flex" flexWrap="wrap" gap={2} mb={2}>
+        <TextField
+          label="Start Date"
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label="End Date"
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          label="Order ID"
+          value={orderId}
+          onChange={(e) => setOrderId(e.target.value)}
+        />
+        <FormControl sx={{ minWidth: 120 }}>
+          <Select
+            displayEmpty
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value as number | "")}
+          >
+            <MenuItem value="">All Status</MenuItem>
+            {statusList.map((status) => (
+              <MenuItem key={status.id} value={status.id}>
+                {status.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button variant="contained" onClick={loadOrders}>
+          Apply Filters
+        </Button>
+      </Box>
+
       <Box sx={{ width: "100%" }}>
         {categories.length > 0 ? (
           <DataGrid
