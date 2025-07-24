@@ -10,21 +10,25 @@ import {
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Category, fetchCategories } from "../../app/services/CategoryService";
 import { toast } from "react-toastify";
-import { createProduct } from "../../app/services/ProductService";
-import { useNavigate } from "react-router-dom";
+import {
+  fetchProductById,
+  updateProduct,
+} from "../../app/services/ProductService";
+import { useNavigate, useParams } from "react-router-dom";
 import { Option, UNIT_OPTIONS } from "../../app/api/unitOptions";
 import { PACKAGING_OPTIONS } from "../../app/api/packagingOptions";
 
-const AddProduct: React.FC = () => {
+const UpdateProduct: React.FC = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     productName: "",
     sku: "",
-    mrp:"",
-    price:"",
+    mrp: "",
+    price: "",
     hsnCode: "",
     weight: "",
-    quantity:"",
+    quantity: "",
     category: "",
     unit: "",
     packaging: "",
@@ -33,6 +37,10 @@ const AddProduct: React.FC = () => {
     description: "",
     keywords: "",
   });
+
+  if (!id) {
+    navigate("/not-found");
+  }
   const [loading, setLoading] = useState(false);
   const [units, setUnits] = useState<Option[]>([]);
   const [packagingTypes, setPackagingTypes] = useState<Option[]>([]);
@@ -67,8 +75,8 @@ const AddProduct: React.FC = () => {
       productName: "",
       sku: "",
       mrp: "",
-      price:"",
-      quantity:"",
+      price: "",
+      quantity: "",
       hsnCode: "",
       weight: "",
       category: "",
@@ -83,6 +91,7 @@ const AddProduct: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!formData.productName.trim())
       return toast.error("Product name is required");
     if (!formData.sku.trim()) return toast.error("SKU is required");
@@ -101,10 +110,10 @@ const AddProduct: React.FC = () => {
       data.append("name", formData.productName);
       data.append("sku", formData.sku);
       data.append("base_mrp", formData.mrp);
-      data.append("base_price",formData.price);
-      data.append("quantity",formData.quantity);
+      data.append("base_price", formData.price);
+      data.append("quantity", formData.quantity);
       data.append("hsn_code", formData.hsnCode);
-      data.append("quantity", formData.weight);
+      data.append("weight", formData.weight);
       data.append("category_id", formData.category);
       data.append("unit", formData.unit);
       data.append("packaging_type", formData.packaging);
@@ -118,12 +127,9 @@ const AddProduct: React.FC = () => {
       }
 
       setLoading(true);
-      const res = await createProduct(data);
-      console.log('resss product',res)
-
+      const res = await updateProduct(data, Number(id));
       if ((res as any).status === "success") {
-        toast.success("Product created successfully");
-        handleReset();
+        toast.success("Product updated successfully");
         navigate("/catalog/product");
       } else {
         toast.error("Something went wrong");
@@ -132,8 +138,37 @@ const AddProduct: React.FC = () => {
       setLoading(false);
     } catch (err) {
       console.error(err);
-      toast.error("Failed to create product");
+      toast.error("Failed to update product");
       setLoading(false);
+    }
+  };
+
+  const fetchProduct = async (productId: number) => {
+    try {
+      const res = await fetchProductById(productId);
+      if ((res as any).status === "success") {
+        const product = (res as any).data;
+        setFormData({
+          productName: product.name || "",
+          sku: product.sku || "",
+          mrp: product.base_mrp || "",
+          price: product.base_price || "",
+          quantity: product.quantity || "",
+          hsnCode: product.hsn_code || "",
+          weight: product.weight || "",
+          category: product.category_id || "",
+          unit: product.unit || "",
+          packaging: product.packaging_type || "",
+          gst: product.tax || "",
+          cess: product.cess || "0",
+          description: product.description || "",
+          keywords: product.keywords || "",
+        });
+      } else {
+        toast.error("Failed to load product");
+      }
+    } catch (err) {
+      toast.error("Error loading product");
     }
   };
 
@@ -141,6 +176,7 @@ const AddProduct: React.FC = () => {
     getCategories();
     setUnits(UNIT_OPTIONS);
     setPackagingTypes(PACKAGING_OPTIONS);
+    if (id) fetchProduct(Number(id));
   }, []);
 
   return (
@@ -189,7 +225,7 @@ const AddProduct: React.FC = () => {
               onChange={handleChange}
               fullWidth
             />
-             <TextField
+            <TextField
               required
               label="Base Price"
               name="price"
@@ -213,7 +249,6 @@ const AddProduct: React.FC = () => {
               onChange={handleChange}
               fullWidth
             />
-          
           </Box>
 
           <Box
@@ -223,7 +258,6 @@ const AddProduct: React.FC = () => {
             flexDirection="column"
             gap={2}
           >
-          
             <TextField
               select
               required
@@ -239,7 +273,7 @@ const AddProduct: React.FC = () => {
                 </MenuItem>
               ))}
             </TextField>
-           
+
             <TextField
               select
               required
@@ -270,14 +304,14 @@ const AddProduct: React.FC = () => {
               onChange={handleChange}
               fullWidth
             />
-             <TextField
+            <TextField
               label="Quantity"
               name="quantity"
               value={formData.quantity}
               onChange={handleChange}
               fullWidth
             />
-             <TextField
+            <TextField
               select
               required
               label="Unit of Measurement"
@@ -348,10 +382,10 @@ const AddProduct: React.FC = () => {
             Reset
           </Button>
           {loading ? (
-            <Typography>Uploading....</Typography>
+            <Typography>Updating....</Typography>
           ) : (
             <Button variant="contained" type="submit" color="primary">
-              Submit
+              Update
             </Button>
           )}
         </Box>
@@ -360,4 +394,4 @@ const AddProduct: React.FC = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

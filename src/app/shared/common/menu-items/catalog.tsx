@@ -40,7 +40,7 @@ const catalog = {
           id: 'manageproduct',
           title: 'Manage Product',
           type: 'item',
-          url: '/catalog/manage-product',
+          url: '/catalog/product',
           breadcrumbs:false,
         },
         {

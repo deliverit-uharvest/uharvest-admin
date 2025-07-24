@@ -2,7 +2,6 @@ import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
 import NotFound from "../../features/errors/NotFound";
 import ServerError from "../../features/errors/ServerError";
 import Customer from "../../features/customer/Index";
-import Product from "../../features/product/Index";
 import Profile from "../../features/account/Index";
 import RequireAuth from "./RequireAuth";
 import DashboardLayout from "../layout/Dashboard";
@@ -16,8 +15,7 @@ import AddProduct from "../../features/addProduct";
 import OrderManagement from "../../features/orderManagement";
 import CustomerList from "../../features/customerOnboard/CustomerList";
 import AddCustomer from "../../features/customerOnboard/Addcustomer";
-
-
+import UpdateProduct from "../../features/addProduct/updateProduct";
 
 export const routes: RouteObject[] = [
   {
@@ -30,9 +28,7 @@ export const routes: RouteObject[] = [
           {
             element: <RequireAuth />,
             children: [
-              
               { path: "customer", element: <Customer /> },
-              { path: "product", element: <Product /> },
               { path: "profile", element: <Profile /> },
               {
                 path: "catalog",
@@ -45,25 +41,27 @@ export const routes: RouteObject[] = [
                       { path: ":id", element: <UpdateCategory /> },
                     ],
                   },
-                  { path: "manage-product", element: <ProductList /> },
-                  { path: "add-product", element: <AddProduct /> },
+                  {
+                    path: "product",
+                    children: [
+                      { index: true, element: <ProductList /> },
+                      { path: "add", element: <AddProduct /> },
+                      { path: "update/:id", element: <UpdateProduct /> },
+                    ],
+                  },
                 ],
               },
               {
                 path: "manageorder",
+                children: [{ path: "orders", element: <OrderManagement /> }],
+              },
+              {
+                path: "customerOnboard",
                 children: [
-                  { path: "orders", element: <OrderManagement /> },
-                                   
+                  { path: "customers", element: <CustomerList /> },
+                  { path: "addCustomer", element: <AddCustomer /> },
                 ],
               },
-               {
-                    path: "customerOnboard",
-                    children: [
-                     
-                      { path: "customers", element: <CustomerList /> },
-                      { path: "addCustomer", element: <AddCustomer /> },
-                    ],
-                  },
             ],
           },
           { path: "not-found", element: <NotFound /> },
@@ -75,5 +73,5 @@ export const routes: RouteObject[] = [
     ],
   },
 ];
- 
+
 export const router = createBrowserRouter(routes);

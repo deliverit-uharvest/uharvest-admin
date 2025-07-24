@@ -2,7 +2,11 @@ import agent from "../api/agent";
 
 export const fetchProducts = async () => {
   const result = await agent.Product.getAll();
-  console.log("resulttt", result);
+  return result;
+};
+
+export const fetchProductById = async (id:number) => {
+  const result = await agent.Product.getProduct(id);
   return result;
 };
 
@@ -16,4 +20,8 @@ export const deleteProduct = async (productId: number) => {
 
 export const createProduct = async (product: FormData) => {
   return await agent.Product.createProduct(product);
+};
+
+export const updateProduct = async (product: FormData,id:number) => {
+  return await agent.Product.updateProduct(product,id);
 };

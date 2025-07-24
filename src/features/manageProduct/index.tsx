@@ -145,6 +145,10 @@ const ProductList: React.FC = () => {
     }
   };
 
+  const handleUpdate = async (id: number) => {
+    navigate(`/catalog/product/update/${id}`);
+  };
+
   return (
     <Box p={3}>
       <Box
@@ -254,7 +258,10 @@ const ProductList: React.FC = () => {
                   <IconButton color="primary">
                     <VisibilityIcon />
                   </IconButton>
-                  <IconButton color="info">
+                  <IconButton
+                    color="info"
+                    onClick={() => handleUpdate(product.id)}
+                  >
                     <EditIcon />
                   </IconButton>
                   <IconButton

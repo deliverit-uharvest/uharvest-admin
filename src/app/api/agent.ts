@@ -78,10 +78,11 @@ const Product = {
       name?: string;
     } = {}
   ) => requests.post("/product", filters),
-
+  getProduct:(id:number)=>requests.get(`product/${id}`),
   updateStatus: (productId: number) => requests.patch(`/product/${productId}`),
   delete: (productId: number) => requests.delete(`/product/${productId}`),
   createProduct: (data: FormData) => requests.post("/product/create", data),
+  updateProduct:(data:FormData,id:number)=>requests.patch(`product/update/${id}`,data)
 };
 
 const Customer = {};
@@ -101,7 +102,7 @@ const Category = {
         "Content-Type": "multipart/form-data",
       },
     }),
-  update: (data: FormData) => axios.post("/category", data),
+  update: (data: FormData) => requests.post("/category", data),
   getById: (id: number) => requests.get(`/category/${id}`),
 };
 
@@ -115,27 +116,11 @@ const Orders = {
         "Content-Type": "multipart/form-data",
       },
     }),
-  update: (data: FormData) => axios.post('/orders', data),
+  update: (data: FormData) => requests.post('/orders', data),
   getById: (id: number) => requests.get(`/orders/${id}`),
   changeStatus: (payload: { order_id: string; status_id: number }) =>
     requests.post<ApiResponse<any>>("/orders/change-status", payload),
 };
-
-// const Cart = {
-//   addToCart: (productId: number) => {
-//     return requests.post("/cart/add-to-cart", { product_id: productId ,device_id:"temp"});
-//   },
-//   getCart: () => {
-//     return requests.get("/cart");
-//   },
-//   updateQuantity: (cartId: number, action: "increase" | "decrease") =>
-//     requests.post("/cart/update", { cart_id: cartId, action: action,device_id:"temp" }),
-// };
-
-// const Orders = {
-//   getorders: () => requests.get("/orders"),
-//   createOrder: () => requests.post("/orders/create", {}),
-// };
 
 const agent = {
   Product,
@@ -143,8 +128,7 @@ const agent = {
   User,
   Category,
   Orders,
-  // Cart,
-  // Orders,
+
 };
 
 export default agent;
