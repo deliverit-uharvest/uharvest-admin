@@ -13,3 +13,7 @@ export const changeStatus = async (productId: number) => {
 export const deleteProduct = async (productId: number) => {
   return await agent.Product.delete(productId);
 };
+
+export const createProduct = async (product: FormData) => {
+  return await agent.Product.createProduct(product);
+};
