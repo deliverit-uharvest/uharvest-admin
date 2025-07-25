@@ -115,6 +115,7 @@ const AddProduct: React.FC = () => {
     if (!formData.unit) return toast.error("Please select unit");
     if (!formData.packaging) return toast.error("Please select Packaging type");
     if (!formData.gst.trim()) return toast.error("GST is required");
+  
     if (!formData.description.trim())
       return toast.error("Description is required");
 

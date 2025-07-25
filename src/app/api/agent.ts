@@ -143,6 +143,7 @@ const Organisation = {
 
 const subcategory = {
   get: () => requests.get<ApiResponse<LoginResponse>>("/sub-category"),
+  createSubcategory: (data: FormData) => requests.post("/sub-category/create", data),
 //   getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
 //   delete: (id: number) => axios.delete(`/orders/${id}`),
 //   create: (data: FormData) =>

@@ -89,7 +89,7 @@ const SubCategoryList: React.FC = () => {
         <Button
           variant="contained"
           sx={{ backgroundColor: "#fdd835", color: "#000" }}
-          onClick={() => navigate("/catalog/subcategory/add")}
+          onClick={() => navigate("/catalog/subcategory/add")} // thi is made accorfing to the routes path
         >
           Add Sub-Category
         </Button>
@@ -131,7 +131,7 @@ const SubCategoryList: React.FC = () => {
               <TableRow key={row.id}>
                 <TableCell>
                   <img
-                    src={row.image ?? "/no-image.png"}
+                    src={row?.image ?? "/no-image.png"}
                     // alt={row.name}
                     width="40"
                     height="40"

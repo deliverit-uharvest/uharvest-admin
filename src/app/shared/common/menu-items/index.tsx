@@ -15,7 +15,7 @@ import organisationOnboard from './organisationOnboard';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [system,dashboard,promotions,catalog,manageorder,organisationOnboard,location,userMgnt,miscellaneos,configuration ] //support
+  items: [system,dashboard,catalog,manageorder,organisationOnboard,location,userMgnt,miscellaneos,configuration ] //support
 };
 
 export default menuItems;

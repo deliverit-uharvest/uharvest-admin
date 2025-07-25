@@ -1,3 +1,4 @@
+import { create } from "domain";
 import agent from "../api/agent";
 
 export interface subcategory {
@@ -25,6 +26,10 @@ export interface subcategory {
 export const fetchsubcategory = async (): Promise<any> => {
   const response = await agent.subcategory.get();
   return response;
+};
+
+export const createSubcategory = async (create: FormData) => {
+  return await agent.subcategory.createSubcategory(create);
 };
 
 // export const fetchOrdersStatus = async (): Promise<any> => {

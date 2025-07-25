@@ -43,7 +43,7 @@ const CategoryPage = () => {
       headerName: "Status",
       flex: 1,
       renderCell: (params) => (
-        <Checkbox checked={params.value} color="primary" />
+        <Checkbox checked={params.value} color="success" />
       ),
     },
     {

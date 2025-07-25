@@ -18,6 +18,7 @@ import OrganisationList from "../../features/organisationOnboard/OrganisationLis
 import SubCategoryList from "../../features/subCategory";
 import AddSubCategory from "../../features/subCategory/Addsubcategory";
 import UpdateProduct from "../../features/addProduct/updateProduct";
+import DashboardHome from "../../features/dashboard";
 
 export const routes: RouteObject[] = [
   {
@@ -30,6 +31,7 @@ export const routes: RouteObject[] = [
           {
             element: <RequireAuth />,
             children: [
+              { path: "dashboard", element: <DashboardHome /> },
               { path: "customer", element: <Customer /> },
               { path: "profile", element: <Profile /> },
               {

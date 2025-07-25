@@ -5,15 +5,15 @@ import {
   MenuItem,
   TextField,
   Typography,
-  InputLabel,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
 import {
   fetchsubcategory,
-  subcategory,
-} from "../../app/services/subcatagoryservice"; //import from subcatergory service
+  createSubcategory,
+} from "../../app/services/subcatagoryservice";
 
 export interface SubCategory {
   id: number;
@@ -24,6 +24,7 @@ export interface SubCategory {
     name: string;
   };
 }
+
 interface Category {
   id: number;
   name: string;
@@ -32,30 +33,32 @@ interface Category {
 const AddSubCategory = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
 
-useEffect(() => {
-  const loadCategories = async () => {
-    try {
-      const res = await fetchsubcategory();
-      const uniqueMap = new Map();
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await fetchsubcategory();
+        const uniqueMap = new Map();
 
-      res.data.forEach((item: any) => {
-        if (item.category && !uniqueMap.has(item.category.id)) {
-          uniqueMap.set(item.category.id, {
-            id: item.category.id,
-            name: item.category.name,
-          });
-        }
-      });
+        res.data.forEach((item: any) => {
+          if (item.category && !uniqueMap.has(item.category.id)) {
+            uniqueMap.set(item.category.id, {
+              id: item.category.id,
+              name: item.category.name,
+            });
+          }
+        });
 
-      setCategories(Array.from(uniqueMap.values()));
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
+        setCategories(Array.from(uniqueMap.values()));
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
-  loadCategories();
-}, []);
+    loadCategories();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -68,12 +71,22 @@ useEffect(() => {
       category: Yup.string().required("Required"),
       image: Yup.mixed().required("Image is required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values, { resetForm }) => {
       const formData = new FormData();
       formData.append("name", values.name);
-      formData.append("category", values.category);
-      if (values.image) formData.append("image", values.image);
-      console.log("Submit this:", values);
+      formData.append("category_id", values.category);
+      if (values.image) formData.append("file", values.image); //  CORRECT key name
+
+      try {
+        const res = await createSubcategory(formData);
+        console.log("Successfully submitted:", res);
+        setSuccessOpen(true);
+        resetForm();
+        setPreview(null);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        setErrorOpen(true);
+      }
     },
   });
 
@@ -117,7 +130,7 @@ useEffect(() => {
         >
           <MenuItem value="">Select</MenuItem>
           {categories.map((cat) => (
-            <MenuItem key={cat.id} value={cat.name}>
+            <MenuItem key={cat.id} value={cat.id.toString()}>
               {cat.name}
             </MenuItem>
           ))}
@@ -134,7 +147,13 @@ useEffect(() => {
         />
         {preview && (
           <Box mb={2}>
-            <img src={preview} alt="Preview" width={100} height={100} style={{ borderRadius: 4 }} />
+            <img
+              src={preview}
+              alt="Preview"
+              width={100}
+              height={100}
+              style={{ borderRadius: 4 }}
+            />
           </Box>
         )}
         {formik.touched.image && formik.errors.image && (
@@ -152,6 +171,35 @@ useEffect(() => {
           </Button>
         </Box>
       </form>
+
+      {/* Toasts */}
+      <Snackbar
+        open={successOpen}
+        autoHideDuration={3000}
+        onClose={() => setSuccessOpen(false)}
+      >
+        <Alert
+          onClose={() => setSuccessOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Sub Category Created Successfully!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={errorOpen}
+        autoHideDuration={3000}
+        onClose={() => setErrorOpen(false)}
+      >
+        <Alert
+          onClose={() => setErrorOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Something went wrong!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
