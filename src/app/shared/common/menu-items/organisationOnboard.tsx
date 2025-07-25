@@ -15,14 +15,14 @@ const organisationOnboard = {
           id: 'organisation',
           title: 'Organisation',
           type: 'item',
-          url: '/organisationOnboard/organisation',
+          url: '/organisation',
           Breadcrumbs:false,
         },
         {
           id: 'customers',
           title: 'Outlet',
           type: 'item',
-          url: 'customerOnboard/customers',
+          url: '/organisation/outlet',
           breadcrumbs:false,
         },
         {

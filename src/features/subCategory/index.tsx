@@ -89,7 +89,7 @@ const SubCategoryList: React.FC = () => {
         <Button
           variant="contained"
           sx={{ backgroundColor: "#fdd835", color: "#000" }}
-          onClick={() => navigate("/catalog/addsub")}
+          onClick={() => navigate("/catalog/subcategory/add")}
         >
           Add Sub-Category
         </Button>

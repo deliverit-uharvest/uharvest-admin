@@ -12,7 +12,7 @@ const manageorder = {
           id: 'orders',
           title: 'orders',
           type: 'item',
-          url: 'manageorder/orders'
+          url: "orders"
         },
         {
           id: 'sales-return',

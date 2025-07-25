@@ -176,7 +176,7 @@ const ProductList: React.FC = () => {
           variant="contained"
           startIcon={<AddIcon />}
           sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
-          onClick={() => handleNavigate("/catalog/add-product")}
+          onClick={() => handleNavigate("/catalog/product/add")}
         >
           Add Product
         </Button>

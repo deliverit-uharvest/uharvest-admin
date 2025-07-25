@@ -38,16 +38,20 @@ export const routes: RouteObject[] = [
                   {
                     path: "category",
                     children: [
-                      
                       { index: true, element: <CategoryPage /> },
                       { path: "add", element: <AddCategory /> },
                       { path: ":id", element: <UpdateCategory /> },
-          
                     ],
-                    
                   },
-                  { path: "subcategory", element: <SubCategoryList /> },
-                  { path: "addsub", element: <AddSubCategory /> },
+                  {
+                    path: "subcategory",
+                    children: [
+                      { index: true, element: <SubCategoryList /> },
+                      { path: "add", element: <AddSubCategory /> },
+                      // { path: "update/:id", element: <UpdateProduct /> },
+                    ],
+                  },
+
                   {
                     path: "product",
                     children: [
@@ -59,15 +63,17 @@ export const routes: RouteObject[] = [
                 ],
               },
 
+              //
+
               {
-                path: "manageorder",
-                children: [{ path: "orders", element: <OrderManagement /> }],
+                path: "Orders",
+                children: [{ index: true, element: <OrderManagement /> }],
               },
               {
-                path: "organisationOnboard",
+                path: "organisation",
                 children: [
-                  { path: "organisation", element: <OrganisationList /> },
-                  { path: "add-organisation", element: <AddOrganisation /> },
+                  { index: true, element: <OrganisationList /> },
+                  { path: "add", element: <AddOrganisation /> },
                 ],
               },
             ],
