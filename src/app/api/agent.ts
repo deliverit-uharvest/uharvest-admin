@@ -125,20 +125,41 @@ const Orders = {
 
 const Organisation = {
   get: (config = {}) => axios.get<ApiResponse<any>>("/organisation", config).then(responseBody),
-  getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
-  delete: (id: number) => axios.delete(`/orders/${id}`),
-  create: (data: FormData) =>
-    axios.post("/organisation", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }),
-  update: (data: FormData) => axios.post('/orders', data),
-  getById: (id: number) => requests.get(`/orders/${id}`),
-  changeStatus: (payload: { order_id: string; status_id: number }) =>
-    requests.post<ApiResponse<any>>("/orders/change-status", payload),
+  //getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
+  delete: (id: number) => axios.delete(`/organisation/${id}`),
+  create: (data: any) =>
+  axios.post("/organisation", data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }),
+  // create: (data: FormData) =>
+  //   axios.post("/organisation", data, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //   }),
+  //update: (data: FormData) => axios.post('/orders', data),
+  //getById: (id: number) => requests.get(`/orders/${id}`),
+  //changeStatus: (payload: { order_id: string; status_id: number }) =>
+    //requests.post<ApiResponse<any>>("/orders/change-status", payload),
 };
 
+const Outlet = {
+  get: (config = {}) => axios.get<ApiResponse<any>>("/outlet", config).then(responseBody),
+  //getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
+  delete: (id: number) => axios.delete(`/outlet/${id}`),
+  create: (data: any) =>
+  axios.post("/outlet", data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }),
+  //update: (data: FormData) => axios.post('/orders', data),
+  //getById: (id: number) => requests.get(`/orders/${id}`),
+  //changeStatus: (payload: { order_id: string; status_id: number }) =>
+    //requests.post<ApiResponse<any>>("/orders/change-status", payload),
+};
 // ============= SAubcarergory=========//
 
 const subcategory = {
@@ -172,6 +193,14 @@ const subcategory = {
 //   getorders: () => requests.get("/orders"),
 //   createOrder: () => requests.post("/orders/create", {}),
 };
+const States = {
+  get: () => requests.get<ApiResponse<LoginResponse>>("/states"),
+};
+
+const Cities = {
+  getByState: (stateId: number) =>
+    requests.get<ApiResponse<any>>(`/cities?state_id=${stateId}`),
+};
 
 const agent = {
   Product,
@@ -180,7 +209,10 @@ const agent = {
   Category,
   Orders,
   subcategory,
-  Organisation
+  Organisation,
+  Outlet,
+  States,
+  Cities
   // Cart,
   // Orders,
 };

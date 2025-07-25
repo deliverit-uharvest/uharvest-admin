@@ -14,13 +14,12 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import {
-  fetchOrganisation,
-  
-  Organisation,
-} from "../../app/services/OrganisationService";
+  fetchOutlet,
+  Outlet,
+} from "../../app/services/OutletService";
 
 
-const OrganisationList = () => {
+const OutletList = () => {
   const navigate = useNavigate();
 
   interface Status {
@@ -28,7 +27,7 @@ const OrganisationList = () => {
     name: string;
   }
 
-  const [categories, setCategories] = useState<Organisation[]>([]);
+  const [categories, setCategories] = useState<Outlet[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [statusList, setStatusList] = useState<Status[]>([]);
 
@@ -45,11 +44,7 @@ const OrganisationList = () => {
       flex: 1,
       sortable: false,
     },
-    {
-      field: "legalname",
-      headerName: "Legal Name",
-      flex: 2,
-    },
+    
     {
       field: "email",
       headerName: "Email",
@@ -61,20 +56,42 @@ const OrganisationList = () => {
       flex: 1,
     },
     {
-      field: "address",
-      headerName: "Address",
-      flex: 1,
-    },
-    {
-      field: "pin_code",
-      headerName: "Pincode",
-      flex: 1,
-    },
-    {
       field: "pan_number",
       headerName: "Pan Number",
       flex: 1,
     },
+    {
+      field: "gst_number",
+      headerName: "Gst Number",
+      flex: 1,
+    },
+    {
+      field: "shipping_addressline1",
+      headerName: "Address",
+      flex: 1,
+    },
+    {
+      field: "shippingpincode",
+      headerName: "Pincode",
+      flex: 1,
+    },
+    {
+      field: "shippingCity",
+      headerName: "City",
+      flex: 1,
+      renderCell: (params) => (
+        <span>{params.row.shippingCity?.name ?? "No Data"}</span>
+      ),
+    },
+    {
+      field: "shippingState",
+      headerName: "State",
+      flex: 1,
+      renderCell: (params) => (
+        <span>{params.row.shippingState?.name ?? "No Data"}</span>
+      ),
+    },
+    
     // {
     //   field: "action",
     //   headerName: "Action",
@@ -163,11 +180,11 @@ const OrganisationList = () => {
   const loadOrders = async () => {
     try {
       setLoading(true);
-      const res = await fetchOrganisation({
+      const res = await fetchOutlet({
         startDate,
         endDate,
-        //statusId: selectedStatus,
-        //orderId,
+        statusId: selectedStatus,
+        orderId,
       });
       if (res.status === "success") {
         setCategories(res.data);
@@ -175,7 +192,7 @@ const OrganisationList = () => {
         toast(res.message);
       }
     } catch (err) {
-      toast("Failed to load orders.");
+      toast("Failed to load outlet.");
     } finally {
       setLoading(false);
     }
@@ -206,16 +223,16 @@ const OrganisationList = () => {
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6" fontWeight={600}>
-          Organisation
+          Outlet
         </Typography>
 
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
-          onClick={() => handleNavigate("/organisation/add")}
+          onClick={() => handleNavigate("/organisation/outlet/add")}
         >
-          Add Organisation
+          Add Outlet
         </Button>
       </Box>
 
@@ -291,4 +308,4 @@ const OrganisationList = () => {
   );
 };
 
-export default OrganisationList;
+export default OutletList;

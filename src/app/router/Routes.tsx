@@ -18,6 +18,8 @@ import OrganisationList from "../../features/organisationOnboard/OrganisationLis
 import SubCategoryList from "../../features/subCategory";
 import AddSubCategory from "../../features/subCategory/Addsubcategory";
 import UpdateProduct from "../../features/addProduct/updateProduct";
+import OutletList from "../../features/outlet/OutletList";
+import AddOutlet from "../../features/outlet/addOutlet";
 
 export const routes: RouteObject[] = [
   {
@@ -74,6 +76,8 @@ export const routes: RouteObject[] = [
                 children: [
                   { index: true, element: <OrganisationList /> },
                   { path: "add", element: <AddOrganisation /> },
+                  { path: "outlet", element: <OutletList /> },
+                  { path: "outlet/add", element: <AddOutlet /> },
                 ],
               },
             ],
