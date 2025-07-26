@@ -17,12 +17,8 @@ import OrderManagement from "../../features/orderManagement";
 import OrganisationList from "../../features/organisationOnboard/OrganisationList";
 import SubCategoryList from "../../features/subCategory";
 import AddSubCategory from "../../features/subCategory/Addsubcategory";
-<<<<<<< Updated upstream
-import UpdateProduct from "../../features/addProduct/updateProduct";
 import DashboardHome from "../../features/dashboard";
-=======
 import UpdateProduct from "../../features/product/updateProduct";
->>>>>>> Stashed changes
 
 export const routes: RouteObject[] = [
   {
