@@ -1,35 +1,42 @@
 import agent from "../api/agent";
 
-export interface Organisation {
+export interface Outlet {
   id: number;
-  name: string;
+  name:string;
   created_at: string;
   
 }
 
 
-export const fetchOrganisation = async (filters?: {
+export const fetchOutlet = async (filters?: {
   startDate?: string;
   endDate?: string;
-  // statusId?: number | "";
-  // orderId?: string;
+  statusId?: number | "";
+  orderId?: string;
 }): Promise<any> => {
   const params: Record<string, string> = {};
 
   if (filters?.startDate) params.start_date = filters.startDate;
   if (filters?.endDate) params.end_date = filters.endDate;
-  // if (filters?.statusId !== "" && filters?.statusId !== undefined)
-  //   params.status_id = filters.statusId.toString();
-  // if (filters?.orderId) params.order_id = filters.orderId;
+  if (filters?.statusId !== "" && filters?.statusId !== undefined)
+    params.status_id = filters.statusId.toString();
+  if (filters?.orderId) params.order_id = filters.orderId;
 
-  const response = await agent.Organisation.get({ params });
+  
+  const response = await agent.Outlet.get({ params });
   return response;
 };
 
-export const addOrganisation = async (data: any): Promise<any> => {
-  const response = await agent.Organisation.create(data);
+// export const addOutlet = async (formData: FormData): Promise<any> => {
+//   const response = await agent.Organisation.create(formData);
+//   return response;
+// };
+
+export const addOutlet = async (data: any): Promise<any> => {
+  const response = await agent.Outlet.create(data);
   return response;
 };
+
 
 // export const fetchOrdersStatus = async (): Promise<any> => {
 //   const response = await agent.Orders.getstatus();

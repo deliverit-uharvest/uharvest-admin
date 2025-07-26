@@ -6,54 +6,54 @@ import {
   Typography,
   InputLabel,
   Paper,
-  MenuItem,
   Select,
+  MenuItem
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { addOrganisation } from "../../app/services/OrganisationService";
-import { fetchStates, States } from "../../app/services/StatesService";
-import { fetchCitiesByState, City } from "../../app/services/CitiesService";
+import { addOutlet } from "../../app/services/OutletService";
+import { fetchOrganisation, Organisation } from "../../app/services/OrganisationService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
 import { useEffect } from "react";
 
-
-
-const AddOrganisation = () => {
+const AddOutlet = () => {
   const [name, setName] = useState("");
-  const [legalName, setLegalName] = useState("");
+  
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [secmobile, setSecMobile] = useState("");
   const [panNumber, setPanNumber] = useState("");
   const [gstNumber, setGstNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [landMark, setLandMark] = useState("");
+  const [shopLicense, setShopLicense] = useState("");
+  const [fssaiNumber, setFssaiNumber] = useState("");
+  const [licenseRegistrationNumber, setLicenseRegistrationNumber] = useState("");
+  const [shippingAddressline1, setShippingAddressline1] = useState("");
+  const [shippingAddressline2, setShippingAddressline2] = useState("");
+  
+  //const [address, setAddress] = useState("");
+  const [shippingPincode, setShippingPincode] = useState("");
   const navigate = useNavigate();
   // const [rank, setRank] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  //const [image, setImage] = useState<File | null>(null);
 
-  const [stateList, setStateList] = useState<States[]>([]);
-  const [selectedState, setSelectedState] = useState("");
-
-  const [cityList, setCityList] = useState<City[]>([]);
-  const [selectedCity, setSelectedCity] = useState("");
+  const [organisationList, setOrganisationList] = useState<Organisation[]>([]);
+  const [selectedOrganisation, setSelectedOrganisation] = useState("");
 
   const handleReset = () => {
     setName("");
-    setLegalName("");
+    
     setEmail("");
     setMobile("");
     setSecMobile("");
     setPanNumber("");
     setGstNumber("");
-    setAddress("");
-    setPincode("");
-    setLandMark("");
+    setShippingAddressline1("");
+    setShippingPincode("");
+    setShopLicense("");
+    setFssaiNumber("");
+    setLicenseRegistrationNumber("");
     // setRank("");
-    setImage(null);
+    //setImage(null);
   };
 
   const handleSubmit = async () => {
@@ -61,144 +61,111 @@ const AddOrganisation = () => {
       toast("Name is required");
       return;
     }
-    if (!legalName.trim()) {
-      toast("Legal name is required");
-      return;
-    }
+    
     if (!email.trim()) {
       toast("Email is required");
       return;
     }
-    if (!mobile.trim()) {
-      toast("Mobile is required");
-      return;
-    }
-    if (!panNumber.trim()) {
-      toast("Pan number is required");
-      return;
-    }
-    if (!gstNumber.trim()) {
-      toast("Gst number is required");
-      return;
-    }
-    if (!address.trim()) {
+    // if (!mobile.trim()) {
+    //   toast("Mobile is required");
+    //   return;
+    // }
+    // if (!panNumber.trim()) {
+    //   toast("Pan number is required");
+    //   return;
+    // }
+    // if (!gstNumber.trim()) {
+    //   toast("Gst number is required");
+    //   return;
+    // }
+    // if (!shopLicense.trim()) {
+    //   toast("Shop license is required");
+    //   return;
+    // }
+    // if (!fssaiNumber.trim()) {
+    //   toast("Fssai number is required");
+    //   return;
+    // }
+    // if (!licenseRegistrationNumber.trim()) {
+    //   toast("set license registration number is required");
+    //   return;
+    // }
+
+    if (!shippingAddressline1.trim()) {
       toast("Address is required");
       return;
     }
-    if (!pincode.trim()) {
+    if (!shippingPincode.trim()) {
       toast("Pincode is required");
       return;
     }
-    if (!selectedState) {
-      toast("State is required");
-      return;
-    }
-    if (!selectedCity) {
-      toast("City is required");
-      return;
-    }
-    if (!landMark) {
-      toast("Lankmark is required");
-      return;
-    }
+    
 
     // const formData = new FormData();
     // formData.append("name", name);
-    // formData.append("legalname", legalName);
+    
     // formData.append("email", email);
     // formData.append("mobile", mobile);
     // formData.append("secondary_mobile", secmobile);
     // formData.append("pan_number", panNumber);
     // formData.append("gst_number", gstNumber);
-    // formData.append("address", address);
-    // formData.append("pin_code", pincode);
-    // formData.append("stateid", selectedState);
-    // formData.append("cityid", selectedCity);
-    // formData.append("land_mark", landMark);
+    // formData.append("shop_license", shopLicense);
+    // formData.append("fssai_number", fssaiNumber);
+    // formData.append("license_registration_number", licenseRegistrationNumber);
+
+    // formData.append("shipping_addressline1", shippingAddressline1);
+    // formData.append("shippingpincode", shippingPincode);
     // if (image) {
     //   formData.append("imagename", image);
     // }
 
     const payload = {
                   name,
-                  legalname: legalName,
+                  org_id: selectedOrganisation,
                   email,
-                  mobile,
-                  secondary_mobile: secmobile,
-                  pan_number: panNumber,
-                  gst_number: gstNumber,
-                  address,
-                  pin_code: pincode,
-                  stateid: Number(selectedState),
-                  cityid: Number(selectedCity),
-                  land_mark: landMark,
-                  imagename: image?.name || "", // or base64 if backend supports it
-                  lat: "21.0760",  // optional: hardcoded or use geolocation
-                  long: "52.8777"  // optional: hardcoded or use geolocation
+                  //mobile,
+                  // secondary_mobile: secmobile,
+                  // pan_number: panNumber,
+                  // gst_number: gstNumber,
+                  shipping_addressline1:shippingAddressline1,
+                  shipping_addressline2:shippingAddressline2,
+                  //shippingPincode: shippingPincode,
+                  // stateid: Number(selectedState),
+                  // cityid: Number(selectedCity),
+                  // land_mark: landMark,
+                  //lat: "21.0760",  // optional: hardcoded or use geolocation
+                  //long: "52.8777"  // optional: hardcoded or use geolocation
                 };
 
     try {
-      const response = await addOrganisation(payload);
+      const response = await addOutlet(payload);
       if (response.data.status === "success") {
-        toast("Organisation saved successfully!");
+        toast("Outlet saved successfully!");
         handleReset();
-        navigate("/organisation");
+        navigate("/organisation/outlet");
       } else {
         toast(response.data.message);
       }
     } catch (error) {
-      toast("Failed to save organisation.");
+      toast("Failed to save outlet.");
     }
   };
 
 
   useEffect(() => {
-  const loadStates = async () => {
-    try {
-      const res = await fetchStates();
-      if (res.status === "success") {
-        setStateList(res.data); // Adjust if your API structure is different
+    const loadOrganisation = async () => {
+      try {
+        const res = await fetchOrganisation();
+        if (res.status === "success") {
+          setOrganisationList(res.data); // Adjust if your API structure is different
+        }
+      } catch (err) {
+        toast("Failed to load organisation");
       }
-    } catch (err) {
-      toast("Failed to load states");
-    }
-  };
-
-  loadStates();
-}, []);
-
-useEffect(() => {
-  if (!selectedState) return;
-
-  const loadCities = async () => {
-    try {
-      const res = await fetchCitiesByState(Number(selectedState));
-      if (res?.status === "success") {
-        setCityList(res.data);
-      }
-    } catch (err) {
-      toast("Failed to load cities");
-    }
-  };
-
-  loadCities();
-}, [selectedState]);
-
-
-// useEffect(() => {
-//     const loadStatuses = async () => {
-//       try {
-//         const res = await fetchOrdersStatus();
-//         if (res.status === "success") {
-//           setStatusList(res.data);
-//         }
-//       } catch (error) {
-//         console.error("Failed to fetch status list", error);
-//       }
-//     };
-
-//     loadStatuses();
-//   }, []);
+    };
+  
+    loadOrganisation();
+  }, []);
 
   return (
     <Box
@@ -225,10 +192,30 @@ useEffect(() => {
           color="primary"
           textAlign="center"
         >
-          Add New Organisation
+          Add New Outlet
         </Typography>
 
         {/* Category Name */}
+
+        <Box mb={3}>
+          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+            Organisation <span style={{ color: "red" }}>*</span>
+          </InputLabel>
+          <Select
+            fullWidth
+            displayEmpty
+            value={selectedOrganisation}
+            onChange={(e) => setSelectedOrganisation(e.target.value)}
+          >
+            <MenuItem value="" disabled>Select a organisation</MenuItem>
+            {organisationList.map((org) => (
+              <MenuItem key={org.id} value={org.id}>
+                {org.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
             Name <span style={{ color: "red" }}>*</span>
@@ -242,18 +229,7 @@ useEffect(() => {
           />
         </Box>
 
-        <Box mb={3}>
-          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-            Legal Name <span style={{ color: "red" }}>*</span>
-          </InputLabel>
-          <TextField
-            fullWidth
-            size="medium"
-            placeholder="Enter Legal name"
-            value={legalName}
-            onChange={(e) => setLegalName(e.target.value)}
-          />
-        </Box>
+        
 
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
@@ -322,79 +298,79 @@ useEffect(() => {
 
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-           Address <span style={{ color: "red" }}>*</span>
+            Shop License <span style={{ color: "red" }}>*</span>
+          </InputLabel>
+          <TextField
+            fullWidth
+            size="medium"
+            placeholder="Enter Shop License"
+            value={shopLicense}
+            onChange={(e) => setShopLicense(e.target.value)}
+          />
+        </Box>
+
+        <Box mb={3}>
+          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+            FSSAI Number <span style={{ color: "red" }}>*</span>
+          </InputLabel>
+          <TextField
+            fullWidth
+            size="medium"
+            placeholder="Enter FSSAI Number"
+            value={fssaiNumber}
+            onChange={(e) => setFssaiNumber(e.target.value)}
+          />
+        </Box>
+
+        <Box mb={3}>
+          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+            License Registration Number <span style={{ color: "red" }}>*</span>
+          </InputLabel>
+          <TextField
+            fullWidth
+            size="medium"
+            placeholder="Enter FSSAI Number"
+            value={licenseRegistrationNumber}
+            onChange={(e) => setLicenseRegistrationNumber(e.target.value)}
+          />
+        </Box>
+
+        <Box mb={3}>
+          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+           Shipping Address Line1 <span style={{ color: "red" }}>*</span>
           </InputLabel>
           <TextField
             fullWidth
             size="medium"
             placeholder="Enter Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            value={shippingAddressline1}
+            onChange={(e) => setShippingAddressline1(e.target.value)}
           />
         </Box>
 
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-            State <span style={{ color: "red" }}>*</span>
+           Shipping Address Line2 <span style={{ color: "red" }}>*</span>
           </InputLabel>
-          <Select
+          <TextField
             fullWidth
-            displayEmpty
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-          >
-            <MenuItem value="" disabled>Select a state</MenuItem>
-            {stateList.map((state) => (
-              <MenuItem key={state.id} value={state.id}>
-                {state.name}
-              </MenuItem>
-            ))}
-          </Select>
+            size="medium"
+            placeholder="Enter Address"
+            value={shippingAddressline2}
+            onChange={(e) => setShippingAddressline2(e.target.value)}
+          />
         </Box>
 
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-            City <span style={{ color: "red" }}>*</span>
-          </InputLabel>
-          <Select
-            fullWidth
-            displayEmpty
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            disabled={!cityList.length}
-          >
-            <MenuItem value="" disabled>Select a city</MenuItem>
-            {cityList.map((city) => (
-              <MenuItem key={city.id} value={city.id}>
-                {city.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </Box>
-
-        <Box mb={3}>
-          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-            Pincode <span style={{ color: "red" }}>*</span>
+            Shipping Pincode <span style={{ color: "red" }}>*</span>
           </InputLabel>
           <TextField
             fullWidth
             size="medium"
             placeholder="Enter Pincode"
-            value={pincode}
-            onChange={(e) => setPincode(e.target.value)}
-          />
-        </Box>
-
-        <Box mb={3}>
-          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-            Landmark <span style={{ color: "red" }}>*</span>
-          </InputLabel>
-          <TextField
-            fullWidth
-            size="medium"
-            placeholder="Enter Land Mark"
-            value={landMark}
-            onChange={(e) => setLandMark(e.target.value)}
+            value={shippingPincode}
+            onChange={(e) => setShippingPincode(e.target.value)}
           />
         </Box>
 
@@ -413,7 +389,7 @@ useEffect(() => {
       </Box> */}
 
         {/* Image Upload */}
-        <Box mb={3}>
+        {/* <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
             Upload Image <span style={{ color: "red" }}>*</span>
           </InputLabel>
@@ -439,7 +415,7 @@ useEffect(() => {
               Selected: {image.name}
             </Typography>
           )}
-        </Box>
+        </Box> */}
 
         {/* Buttons */}
         <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
@@ -482,4 +458,4 @@ useEffect(() => {
   );
 };
 
-export default AddOrganisation;
+export default AddOutlet;

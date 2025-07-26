@@ -3,32 +3,33 @@ import { baseApiUrl } from "../api/constants";
 export default class UserStore {
   user: any = null;
   token: string | null = null;
-
+ 
   constructor() {
     makeAutoObservable(this);
   }
-
+ 
   get isLoggedIn() {
     return !!this.user;
   }
-
+ 
   setUser = (user: any, token: string) => {
     this.user = user;
     this.token = token;
     localStorage.setItem("token", token);
   };
-
+ 
   logout = () => {
     this.user = null;
     this.token = null;
     localStorage.removeItem("token");
   };
-
+ 
   loading = true;
   loadUser = async () => {
     console.log("Running loadUser()");
     this.loading = true;
     const token = localStorage.getItem("token");
+    console.log("Token in localStorage:", token);
     console.log("Token in localStorage:", token);
     if (!token) {
       this.loading = false;
@@ -39,11 +40,12 @@ export default class UserStore {
       const resData = await fetch(`${baseApiUrl}/auth/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+ 
       const resJson = await resData.json();
 
       if (resJson.status == "success") {
         runInAction(() => {
+          this.user = resJson.data;
           this.user = resJson.data;
           this.token = token;
         });
@@ -51,6 +53,7 @@ export default class UserStore {
         this.logout();
       }
     } catch (err) {
+      console.error("Error in loadUser:", err);
       console.error("Error in loadUser:", err);
       this.logout();
     } finally {
@@ -60,3 +63,4 @@ export default class UserStore {
     }
   };
 }
+ 
