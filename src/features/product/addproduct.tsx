@@ -127,7 +127,7 @@ const AddProduct: React.FC = () => {
       data.append("base_price",formData.price);
       data.append("quantity",formData.quantity);
       data.append("hsn_code", formData.hsnCode);
-      data.append("quantity", formData.weight);
+      data.append("weight", formData.weight);
       data.append("category_id", formData.category);
       data.append("unit", formData.unit);
       data.append("packaging_type", formData.packaging);

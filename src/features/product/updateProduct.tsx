@@ -328,12 +328,7 @@ const UpdateProduct: React.FC = () => {
             </TextField>
           </Box>
         </Box>
-
-        {/* Description */}
-        <Box>
-          <Typography fontWeight={500} mb={1}>
-            Description *
-          </Typography>
+        <Box>          
           <TextareaAutosize
             minRows={4}
             name="description"
@@ -344,8 +339,7 @@ const UpdateProduct: React.FC = () => {
             required
           />
         </Box>
-
-        {/* Upload Images */}
+        
         <Box>
           <Typography fontWeight={500} mb={1}>
             Upload Images

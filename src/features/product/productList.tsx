@@ -255,9 +255,9 @@ const ProductList: React.FC = () => {
                   />
                 </TableCell>
                 <TableCell>
-                  <IconButton color="primary">
+                  {/* <IconButton color="primary">
                     <VisibilityIcon />
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                     color="info"
                     onClick={() => handleUpdate(product.id)}
