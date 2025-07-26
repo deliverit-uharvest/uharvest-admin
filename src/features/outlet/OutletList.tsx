@@ -13,11 +13,8 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import {
-  fetchOutlet,
-  Outlet,
-} from "../../app/services/OutletService";
-
+import { fetchOutlet, Outlet } from "../../app/services/OutletService";
+import TableSkeleton from "../loader/TableSkeleton"; // ✅ Importing loader
 
 const OutletList = () => {
   const navigate = useNavigate();
@@ -31,50 +28,19 @@ const OutletList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [statusList, setStatusList] = useState<Status[]>([]);
 
-  // Filter states
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<number | "">("");
   const [orderId, setOrderId] = useState("");
 
   const columns: GridColDef[] = [
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-      sortable: false,
-    },
-    
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
-    {
-      field: "mobile",
-      headerName: "Mobile",
-      flex: 1,
-    },
-    {
-      field: "pan_number",
-      headerName: "Pan Number",
-      flex: 1,
-    },
-    {
-      field: "gst_number",
-      headerName: "Gst Number",
-      flex: 1,
-    },
-    {
-      field: "shipping_addressline1",
-      headerName: "Address",
-      flex: 1,
-    },
-    {
-      field: "shippingpincode",
-      headerName: "Pincode",
-      flex: 1,
-    },
+    { field: "name", headerName: "Name", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1 },
+    { field: "mobile", headerName: "Mobile", flex: 1 },
+    { field: "pan_number", headerName: "Pan Number", flex: 1 },
+    { field: "gst_number", headerName: "Gst Number", flex: 1 },
+    { field: "shipping_addressline1", headerName: "Address", flex: 1 },
+    { field: "shippingpincode", headerName: "Pincode", flex: 1 },
     {
       field: "shippingCity",
       headerName: "City",
@@ -91,87 +57,7 @@ const OutletList = () => {
         <span>{params.row.shippingState?.name ?? "No Data"}</span>
       ),
     },
-    
-    // {
-    //   field: "action",
-    //   headerName: "Action",
-    //   flex: 2,
-    //   renderCell: (params) => {
-    //     const orderId = params.row.unique_id;
-    //     const currentStatusId = params.row.statusHistory?.[0]?.status?.id || "";
-
-    //     const handleStatusChange = async (event: any) => {
-    //       const newStatusId = event.target.value;
-
-    //       try {
-    //         const res = await updateOrderStatus(orderId, newStatusId);
-
-    //         if (res.status === "success") {
-    //           toast.success("Status updated successfully");
-
-    //           setCategories((prev) =>
-    //             prev.map((order) =>
-    //               order.unique_id === orderId
-    //                 ? {
-    //                     ...order,
-    //                     statusHistory: [
-    //                       {
-    //                         status: statusList.find((s) => s.id === newStatusId) || {
-    //                           id: newStatusId,
-    //                           name: "Unknown",
-    //                         },
-    //                       },
-    //                     ],
-    //                   }
-    //                 : order
-    //             )
-    //           );
-    //         } else {
-    //           toast.error("Failed to update status");
-    //         }
-    //       } catch (err) {
-    //         toast.error("Error while updating status");
-    //         console.error(err);
-    //       }
-    //     };
-
-    //     return (
-    //       <Box>
-    //         <FormControl fullWidth size="medium">
-    //           <Select value={currentStatusId} onChange={handleStatusChange}>
-    //             {statusList.map((status) => (
-    //               <MenuItem key={status.id} value={status.id}>
-    //                 <Box display="flex" alignItems="center" gap={1}>
-    //                   <Box
-    //                     sx={{
-    //                       width: 10,
-    //                       height: 10,
-    //                       borderRadius: "50%",
-    //                     }}
-    //                   />
-    //                   {status.name}
-    //                 </Box>
-    //               </MenuItem>
-    //             ))}
-    //           </Select>
-    //         </FormControl>
-    //       </Box>
-    //     );
-    //   },
-    // },
   ];
-
-  // const handleDelete = async (id: number) => {
-  //   const confirm = window.confirm("Are you sure you want to delete this order?");
-  //   if (!confirm) return;
-
-  //   try {
-  //     await deleteOrganisation(id);
-  //     setCategories((prev) => prev.filter((cat) => cat.id !== id));
-  //   } catch (err) {
-  //     toast("Something went wrong while deleting.");
-  //   }
-  // };
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -202,24 +88,7 @@ const OutletList = () => {
     loadOrders();
   }, []);
 
-  // useEffect(() => {
-  //   const loadStatuses = async () => {
-  //     try {
-  //       const res = await fetchOrdersStatus();
-  //       if (res.status === "success") {
-  //         setStatusList(res.data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch status list", error);
-  //     }
-  //   };
-
-  //   loadStatuses();
-  // }, []);
-
   return (
-    
-    
     <Box p={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6" fontWeight={600}>
@@ -252,32 +121,15 @@ const OutletList = () => {
           onChange={(e) => setEndDate(e.target.value)}
           InputLabelProps={{ shrink: true }}
         />
-        {/* <TextField
-          label="Order ID"
-          value={orderId}
-          onChange={(e) => setOrderId(e.target.value)}
-        />
-        <FormControl sx={{ minWidth: 120 }}>
-          <Select
-            displayEmpty
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value as number | "")}
-          >
-            <MenuItem value="">All Status</MenuItem>
-            {statusList.map((status) => (
-              <MenuItem key={status.id} value={status.id}>
-                {status.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
         <Button variant="contained" onClick={loadOrders}>
           Apply Filters
         </Button>
       </Box>
 
       <Box sx={{ width: "100%" }}>
-        {categories.length > 0 ? (
+        {loading ? (
+          <TableSkeleton rows={6} columns={9} /> // ✅ Applied loader here
+        ) : categories.length > 0 ? (
           <DataGrid
             autoHeight
             loading={loading}
@@ -298,8 +150,6 @@ const OutletList = () => {
               p: 2,
             }}
           />
-        ) : loading ? (
-          <Typography>Loading...</Typography>
         ) : (
           <Typography>No data found</Typography>
         )}

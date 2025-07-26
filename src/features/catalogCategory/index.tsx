@@ -24,6 +24,9 @@ import {
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+// 👇 Importing TableSkeleton
+import TableSkeleton from "../loader/TableSkeleton";
+
 const CategoryPage = () => {
   const navigate = useNavigate();
 
@@ -34,7 +37,6 @@ const CategoryPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Dialog state
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
@@ -151,10 +153,12 @@ const CategoryPage = () => {
         </Button>
       </Box>
 
-      {categories.length > 0 ? (
+      {loading ? (
+        // 👇 Table Skeleton Loader
+        <TableSkeleton rows={6} columns={4} />
+      ) : categories.length > 0 ? (
         <DataGrid
           autoHeight
-          loading={loading}
           rows={categories}
           columns={columns}
           initialState={{
@@ -171,8 +175,6 @@ const CategoryPage = () => {
             p: 2,
           }}
         />
-      ) : loading ? (
-        <Typography>Loading...</Typography>
       ) : (
         <Typography>No categories found.</Typography>
       )}
@@ -182,8 +184,7 @@ const CategoryPage = () => {
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this category? This action cannot be
-            undone.
+            Are you sure you want to delete this category? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

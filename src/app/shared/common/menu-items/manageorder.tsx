@@ -18,7 +18,7 @@ const manageorder = {
           id: 'sales-return',
           title: 'Sales Return',
           type: 'item',
-          url: '/dashboard/sales'
+          url: 'sales'
         },
         {
           id: 'pod-mgnt',

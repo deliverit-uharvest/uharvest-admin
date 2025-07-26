@@ -165,34 +165,10 @@ const Outlet = {
 const subcategory = {
   get: () => requests.get<ApiResponse<LoginResponse>>("/sub-category"),
   createSubcategory: (data: FormData) => requests.post("/sub-category/create", data),
-//   getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
-//   delete: (id: number) => axios.delete(`/orders/${id}`),
-//   create: (data: FormData) =>
-//     axios.post("/orders/create", data, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     }),
-//   update: (data: FormData) => axios.post('/orders', data),
-//   getById: (id: number) => requests.get(`/orders/${id}`),
-//   changeStatus: (payload: { order_id: string; status_id: number }) =>
-//     requests.post<ApiResponse<any>>("/orders/change-status", payload),
-// };
+  delete: (id: number) => requests.delete(`/sub-category/${id}`),
+  updateStatus: (id: number) => requests.patch(`/sub-category/${id}`),
+  
 
-// const Cart = {
-//   addToCart: (productId: number) => {
-//     return requests.post("/cart/add-to-cart", { product_id: productId ,device_id:"temp"});
-//   },
-//   getCart: () => {
-//     return requests.get("/cart");
-//   },
-//   updateQuantity: (cartId: number, action: "increase" | "decrease") =>
-//     requests.post("/cart/update", { cart_id: cartId, action: action,device_id:"temp" }),
-// };
-
-// const Orders = {
-//   getorders: () => requests.get("/orders"),
-//   createOrder: () => requests.post("/orders/create", {}),
 };
 const States = {
   get: () => requests.get<ApiResponse<LoginResponse>>("/states"),

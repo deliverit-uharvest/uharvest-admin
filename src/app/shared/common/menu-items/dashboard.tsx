@@ -1,4 +1,4 @@
-const dashboard = {
+const overview = {
   id: 'group-dashboard',
   title: '', // This is the group heading (optional)
   type: 'group',
@@ -6,13 +6,13 @@ const dashboard = {
     {
       id: 'dashboard-collapse',
       title: 'Dashboard', // The visible text
-      type: 'collapse',   // ⬅️ Make it collapsible
+      type: 'collapse',   // ⬅Make it collapsible
       children: [
         {
           id: 'overview',
           title: 'Overview',
           type: 'item',
-          url: '/dashboard/overview'
+          url: 'overview'
           
         },
         
@@ -21,4 +21,4 @@ const dashboard = {
   ]
 };
 
-export default dashboard;
+export default overview;

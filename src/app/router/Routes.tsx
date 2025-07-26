@@ -16,11 +16,14 @@ import AddOrganisation from "../../features/addOrganisation";
 import OrderManagement from "../../features/orderManagement";
 import OrganisationList from "../../features/organisationOnboard/OrganisationList";
 import SubCategoryList from "../../features/subCategory";
-import AddSubCategory from "../../features/subCategory/Addsubcategory";
+import AddSubCategory from "../../features/subCategory/Addsubcategory";//====
 import DashboardHome from "../../features/dashboard";
 import UpdateProduct from "../../features/product/updateProduct";
 import OutletList from "../../features/outlet/OutletList";
 import AddOutlet from "../../features/outlet/addOutlet";
+import ComingSoon from "../../features/managestock";
+import ComingSoon2 from "../../features/overview";
+import Salesreturn from "../../features/salesReturn";
 
 export const routes: RouteObject[] = [
   {
@@ -55,7 +58,7 @@ export const routes: RouteObject[] = [
                       // { path: "update/:id", element: <UpdateProduct /> },
                     ],
                   },
-
+                 
                   {
                     path: "product",
                     children: [
@@ -64,14 +67,38 @@ export const routes: RouteObject[] = [
                       { path: "update/:id", element: <UpdateProduct /> },
                     ],
                   },
+                  {
+                    path: "stock-management",
+                    children: [
+                     
+                      { index:true, element: <ComingSoon2 /> },
+                     
+                    ],
+                  },
+
+
                 ],
               },
+
+               {
+                path: "overview",
+                children: [
+                  { index: true, element: <ComingSoon /> },
+                 
+                ],
+              },
+
+
+
 
               //
 
               {
                 path: "Orders",
-                children: [{ index: true, element: <OrderManagement /> }],
+                children: [
+                  { index: true, element: <OrderManagement /> },
+                  { path: "sales", element: <Salesreturn /> },
+                ],
               },
               {
                 path: "organisation",

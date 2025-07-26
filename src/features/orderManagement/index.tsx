@@ -20,6 +20,9 @@ import {
   updateOrderStatus,
 } from "../../app/services/OrdersService";
 
+// 👇 import your skeleton loader
+import TableSkeleton from "../loader/TableSkeleton";
+
 const OrderManagement = () => {
   const navigate = useNavigate();
 
@@ -32,7 +35,6 @@ const OrderManagement = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [statusList, setStatusList] = useState<Status[]>([]);
 
-  // Filter states
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<number | "">("");
@@ -103,7 +105,6 @@ const OrderManagement = () => {
 
             if (res.status === "success") {
               toast.success("Status updated successfully");
-
               setCategories((prev) =>
                 prev.map((order) =>
                   order.unique_id === orderId
@@ -257,10 +258,11 @@ const OrderManagement = () => {
       </Box>
 
       <Box sx={{ width: "100%" }}>
-        {categories.length > 0 ? (
+        {loading ? (
+          <TableSkeleton rows={8} columns={8} />
+        ) : categories.length > 0 ? (
           <DataGrid
             autoHeight
-            loading={loading}
             rows={categories}
             columns={columns}
             getRowId={(row) => row.id}
@@ -278,8 +280,6 @@ const OrderManagement = () => {
               p: 2,
             }}
           />
-        ) : loading ? (
-          <Typography>Loading...</Typography>
         ) : (
           <Typography>No data found</Typography>
         )}

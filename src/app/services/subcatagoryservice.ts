@@ -32,6 +32,15 @@ export const createSubcategory = async (create: FormData) => {
   return await agent.subcategory.createSubcategory(create);
 };
 
+export const deleteSubCategory = async (id: number) => {
+  return await agent.subcategory.delete(id);
+};
+
+export const toggleSubCategoryStatus = async (id: number) => {
+  return await agent.subcategory.updateStatus(id);
+};
+
+
 // export const fetchOrdersStatus = async (): Promise<any> => {
 //   const response = await agent.Orders.getstatus();
 //   return response;

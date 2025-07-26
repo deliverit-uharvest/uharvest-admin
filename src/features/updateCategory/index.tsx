@@ -60,7 +60,7 @@ const UpdateCategory = () => {
       console.log("Full Response:", response);
 
       const status = response?.data?.status?.toLowerCase();
-         console.log("Status:", response?.data?.status);
+      console.log("Status:", response?.data?.status);
       const message = response?.data?.message;
    
 
