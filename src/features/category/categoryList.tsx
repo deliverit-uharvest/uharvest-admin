@@ -34,7 +34,6 @@ const CategoryPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Dialog state
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
@@ -92,9 +91,7 @@ const CategoryPage = () => {
           <IconButton
             size="small"
             color="primary"
-            onClick={() =>
-              handleNavigate(`/catalog/category/${params.row.id}`)
-            }
+            onClick={() => handleNavigate(`/catalog/category/${params.row.id}`)}
           >
             <EditIcon />
           </IconButton>
@@ -188,7 +185,11 @@ const CategoryPage = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+          <Button
+            onClick={handleConfirmDelete}
+            color="error"
+            variant="contained"
+          >
             Delete
           </Button>
         </DialogActions>

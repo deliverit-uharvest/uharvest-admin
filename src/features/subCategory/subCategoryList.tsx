@@ -15,7 +15,6 @@ import {
   TextField,
   Typography,
   Paper,
-  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -24,6 +23,8 @@ import {
   fetchsubcategory,
   subcategory,
 } from "../../app/services/subcatagoryservice"; //import from subcatergory service
+import { toast } from "react-toastify";
+import { Category, fetchCategories } from "../../app/services/CategoryService";
 
 export interface SubCategory {
   id: number;
@@ -44,29 +45,33 @@ const SubCategoryList: React.FC = () => {
   const [data, setData] = useState<SubCategory[]>([]); // ✅ correct
 
   const [categoryFilter, setCategoryFilter] = useState<string>(""); // all list
-  const [categories, setCategories] = useState<string[]>([]); // filter list
+  const [categories, setCategories] = useState<Category[]>([]); // filter list
+
+  const getCategories = async () => {
+    try {
+      const res = await fetchCategories();
+      if ((res as any).status === "success") {
+        setCategories((res as any).data);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      toast.error("Failed to fetch categories");
+    }
+  };
+
+  const loadData = async () => {
+    try {
+      const response = await fetchsubcategory();
+      const subcategories = response.data;
+      setData(subcategories);
+    } catch (error) {
+      toast.error("Error fetching subcategory");
+    }
+  };
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const response = await fetchsubcategory();
-        const subcategories = response.data;
-        setData(subcategories);
-
-        // ✅ Extract unique category names
-        const uniqueCategories: string[] = Array.from(
-          new Set(
-            subcategories
-              .map((item: SubCategory) => item.category?.name)
-              .filter(Boolean)
-          )
-        );
-        setCategories(uniqueCategories);
-      } catch (error) {
-        console.error("Error fetching subcategory:", error);
-      }
-    };
-
+    getCategories();
     loadData();
   }, []);
 
@@ -74,7 +79,7 @@ const SubCategoryList: React.FC = () => {
     ? data.filter((item) => item.category?.name === categoryFilter)
     : data;
 
-     const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <Box p={3}>
@@ -107,8 +112,8 @@ const SubCategoryList: React.FC = () => {
         >
           <MenuItem value="">All</MenuItem>
           {categories.map((category) => (
-            <MenuItem key={category} value={category}>
-              {category}
+            <MenuItem key={category.id} value={category.id}>
+              {category.name}
             </MenuItem>
           ))}
         </TextField>

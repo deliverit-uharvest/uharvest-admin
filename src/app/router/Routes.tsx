@@ -7,20 +7,22 @@ import RequireAuth from "./RequireAuth";
 import DashboardLayout from "../layout/Dashboard";
 import AuthLayout from "../layout/Auth";
 import Root from "../layout/Root";
-import CategoryPage from "../../features/catalogCategory"; //
-import AddCategory from "../../features/addcategory";
-import UpdateCategory from "../../features/updateCategory";
+import CategoryPage from "../../features/category/categoryList";
+import UpdateCategory from "../../features/category/updateCategory";
 import ProductList from "../../features/product/productList";
 import AddProduct from "../../features/product/addproduct";
 import AddOrganisation from "../../features/addOrganisation";
 import OrderManagement from "../../features/orderManagement";
 import OrganisationList from "../../features/organisationOnboard/OrganisationList";
-import SubCategoryList from "../../features/subCategory";
-import AddSubCategory from "../../features/subCategory/Addsubcategory";
+import SubCategoryList from "../../features/subCategory/subCategoryList";
 import DashboardHome from "../../features/dashboard";
 import UpdateProduct from "../../features/product/updateProduct";
 import OutletList from "../../features/outlet/OutletList";
 import AddOutlet from "../../features/outlet/addOutlet";
+import AddCategory from "../../features/category/addCategory";
+import AddSubCategory from "../../features/subCategory/addSubCategory";
+
+
 
 export const routes: RouteObject[] = [
   {
@@ -93,5 +95,6 @@ export const routes: RouteObject[] = [
     ],
   },
 ];
+
 
 export const router = createBrowserRouter(routes);

@@ -14,6 +14,9 @@ import {
   fetchsubcategory,
   createSubcategory,
 } from "../../app/services/subcatagoryservice";
+import { Category, fetchCategories } from "../../app/services/CategoryService";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export interface SubCategory {
   id: number;
@@ -25,39 +28,30 @@ export interface SubCategory {
   };
 }
 
-interface Category {
-  id: number;
-  name: string;
-}
-
-const AddSubCategory = () => {
+const AddSubCategory: React.FC = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
   const [successOpen, setSuccessOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
 
-  useEffect(() => {
-    const loadCategories = async () => {
+
+    const getCategories = async () => {
       try {
-        const res = await fetchsubcategory();
-        const uniqueMap = new Map();
-
-        res.data.forEach((item: any) => {
-          if (item.category && !uniqueMap.has(item.category.id)) {
-            uniqueMap.set(item.category.id, {
-              id: item.category.id,
-              name: item.category.name,
-            });
-          }
-        });
-
-        setCategories(Array.from(uniqueMap.values()));
+        const res = await fetchCategories();
+        if ((res as any).status === "success") {
+          setCategories((res as any).data);
+        } else {
+          toast.error("Something went wrong");
+        }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        toast.error("Failed to fetch categories");
       }
     };
 
-    loadCategories();
+
+  useEffect(() => {
+    getCategories();
   }, []);
 
   const formik = useFormik({
@@ -75,14 +69,14 @@ const AddSubCategory = () => {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("category_id", values.category);
-      if (values.image) formData.append("file", values.image); //  CORRECT key name
-
+      if (values.image) formData.append("file", values.image);
       try {
         const res = await createSubcategory(formData);
         console.log("Successfully submitted:", res);
         setSuccessOpen(true);
         resetForm();
         setPreview(null);
+        navigate("/catalog/subcategory");
       } catch (error) {
         console.error("Error submitting form:", error);
         setErrorOpen(true);

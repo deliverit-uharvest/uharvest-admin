@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -8,34 +8,14 @@ import {
   Paper,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { useNavigate, useParams } from "react-router-dom";
+import { addCategory } from "../../app/services/CategoryService";
 import { toast } from "react-toastify";
-import {
-  getCategoryById,
-  updateCategory,
-} from "../../app/services/CategoryService";
+import { useNavigate } from "react-router-dom";
 
-const UpdateCategory = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const AddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [existingImageUrl, setExistingImageUrl] = useState<string>("");
-
-  useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        const res = await getCategoryById(Number(id));
-        setCategoryName(res.data.name || "");
-        setExistingImageUrl(res.data.image || ""); // assumes backend sends 'image'
-      } catch (error) {
-        toast("Failed to fetch category");
-        navigate("/catalog/category");
-      }
-    };
-
-    if (id) fetchCategory();
-  }, [id, navigate]);
+  const navigate = useNavigate();
 
   const handleReset = () => {
     setCategoryName("");
@@ -50,37 +30,24 @@ const UpdateCategory = () => {
 
     const formData = new FormData();
     formData.append("name", categoryName);
-    formData.append("category_id", String(id));
     if (image) {
       formData.append("file", image);
     }
 
     try {
-      const response = await updateCategory(formData);
-      console.log("Full Response:", response);
+      const response = await addCategory(formData);
 
-      const status = response?.data?.status?.toLowerCase();
-         console.log("Status:", response?.data?.status);
-      const message = response?.data?.message;
-   
-
-      if (status == "success") {
-        toast(message || "Category updated successfully!");
-
-        //  Redirect only after successful update
-        setTimeout(() => {
-          navigate("/catalog/category");
-        }, 1500);
+      if (response.data.status === "success") {
+        toast("Category saved successfully!");
+        handleReset();
+        navigate("/catalog/category");
       } else {
-        toast(message || "Failed to update category.");
+        toast(response.data.message);
       }
-    } catch (error: any) {
-      toast(error?.response?.data?.message || "Failed to update category.");
+    } catch (error) {
+      toast("Failed to save category.");
     }
   };
-
-  // Image preview (either new or existing)
-  const previewImageUrl = image ? URL.createObjectURL(image) : existingImageUrl;
 
   return (
     <Box
@@ -107,10 +74,10 @@ const UpdateCategory = () => {
           color="primary"
           textAlign="center"
         >
-          Update Category
+          Add New Category
         </Typography>
 
-        {/* Category Name Input */}
+        {/* Category Name */}
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
             Category Name <span style={{ color: "red" }}>*</span>
@@ -124,10 +91,10 @@ const UpdateCategory = () => {
           />
         </Box>
 
-        {/* Upload Image */}
+        {/* Image Upload */}
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-            Upload Image
+            Upload Image <span style={{ color: "red" }}>*</span>
           </InputLabel>
           <Button
             component="label"
@@ -146,28 +113,30 @@ const UpdateCategory = () => {
               }
             />
           </Button>
+
+          {/* Image Preview */}
           {image && (
-            <Typography variant="body1" mt={1} color="text.secondary">
-              Selected: {image.name}
-            </Typography>
+            <Box mt={2}>
+              <Typography variant="body1" color="text.secondary">
+                Selected: {image.name}
+              </Typography>
+              <Box mt={1}>
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="Preview"
+                  style={{
+                    maxHeight: "200px",
+                    maxWidth: "100%",
+                    borderRadius: "8px",
+                    border: "1px solid #ddd",
+                  }}
+                />
+              </Box>
+            </Box>
           )}
         </Box>
 
-        {/* Image Preview */}
-        {previewImageUrl && (
-          <Box mt={2}>
-            <Typography variant="subtitle1" fontWeight={600}>
-              Image Preview:
-            </Typography>
-            <img
-              src={previewImageUrl}
-              alt="Preview"
-              style={{ marginTop: 10, maxWidth: 200, borderRadius: 8 }}
-            />
-          </Box>
-        )}
-
-        {/* Action Buttons */}
+        {/* Buttons */}
         <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
           <Button
             variant="outlined"
@@ -200,7 +169,7 @@ const UpdateCategory = () => {
               },
             }}
           >
-            Update
+            Save
           </Button>
         </Box>
       </Paper>
@@ -208,4 +177,4 @@ const UpdateCategory = () => {
   );
 };
 
-export default UpdateCategory;
+export default AddCategory;
