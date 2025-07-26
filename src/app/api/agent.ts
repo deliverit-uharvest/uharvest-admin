@@ -104,6 +104,7 @@ const Category = {
     }),
   update: (data: FormData) => requests.post("/category", data),
   getById: (id: number) => requests.get(`/category/${id}`),
+  updateStatus: (id: number) => requests.patch(`/category/${id}`),
 };
 
 const Orders = {
@@ -133,16 +134,7 @@ const Organisation = {
         "Content-Type": "application/json",
       },
     }),
-  // create: (data: FormData) =>
-  //   axios.post("/organisation", data, {
-  //     headers: {
-  //       "Content-Type": "multipart/form-data",
-  //     },
-  //   }),
-  //update: (data: FormData) => axios.post('/orders', data),
-  //getById: (id: number) => requests.get(`/orders/${id}`),
-  //changeStatus: (payload: { order_id: string; status_id: number }) =>
-  //requests.post<ApiResponse<any>>("/orders/change-status", payload),
+
 };
 
 const Outlet = {
@@ -156,10 +148,7 @@ const Outlet = {
         "Content-Type": "application/json",
       },
     }),
-  //update: (data: FormData) => axios.post('/orders', data),
-  //getById: (id: number) => requests.get(`/orders/${id}`),
-  //changeStatus: (payload: { order_id: string; status_id: number }) =>
-  //requests.post<ApiResponse<any>>("/orders/change-status", payload),
+ 
 };
 
 const SubCategory = {

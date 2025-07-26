@@ -14,6 +14,7 @@ import {
   fetchOutlet,
   Outlet,
 } from "../../app/services/OutletService";
+import TableSkeleton from "../loader/TableSkeleton"; // ✅ Importing loader
 
 const OutletList = () => {
   const navigate = useNavigate();
@@ -119,7 +120,9 @@ const OutletList = () => {
       </Box>
 
       <Box sx={{ width: "100%" }}>
-        {categories.length > 0 ? (
+        {loading ? (
+          <TableSkeleton rows={6} columns={9} /> // ✅ Applied loader here
+        ) : categories.length > 0 ? (
           <DataGrid
             autoHeight
             loading={loading}

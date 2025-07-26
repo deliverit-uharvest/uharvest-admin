@@ -26,11 +26,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Category, fetchCategories } from "../../app/services/CategoryService";
-import {
-  changeStatus,
-  deleteSubCategory,
-  fetchSubCategory,
-} from "../../app/services/SubCatagoryService";
+import { changeStatus, deleteSubCategory, fetchSubCategory } from "../../app/services/subcatagoryservice";
 
 export interface SubCategory {
   id: number;

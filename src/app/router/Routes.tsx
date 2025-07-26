@@ -19,11 +19,12 @@ import DashboardHome from "../../features/dashboard";
 import UpdateProduct from "../../features/product/updateProduct";
 import OutletList from "../../features/outlet/OutletList";
 import AddOutlet from "../../features/outlet/addOutlet";
-import AddCategory from "../../features/category/addCategory";
+import ComingSoon from "../../features/managestock";
+import ComingSoon2 from "../../features/overview";
+import Salesreturn from "../../features/salesReturn";
 import AddSubCategory from "../../features/subCategory/addSubCategory";
-import UpdateSubCategory from "../../features/subCategory/updateSubCategory";
-
-
+import AddCategory from "../../features/category/addCategory";
+import UpdateSubCategory from "../../features/subCategory/updatesubcategory";
 
 export const routes: RouteObject[] = [
   {
@@ -58,7 +59,7 @@ export const routes: RouteObject[] = [
                       { path: "update/:id", element: <UpdateSubCategory /> },
                     ],
                   },
-
+                 
                   {
                     path: "product",
                     children: [
@@ -67,14 +68,38 @@ export const routes: RouteObject[] = [
                       { path: "update/:id", element: <UpdateProduct /> },
                     ],
                   },
+                  {
+                    path: "stock-management",
+                    children: [
+                     
+                      { index:true, element: <ComingSoon2 /> },
+                     
+                    ],
+                  },
+
+
                 ],
               },
+
+               {
+                path: "overview",
+                children: [
+                  { index: true, element: <ComingSoon /> },
+                 
+                ],
+              },
+
+
+
 
               //
 
               {
                 path: "Orders",
-                children: [{ index: true, element: <OrderManagement /> }],
+                children: [
+                  { index: true, element: <OrderManagement /> },
+                  { path: "sales", element: <Salesreturn /> },
+                ],
               },
               {
                 path: "organisation",

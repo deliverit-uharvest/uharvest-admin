@@ -1,16 +1,5 @@
 import agent from "../api/agent";
 
-// export interface SubCategory {
-//   id: number;
-//   category_id: number;
-//   name: string;
-//   is_active: boolean;
-//   image: string | null;
-//   display_sequence_number: string;
-//   created_at: string;
-//   updated_at: string;
-// }
-
 export interface SubCategory {
   id: number;
   category_id: number;
@@ -32,6 +21,8 @@ export const fetchSubCategory = async (): Promise<any> => {
 export const createSubcategory = async (create: FormData) => {
   return await agent.SubCategory.create(create);
 };
+
+
 
 export const getSubCategoryById = async (id: number): Promise<any> => {
   const response = await agent.SubCategory.getById(id);

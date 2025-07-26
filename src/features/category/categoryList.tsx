@@ -18,11 +18,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import {
   Category,
+  changeStatus,
   deleteCategory,
   fetchCategories,
 } from "../../app/services/CategoryService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
+// 👇 Importing TableSkeleton
+import TableSkeleton from "../loader/TableSkeleton";
 
 const CategoryPage = () => {
   const navigate = useNavigate();
@@ -79,7 +83,11 @@ const CategoryPage = () => {
       headerName: "Status",
       flex: 1,
       renderCell: (params) => (
-        <Checkbox checked={params.value} color="success" />
+        <Checkbox
+          checked={params.row.is_active}
+          color="success"
+          onClick={() => handleToggleStatus(params.row.id)}
+        />
       ),
     },
     {
@@ -127,6 +135,19 @@ const CategoryPage = () => {
     loadCategories();
   }, []);
 
+  const handleToggleStatus = async (id: number) => {
+    try {
+      await changeStatus(id);
+
+      setCategories((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, is_active: !p.is_active } : p))
+      );
+      toast("Status changed successfully");
+    } catch (error) {
+      toast.error("Error updating product status");
+    }
+  };
+
   return (
     <Box p={2}>
       <Box
@@ -148,10 +169,12 @@ const CategoryPage = () => {
         </Button>
       </Box>
 
-      {categories.length > 0 ? (
+      {loading ? (
+        // 👇 Table Skeleton Loader
+        <TableSkeleton rows={6} columns={4} />
+      ) : categories.length > 0 ? (
         <DataGrid
           autoHeight
-          loading={loading}
           rows={categories}
           columns={columns}
           initialState={{
@@ -168,8 +191,6 @@ const CategoryPage = () => {
             p: 2,
           }}
         />
-      ) : loading ? (
-        <Typography>Loading...</Typography>
       ) : (
         <Typography>No categories found.</Typography>
       )}

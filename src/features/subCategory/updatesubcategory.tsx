@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Category, fetchCategories } from "../../app/services/CategoryService";
+import {
+  Category,
+  fetchCategories,
+} from "../../app/services/CategoryService";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { createSubcategory } from "../../app/services/subcatagoryservice";
+import { useNavigate, useParams } from "react-router-dom";
+import { getSubCategoryById, updateSubCategory } from "../../app/services/subcatagoryservice";
 
-const AddSubCategory: React.FC = () => {
+
+const UpdateSubCategory: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams(); // 🔥 Get subcategory id from URL
   const [categories, setCategories] = useState<Category[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Fetch all categories
   const getCategories = async () => {
     try {
       const res = await fetchCategories();
@@ -26,9 +38,26 @@ const AddSubCategory: React.FC = () => {
     }
   };
 
+  // Fetch subcategory by ID
+  const fetchSubCategoryDetails = async () => {
+    try {
+      const res = await getSubCategoryById(Number(id));
+      const subcategory = res.data;
+      formik.setValues({
+        name: subcategory.name,
+        category: subcategory.category_id.toString(),
+        image: null,
+      });
+      setPreview(subcategory.image); 
+    } catch (error) {
+      toast.error("Failed to load subcategory");
+    }
+  };
+
   useEffect(() => {
     getCategories();
-  }, []);
+    if (id) fetchSubCategoryDetails();
+  }, [id]);
 
   const formik = useFormik({
     initialValues: {
@@ -39,23 +68,23 @@ const AddSubCategory: React.FC = () => {
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
       category: Yup.string().required("Required"),
-      image: Yup.mixed().required("Image is required"),
     }),
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values) => {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("category_id", values.category);
-      if (values.image) formData.append("file", values.image);
+      if (values.image) {
+        formData.append("file", values.image);
+      }
+
       try {
         setLoading(true);
-        await createSubcategory(formData);
-        toast("Sub Category Added successfully!");
-        resetForm();
-        setPreview(null);
-        setLoading(false);
+        await updateSubCategory(Number(id), formData); 
+        toast.success("Sub Category updated successfully!");
         navigate("/catalog/subcategory");
       } catch (error) {
-        toast.error("Something went wrong!");
+        toast.error("Update failed");
+      } finally {
         setLoading(false);
       }
     },
@@ -101,14 +130,14 @@ const AddSubCategory: React.FC = () => {
         >
           <MenuItem value="">Select</MenuItem>
           {categories.map((cat) => (
-            cat.is_active?<MenuItem key={cat.id} value={cat.id.toString()}>
+            <MenuItem key={cat.id} value={cat.id.toString()}>
               {cat.name}
-            </MenuItem>:""
+            </MenuItem>
           ))}
         </TextField>
 
         <Typography variant="h6" mb={2}>
-          Upload Image *
+          Upload Image
         </Typography>
         <input
           type="file"
@@ -137,17 +166,18 @@ const AddSubCategory: React.FC = () => {
           <Button type="reset" variant="contained" color="warning">
             Reset
           </Button>
-          {loading ? (
-            <Typography>Submitting...</Typography>
-          ) : (
-            <Button type="submit" variant="contained" color="warning">
-              Save & Next
-            </Button>
-          )}
+          <Button
+            type="submit"
+            variant="contained"
+            color="warning"
+            disabled={loading}
+          >
+            {loading ? "Updating..." : "Update"}
+          </Button>
         </Box>
       </form>
     </Box>
   );
 };
 
-export default AddSubCategory;
+export default UpdateSubCategory;

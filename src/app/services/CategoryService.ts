@@ -15,7 +15,7 @@ export const fetchCategories = async (): Promise<any> => {
   return response;
 };
 
-export const getCategoryById = async (id:number): Promise<any> => {
+export const getCategoryById = async (id: number): Promise<any> => {
   const response = await agent.Category.getById(id);
   return response;
 };
@@ -33,4 +33,8 @@ export const addCategory = async (formData: FormData): Promise<any> => {
 export const updateCategory = async (formData: FormData): Promise<any> => {
   const response = await agent.Category.update(formData);
   return response;
+};
+
+export const changeStatus = async (id: number) => {
+  return await agent.Category.updateStatus(id);
 };

@@ -44,10 +44,10 @@ const catalog = {
           breadcrumbs:false,
         },
         {
-          id: 'manage-stock',
+          id: 'managestock',
           title: 'Manage Stock',
           type: 'item',
-          url: '/dashboard/manage-stock'
+          url: '/catalog/stock-management'
         },
         // {
         //   id: 'req-product',

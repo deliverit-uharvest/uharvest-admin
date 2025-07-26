@@ -12,10 +12,11 @@ import userMgnt from './userMgnt';
 import miscellaneos from './miscellaneous';
 import configuration from './configuration';
 import organisationOnboard from './organisationOnboard';
+import overview from './dashboard';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [system,dashboard,catalog,manageorder,organisationOnboard,location,userMgnt,miscellaneos,configuration ] //support
+  items: [overview,catalog,manageorder,organisationOnboard,userMgnt,miscellaneos,configuration ] //support
 };
 
 export default menuItems;
