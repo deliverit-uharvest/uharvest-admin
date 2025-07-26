@@ -12,7 +12,6 @@ const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 axios.interceptors.request.use((config) => {
   const token = store.userStore.token;
-  console.log("Token sent in request:", token);
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -78,11 +77,12 @@ const Product = {
       name?: string;
     } = {}
   ) => requests.post("/product", filters),
-  getProduct:(id:number)=>requests.get(`product/${id}`),
+  getProduct: (id: number) => requests.get(`product/${id}`),
   updateStatus: (productId: number) => requests.patch(`/product/${productId}`),
   delete: (productId: number) => requests.delete(`/product/${productId}`),
   createProduct: (data: FormData) => requests.post("/product/create", data),
-  updateProduct:(data:FormData,id:number)=>requests.patch(`product/update/${id}`,data)
+  updateProduct: (data: FormData, id: number) =>
+    requests.patch(`product/update/${id}`, data),
 };
 
 const Customer = {};
@@ -107,7 +107,8 @@ const Category = {
 };
 
 const Orders = {
-  get: (config = {}) => axios.get<ApiResponse<any>>("/orders", config).then(responseBody),
+  get: (config = {}) =>
+    axios.get<ApiResponse<any>>("/orders", config).then(responseBody),
   getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
   delete: (id: number) => axios.delete(`/orders/${id}`),
   create: (data: FormData) =>
@@ -116,23 +117,23 @@ const Orders = {
         "Content-Type": "multipart/form-data",
       },
     }),
-  update: (data: FormData) => requests.post('/orders', data),
+  update: (data: FormData) => requests.post("/orders", data),
   getById: (id: number) => requests.get(`/orders/${id}`),
   changeStatus: (payload: { order_id: string; status_id: number }) =>
     requests.post<ApiResponse<any>>("/orders/change-status", payload),
 };
 
-
 const Organisation = {
-  get: (config = {}) => axios.get<ApiResponse<any>>("/organisation", config).then(responseBody),
+  get: (config = {}) =>
+    axios.get<ApiResponse<any>>("/organisation", config).then(responseBody),
   //getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
   delete: (id: number) => axios.delete(`/organisation/${id}`),
   create: (data: any) =>
-  axios.post("/organisation", data, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }),
+    axios.post("/organisation", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
   // create: (data: FormData) =>
   //   axios.post("/organisation", data, {
   //     headers: {
@@ -142,57 +143,34 @@ const Organisation = {
   //update: (data: FormData) => axios.post('/orders', data),
   //getById: (id: number) => requests.get(`/orders/${id}`),
   //changeStatus: (payload: { order_id: string; status_id: number }) =>
-    //requests.post<ApiResponse<any>>("/orders/change-status", payload),
+  //requests.post<ApiResponse<any>>("/orders/change-status", payload),
 };
 
 const Outlet = {
-  get: (config = {}) => axios.get<ApiResponse<any>>("/outlet", config).then(responseBody),
+  get: (config = {}) =>
+    axios.get<ApiResponse<any>>("/outlet", config).then(responseBody),
   //getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
   delete: (id: number) => axios.delete(`/outlet/${id}`),
   create: (data: any) =>
-  axios.post("/outlet", data, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }),
+    axios.post("/outlet", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
   //update: (data: FormData) => axios.post('/orders', data),
   //getById: (id: number) => requests.get(`/orders/${id}`),
   //changeStatus: (payload: { order_id: string; status_id: number }) =>
-    //requests.post<ApiResponse<any>>("/orders/change-status", payload),
+  //requests.post<ApiResponse<any>>("/orders/change-status", payload),
 };
-// ============= SAubcarergory=========//
 
-const subcategory = {
+const SubCategory = {
   get: () => requests.get<ApiResponse<LoginResponse>>("/sub-category"),
-  createSubcategory: (data: FormData) => requests.post("/sub-category/create", data),
-//   getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
-//   delete: (id: number) => axios.delete(`/orders/${id}`),
-//   create: (data: FormData) =>
-//     axios.post("/orders/create", data, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     }),
-//   update: (data: FormData) => axios.post('/orders', data),
-//   getById: (id: number) => requests.get(`/orders/${id}`),
-//   changeStatus: (payload: { order_id: string; status_id: number }) =>
-//     requests.post<ApiResponse<any>>("/orders/change-status", payload),
-// };
-
-// const Cart = {
-//   addToCart: (productId: number) => {
-//     return requests.post("/cart/add-to-cart", { product_id: productId ,device_id:"temp"});
-//   },
-//   getCart: () => {
-//     return requests.get("/cart");
-//   },
-//   updateQuantity: (cartId: number, action: "increase" | "decrease") =>
-//     requests.post("/cart/update", { cart_id: cartId, action: action,device_id:"temp" }),
-// };
-
-// const Orders = {
-//   getorders: () => requests.get("/orders"),
-//   createOrder: () => requests.post("/orders/create", {}),
+  create: (data: FormData) =>
+    requests.post("/sub-category/create", data),
+  delete: (id: number) => axios.delete(`/sub-category/${id}`),
+  update: (data: FormData,id:number) => requests.patch(`/sub-category/update/${id}`, data),
+  getById: (id: number) => requests.get(`/sub-category/${id}`),
+  updateStatus: (id: number) => requests.patch(`/sub-category/${id}`),
 };
 const States = {
   get: () => requests.get<ApiResponse<LoginResponse>>("/states"),
@@ -209,13 +187,12 @@ const agent = {
   User,
   Category,
   Orders,
-  subcategory,
+  SubCategory,
   Organisation,
   Outlet,
   States,
-  Cities
-  // Cart,
-  // Orders,
+  Cities,
+
 };
 
 export default agent;

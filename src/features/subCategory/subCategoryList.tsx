@@ -5,7 +5,6 @@ import {
   Checkbox,
   IconButton,
   MenuItem,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -13,18 +12,25 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
   Paper,
+  Typography,
 } from "@mui/material";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchsubcategory,
-  subcategory,
-} from "../../app/services/subcatagoryservice"; //import from subcatergory service
 import { toast } from "react-toastify";
 import { Category, fetchCategories } from "../../app/services/CategoryService";
+import {
+  changeStatus,
+  deleteSubCategory,
+  fetchSubCategory,
+} from "../../app/services/SubCatagoryService";
 
 export interface SubCategory {
   id: number;
@@ -42,10 +48,13 @@ export interface SubCategory {
 }
 
 const SubCategoryList: React.FC = () => {
-  const [data, setData] = useState<SubCategory[]>([]); // ✅ correct
-
-  const [categoryFilter, setCategoryFilter] = useState<string>(""); // all list
-  const [categories, setCategories] = useState<Category[]>([]); // filter list
+  const [data, setData] = useState<SubCategory[]>([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState<string>("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null
+  );
 
   const getCategories = async () => {
     try {
@@ -60,13 +69,50 @@ const SubCategoryList: React.FC = () => {
     }
   };
 
+  const handleOpenDialog = (id: number) => {
+    setSelectedCategoryId(id);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedCategoryId(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedCategoryId) return;
+
+    try {
+      await deleteSubCategory(selectedCategoryId);
+      setData((prev) => prev.filter((cat) => cat.id !== selectedCategoryId));
+      toast.success("Sub Category deleted successfully.");
+    } catch (err) {
+      toast.error("Something went wrong while deleting.");
+    } finally {
+      handleCloseDialog();
+    }
+  };
+
   const loadData = async () => {
     try {
-      const response = await fetchsubcategory();
+      const response = await fetchSubCategory();
       const subcategories = response.data;
       setData(subcategories);
     } catch (error) {
       toast.error("Error fetching subcategory");
+    }
+  };
+
+  const handleToggleStatus = async (id: number) => {
+    try {
+      await changeStatus(id);
+
+      setData((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, is_active: !p.is_active } : p))
+      );
+      toast("Status changed successfully");
+    } catch (error) {
+      toast.error("Error updating product status");
     }
   };
 
@@ -76,7 +122,7 @@ const SubCategoryList: React.FC = () => {
   }, []);
 
   const filteredData = categoryFilter
-    ? data.filter((item) => item.category?.name === categoryFilter)
+    ? data.filter((item) => item.category_id === Number(categoryFilter))
     : data;
 
   const navigate = useNavigate();
@@ -146,14 +192,21 @@ const SubCategoryList: React.FC = () => {
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.category?.name ?? "N/A"}</TableCell>
                 <TableCell>
-                  <Checkbox checked={row.is_active} />
+                  <Checkbox
+                    checked={row.is_active}
+                    onClick={() => handleToggleStatus(row.id)}
+                  />
                 </TableCell>
                 <TableCell>
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      navigate(`/catalog/subcategory/update/${row.id}`);
+                    }}
+                  >
                     <EditIcon />
                   </IconButton>
                   <IconButton color="error">
-                    <DeleteIcon />
+                    <DeleteIcon onClick={() => handleOpenDialog(row.id)} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -161,6 +214,25 @@ const SubCategoryList: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this category? This action cannot be
+            undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button
+            onClick={handleConfirmDelete}
+            color="error"
+            variant="contained"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

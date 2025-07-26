@@ -25,8 +25,3 @@ export const createProduct = async (product: FormData) => {
 export const updateProduct = async (product: FormData,id:number) => {
   return await agent.Product.updateProduct(product,id);
 };
-
-export const fetchsubcategory = async (): Promise<any> => {
-  const response = await agent.subcategory.get();
-  return response;
-};
