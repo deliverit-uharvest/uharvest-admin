@@ -10,7 +10,6 @@ import {
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import agent from "../../app/api/agent";
 import {
   getCategoryById,
   updateCategory,
@@ -21,12 +20,14 @@ const UpdateCategory = () => {
   const navigate = useNavigate();
   const [categoryName, setCategoryName] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [existingImageUrl, setExistingImageUrl] = useState<string>("");
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         const res = await getCategoryById(Number(id));
         setCategoryName(res.data.name || "");
+        setExistingImageUrl(res.data.image || ""); // assumes backend sends 'image'
       } catch (error) {
         toast("Failed to fetch category");
         navigate("/catalog/category");
@@ -51,22 +52,35 @@ const UpdateCategory = () => {
     formData.append("name", categoryName);
     formData.append("category_id", String(id));
     if (image) {
-      formData.append("image", image);
+      formData.append("file", image);
     }
 
     try {
       const response = await updateCategory(formData);
+      console.log("Full Response:", response);
 
-      if (response.data.status === "success") {
-        toast("Category updated successfully!");
-        navigate("/catalog/category");
+      const status = response?.data?.status?.toLowerCase();
+         console.log("Status:", response?.data?.status);
+      const message = response?.data?.message;
+   
+
+      if (status == "success") {
+        toast(message || "Category updated successfully!");
+
+        //  Redirect only after successful update
+        setTimeout(() => {
+          navigate("/catalog/category");
+        }, 1500);
       } else {
-        toast(response.data.message || "Failed to update category");
+        toast(message || "Failed to update category.");
       }
     } catch (error: any) {
       toast(error?.response?.data?.message || "Failed to update category.");
     }
   };
+
+  // Image preview (either new or existing)
+  const previewImageUrl = image ? URL.createObjectURL(image) : existingImageUrl;
 
   return (
     <Box
@@ -96,6 +110,7 @@ const UpdateCategory = () => {
           Update Category
         </Typography>
 
+        {/* Category Name Input */}
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
             Category Name <span style={{ color: "red" }}>*</span>
@@ -109,6 +124,7 @@ const UpdateCategory = () => {
           />
         </Box>
 
+        {/* Upload Image */}
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
             Upload Image
@@ -137,6 +153,21 @@ const UpdateCategory = () => {
           )}
         </Box>
 
+        {/* Image Preview */}
+        {previewImageUrl && (
+          <Box mt={2}>
+            <Typography variant="subtitle1" fontWeight={600}>
+              Image Preview:
+            </Typography>
+            <img
+              src={previewImageUrl}
+              alt="Preview"
+              style={{ marginTop: 10, maxWidth: 200, borderRadius: 8 }}
+            />
+          </Box>
+        )}
+
+        {/* Action Buttons */}
         <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
           <Button
             variant="outlined"

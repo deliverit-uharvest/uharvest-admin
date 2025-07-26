@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -6,6 +6,11 @@ import {
   Avatar,
   Checkbox,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -22,13 +27,45 @@ import { useNavigate } from "react-router-dom";
 const CategoryPage = () => {
   const navigate = useNavigate();
 
-  const handleNavigate = (path:string)=>{
-     navigate(path);
-  }
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  
+
+  // Dialog state
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null
+  );
+
+  const handleOpenDialog = (id: number) => {
+    setSelectedCategoryId(id);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedCategoryId(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedCategoryId) return;
+
+    try {
+      await deleteCategory(selectedCategoryId);
+      setCategories((prev) =>
+        prev.filter((cat) => cat.id !== selectedCategoryId)
+      );
+      toast.success("Category deleted successfully.");
+    } catch (err) {
+      toast.error("Something went wrong while deleting.");
+    } finally {
+      handleCloseDialog();
+    }
+  };
+
   const columns: GridColDef[] = [
     {
       field: "image",
@@ -52,13 +89,19 @@ const CategoryPage = () => {
       flex: 1,
       renderCell: (params) => (
         <Box display="flex" gap={1}>
-          <IconButton size="small" color="primary" onClick={()=>handleNavigate(`/catalog/category/${params.row.id}`)}>
-            <EditIcon/>
+          <IconButton
+            size="small"
+            color="primary"
+            onClick={() =>
+              handleNavigate(`/catalog/category/${params.row.id}`)
+            }
+          >
+            <EditIcon />
           </IconButton>
           <IconButton
             size="small"
             color="error"
-            onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleOpenDialog(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -67,33 +110,18 @@ const CategoryPage = () => {
     },
   ];
 
-  const handleDelete = async (id: number) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this category?"
-    );
-    if (!confirm) return;
-
-    try {
-      await deleteCategory(id);
-      setCategories((prev) => prev.filter((cat) => cat.id !== id));
-    } catch (err) {
-      toast("Something went wrong while deleting.");
-    }
-  };
-
   useEffect(() => {
     const loadCategories = async () => {
       try {
         setLoading(true);
         const res = await fetchCategories();
-        if (res.status == "success") {
+        if (res.status === "success") {
           setCategories(res.data);
         } else {
-          toast(res.message);
+          toast.error(res.message);
         }
-        setLoading(false);
       } catch (err) {
-        toast("Failed to load categories.");
+        toast.error("Failed to load categories.");
       } finally {
         setLoading(false);
       }
@@ -116,7 +144,7 @@ const CategoryPage = () => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={()=>{handleNavigate("/catalog/category/add")}}
+          onClick={() => handleNavigate("/catalog/category/add")}
           sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
         >
           Add Category
@@ -146,8 +174,25 @@ const CategoryPage = () => {
       ) : loading ? (
         <Typography>Loading...</Typography>
       ) : (
-        <Typography>No data founddd</Typography>
+        <Typography>No categories found.</Typography>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this category? This action cannot be
+            undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

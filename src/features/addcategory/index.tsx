@@ -14,13 +14,11 @@ import { useNavigate } from "react-router-dom";
 
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
-  const navigate = useNavigate();
-  // const [rank, setRank] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const navigate = useNavigate();
 
   const handleReset = () => {
     setCategoryName("");
-    // setRank("");
     setImage(null);
   };
 
@@ -33,7 +31,7 @@ const AddCategory = () => {
     const formData = new FormData();
     formData.append("name", categoryName);
     if (image) {
-      formData.append("image", image);
+      formData.append("file", image);
     }
 
     try {
@@ -56,7 +54,7 @@ const AddCategory = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      bgcolor="#f9f9f9" // Optional background for contrast
+      bgcolor="#f9f9f9"
     >
       <Paper
         elevation={3}
@@ -65,7 +63,7 @@ const AddCategory = () => {
           borderRadius: 4,
           p: 5,
           width: "100%",
-          maxWidth: 900, // Increased width
+          maxWidth: 900,
         }}
       >
         <Typography
@@ -92,20 +90,6 @@ const AddCategory = () => {
           />
         </Box>
 
-        {/* Rank */}
-        {/* <Box mb={3}>
-        <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-          Rank <span style={{ color: "red" }}>*</span>
-        </InputLabel>
-        <TextField
-          fullWidth
-          size="medium"
-          placeholder="Enter rank"
-          value={rank}
-          onChange={(e) => setRank(e.target.value)}
-        />
-      </Box> */}
-
         {/* Image Upload */}
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
@@ -128,10 +112,26 @@ const AddCategory = () => {
               }
             />
           </Button>
+
+          {/* Image Preview */}
           {image && (
-            <Typography variant="body1" mt={1} color="text.secondary">
-              Selected: {image.name}
-            </Typography>
+            <Box mt={2}>
+              <Typography variant="body1" color="text.secondary">
+                Selected: {image.name}
+              </Typography>
+              <Box mt={1}>
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="Preview"
+                  style={{
+                    maxHeight: "200px",
+                    maxWidth: "100%",
+                    borderRadius: "8px",
+                    border: "1px solid #ddd",
+                  }}
+                />
+              </Box>
+            </Box>
           )}
         </Box>
 
