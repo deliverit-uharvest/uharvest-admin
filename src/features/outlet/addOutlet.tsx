@@ -15,6 +15,8 @@ import { fetchOrganisation, Organisation } from "../../app/services/Organisation
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { fetchStates, States } from "../../app/services/StatesService";
+import { fetchCitiesByState, City } from "../../app/services/CitiesService";
 
 const AddOutlet = () => {
   const [name, setName] = useState("");
@@ -38,6 +40,17 @@ const AddOutlet = () => {
 
   const [organisationList, setOrganisationList] = useState<Organisation[]>([]);
   const [selectedOrganisation, setSelectedOrganisation] = useState("");
+
+  const [stateList, setStateList] = useState<States[]>([]);
+  const [selectedState, setSelectedState] = useState("");
+
+  const [cityList, setCityList] = useState<City[]>([]);
+  const [selectedCity, setSelectedCity] = useState("");
+
+  const [openingTime, setOpeningTime] = useState("09:00:00");
+  const [closingTime, setClosingTime] = useState("21:00:00");
+  const [lunchTime, setLunchTime] = useState("14:00:00");
+  const [landMark, setLandMark] = useState("");
 
   const handleReset = () => {
     setName("");
@@ -123,18 +136,23 @@ const AddOutlet = () => {
                   name,
                   org_id: selectedOrganisation,
                   email,
-                  //mobile,
-                  // secondary_mobile: secmobile,
-                  // pan_number: panNumber,
-                  // gst_number: gstNumber,
+                  mobile,
+                  secondary_mobile: secmobile,
+                  pan_number: panNumber,
+                  gst_number: gstNumber,
+                  fssai_number: fssaiNumber,
+                  license_registration_number: licenseRegistrationNumber,
+                  shop_license: shopLicense,
+                  opening_time: openingTime,
+                  closing_time: closingTime,
                   shipping_addressline1:shippingAddressline1,
                   shipping_addressline2:shippingAddressline2,
-                  //shippingPincode: shippingPincode,
-                  // stateid: Number(selectedState),
-                  // cityid: Number(selectedCity),
-                  // land_mark: landMark,
-                  //lat: "21.0760",  // optional: hardcoded or use geolocation
-                  //long: "52.8777"  // optional: hardcoded or use geolocation
+                  shippingpincode: shippingPincode,
+                  shippingstateid: Number(selectedState),
+                  shippingcityid: Number(selectedCity),
+                  land_mark: landMark,
+                  lat: "21.0760",  // optional: hardcoded or use geolocation
+                  long: "52.8777"  // optional: hardcoded or use geolocation
                 };
 
     try {
@@ -166,6 +184,38 @@ const AddOutlet = () => {
   
     loadOrganisation();
   }, []);
+
+  useEffect(() => {
+    const loadStates = async () => {
+      try {
+        const res = await fetchStates();
+        if (res.status === "success") {
+          setStateList(res.data); // Adjust if your API structure is different
+        }
+      } catch (err) {
+        toast("Failed to load states");
+      }
+    };
+  
+    loadStates();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedState) return;
+  
+    const loadCities = async () => {
+      try {
+        const res = await fetchCitiesByState(Number(selectedState));
+        if (res?.status === "success") {
+          setCityList(res.data);
+        }
+      } catch (err) {
+        toast("Failed to load cities");
+      }
+    };
+  
+    loadCities();
+  }, [selectedState]);
 
   return (
     <Box
@@ -363,6 +413,45 @@ const AddOutlet = () => {
 
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+            Shipping State <span style={{ color: "red" }}>*</span>
+          </InputLabel>
+          <Select
+            fullWidth
+            displayEmpty
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+          >
+            <MenuItem value="" disabled>Select a state</MenuItem>
+            {stateList.map((state) => (
+              <MenuItem key={state.id} value={state.id}>
+                {state.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+
+        <Box mb={3}>
+          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+            Shipping City <span style={{ color: "red" }}>*</span>
+          </InputLabel>
+          <Select
+            fullWidth
+            displayEmpty
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+            disabled={!cityList.length}
+          >
+            <MenuItem value="" disabled>Select a city</MenuItem>
+            {cityList.map((city) => (
+              <MenuItem key={city.id} value={city.id}>
+                {city.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+
+        <Box mb={3}>
+          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
             Shipping Pincode <span style={{ color: "red" }}>*</span>
           </InputLabel>
           <TextField
@@ -373,6 +462,58 @@ const AddOutlet = () => {
             onChange={(e) => setShippingPincode(e.target.value)}
           />
         </Box>
+
+        <Box mb={3}>
+          <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+            Landmark <span style={{ color: "red" }}>*</span>
+          </InputLabel>
+          <TextField
+            fullWidth
+            size="medium"
+            placeholder="Enter Land Mark"
+            value={landMark}
+            onChange={(e) => setLandMark(e.target.value)}
+          />
+        </Box>
+
+        <Box mb={3}>
+        <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+          Opening Time <span style={{ color: "red" }}>*</span>
+        </InputLabel>
+        <TextField
+          fullWidth
+          type="time"
+          value={openingTime}
+          onChange={(e) => setOpeningTime(e.target.value)}
+          inputProps={{ step: 1 }} // allows HH:mm:ss
+        />
+      </Box>
+
+      <Box mb={3}>
+        <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+          Closing Time <span style={{ color: "red" }}>*</span>
+        </InputLabel>
+        <TextField
+          fullWidth
+          type="time"
+          value={closingTime}
+          onChange={(e) => setClosingTime(e.target.value)}
+          inputProps={{ step: 1 }} // allows HH:mm:ss
+        />
+      </Box>
+
+      <Box mb={3}>
+        <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+          Lunch Time <span style={{ color: "red" }}>*</span>
+        </InputLabel>
+        <TextField
+          fullWidth
+          type="time"
+          value={lunchTime}
+          onChange={(e) => setLunchTime(e.target.value)}
+          inputProps={{ step: 1 }} // allows HH:mm:ss
+        />
+      </Box>
 
         {/* Rank */}
         {/* <Box mb={3}>

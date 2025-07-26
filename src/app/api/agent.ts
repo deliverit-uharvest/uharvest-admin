@@ -107,7 +107,7 @@ const Category = {
 };
 
 const Orders = {
-  get: (config = {}) => axios.get<ApiResponse<any>>("/orders", config).then(responseBody),
+  get: (config = {}) => axios.post<ApiResponse<any>>("/orders", config).then(responseBody),
   getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
   delete: (id: number) => axios.delete(`/orders/${id}`),
   create: (data: FormData) =>
