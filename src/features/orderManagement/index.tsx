@@ -35,8 +35,10 @@ const OrderManagement = () => {
   // Filter states
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<number | "">("");
+  ///const [selectedStatus, setSelectedStatus] = useState<number | "">("");
   const [orderId, setOrderId] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<number | "">("");
+  
 
   const columns: GridColDef[] = [
     {
@@ -44,6 +46,11 @@ const OrderManagement = () => {
       headerName: "Date",
       flex: 1,
       sortable: false,
+      renderCell: (params) => {
+          const dateStr = params.value;
+          const formattedDate = new Date(dateStr).toISOString().split("T")[0];
+          return <span>{formattedDate}</span>;
+        },
     },
     {
       field: "unique_id",
@@ -174,15 +181,19 @@ const OrderManagement = () => {
       const res = await fetchOrders({
         startDate,
         endDate,
-        statusId: selectedStatus,
+        statusId: selectedStatus === "" ? null : selectedStatus,
         orderId,
       });
-      if (res.status === "success") {
+
+      console.log("Order response:", res);
+
+      if (res?.status === "success") {
         setCategories(res.data);
       } else {
-        toast(res.message);
+        toast(res?.message || "Unknown error");
       }
     } catch (err) {
+      console.error("Fetch orders failed", err);
       toast("Failed to load orders.");
     } finally {
       setLoading(false);
@@ -238,10 +249,13 @@ const OrderManagement = () => {
           onChange={(e) => setOrderId(e.target.value)}
         />
         <FormControl sx={{ minWidth: 120 }}>
-          <Select
+          <Select<number | "">
             displayEmpty
             value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value as number | "")}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSelectedStatus(value === "" ? "" : Number(value));
+            }}
           >
             <MenuItem value="">All Status</MenuItem>
             {statusList.map((status) => (

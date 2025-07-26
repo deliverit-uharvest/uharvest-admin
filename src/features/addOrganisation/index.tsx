@@ -33,7 +33,7 @@ const AddOrganisation = () => {
   const [landMark, setLandMark] = useState("");
   const navigate = useNavigate();
   // const [rank, setRank] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  //const [image, setImage] = useState<File | null>(null);
 
   const [stateList, setStateList] = useState<States[]>([]);
   const [selectedState, setSelectedState] = useState("");
@@ -53,7 +53,7 @@ const AddOrganisation = () => {
     setPincode("");
     setLandMark("");
     // setRank("");
-    setImage(null);
+    //setImage(null);
   };
 
   const handleSubmit = async () => {
@@ -132,7 +132,7 @@ const AddOrganisation = () => {
                   stateid: Number(selectedState),
                   cityid: Number(selectedCity),
                   land_mark: landMark,
-                  imagename: image?.name || "", // or base64 if backend supports it
+                  //imagename: image?.name || "", // or base64 if backend supports it
                   lat: "21.0760",  // optional: hardcoded or use geolocation
                   long: "52.8777"  // optional: hardcoded or use geolocation
                 };
@@ -413,7 +413,7 @@ useEffect(() => {
       </Box> */}
 
         {/* Image Upload */}
-        <Box mb={3}>
+        {/* <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
             Upload Image <span style={{ color: "red" }}>*</span>
           </InputLabel>
@@ -439,7 +439,7 @@ useEffect(() => {
               Selected: {image.name}
             </Typography>
           )}
-        </Box>
+        </Box> */}
 
         {/* Buttons */}
         <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>

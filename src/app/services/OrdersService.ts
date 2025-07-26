@@ -25,19 +25,21 @@ export interface Orders {
 export const fetchOrders = async (filters?: {
   startDate?: string;
   endDate?: string;
-  statusId?: number | "";
+  statusId?: number | "" | null;
   orderId?: string;
 }): Promise<any> => {
-  const params: Record<string, string> = {};
+  const payload: any = {
+    start_date: filters?.startDate || "",
+    end_date: filters?.endDate || "",
+    orderId: filters?.orderId || "",
+  };
 
-  if (filters?.startDate) params.start_date = filters.startDate;
-  if (filters?.endDate) params.end_date = filters.endDate;
-  if (filters?.statusId !== "" && filters?.statusId !== undefined)
-    params.status_id = filters.statusId.toString();
-  if (filters?.orderId) params.order_id = filters.orderId;
+  
+  if (typeof filters?.statusId === "number" && !isNaN(filters.statusId)) {
+    payload.status_id = filters.statusId;
+  }
 
-  // 👇 fix: wrap `params` under `params` key for Axios config
-  const response = await agent.Orders.get({ params });
+  const response = await agent.Orders.get(payload);
   return response;
 };
 
