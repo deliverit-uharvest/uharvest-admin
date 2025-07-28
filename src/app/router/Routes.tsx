@@ -22,7 +22,7 @@ import AddOutlet from "../../features/outlet/addOutlet";
 import ComingSoon from "../../features/managestock";
 import ComingSoon2 from "../../features/overview";
 import Salesreturn from "../../features/salesReturn";
-import AddSubCategory from "../../features/subCategory/addSubCategory";
+import AddSubCategory from "../../features/subCategory/Addsubcategory";
 import AddCategory from "../../features/category/addCategory";
 import UpdateSubCategory from "../../features/subCategory/updatesubcategory";
 

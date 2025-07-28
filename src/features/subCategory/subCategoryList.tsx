@@ -26,7 +26,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Category, fetchCategories } from "../../app/services/CategoryService";
-import { changeStatus, deleteSubCategory, fetchSubCategory } from "../../app/services/subcatagoryservice";
+import {
+  changeStatus,
+  deleteSubCategory,
+  fetchSubCategory,
+} from "../../app/services/subcatagoryservice";
 
 export interface SubCategory {
   id: number;
@@ -51,6 +55,9 @@ const SubCategoryList: React.FC = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
 
   const getCategories = async () => {
     try {
@@ -121,6 +128,12 @@ const SubCategoryList: React.FC = () => {
     ? data.filter((item) => item.category_id === Number(categoryFilter))
     : data;
 
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const navigate = useNavigate();
 
   return (
@@ -136,7 +149,7 @@ const SubCategoryList: React.FC = () => {
         <Button
           variant="contained"
           sx={{ backgroundColor: "#fdd835", color: "#000" }}
-          onClick={() => navigate("/catalog/subcategory/add")} // thi is made accorfing to the routes path
+          onClick={() => navigate("/catalog/subcategory/add")}
         >
           Add Sub-Category
         </Button>
@@ -144,12 +157,14 @@ const SubCategoryList: React.FC = () => {
 
       {/* Filters */}
       <Box display="flex" gap={2} mb={2}>
-        {/* Warehouse dropdown removed */}
         <TextField
           select
           label="Select Category"
           value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
+          onChange={(e) => {
+            setCategoryFilter(e.target.value);
+            setCurrentPage(1); // reset to first page when filter changes
+          }}
           sx={{ minWidth: 200 }}
         >
           <MenuItem value="">All</MenuItem>
@@ -174,12 +189,11 @@ const SubCategoryList: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.map((row) => (
+            {paginatedData.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>
                   <img
                     src={row?.image ?? "/no-image.png"}
-                    // alt={row.name}
                     width="40"
                     height="40"
                     style={{ borderRadius: 4 }}
@@ -210,6 +224,22 @@ const SubCategoryList: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Pagination Buttons */}
+      <Box mt={2} display="flex" justifyContent="center" gap={1}>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <Button
+            key={index + 1}
+            variant={currentPage === index + 1 ? "contained" : "outlined"}
+            sx={{ minWidth: 36 }}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </Button>
+        ))}
+      </Box>
+
+      {/* Delete Confirmation Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
