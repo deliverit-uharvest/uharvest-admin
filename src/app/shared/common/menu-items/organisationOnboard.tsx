@@ -29,7 +29,7 @@ const organisationOnboard = {
           id: 'customer-mgnt',
           title: 'User',
           type: 'item',
-          url: '/dashboard/analytics'
+          url: '/organisation/outlet/user'
         },
         //  {
         //   id: 'customer-type',

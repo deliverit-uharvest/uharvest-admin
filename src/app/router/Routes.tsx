@@ -22,9 +22,11 @@ import AddOutlet from "../../features/outlet/addOutlet";
 import ComingSoon from "../../features/managestock";
 import ComingSoon2 from "../../features/overview";
 import Salesreturn from "../../features/salesReturn";
-import AddSubCategory from "../../features/subCategory/addSubCategory";
+import AddSubCategory from "../../features/subCategory/Addsubcategory";
 import AddCategory from "../../features/category/addCategory";
 import UpdateSubCategory from "../../features/subCategory/updatesubcategory";
+import AddOutletUser from "../../features/outlet/addUser";
+import UserList from "../../features/outlet/UserList"; 
 
 export const routes: RouteObject[] = [
   {
@@ -108,6 +110,8 @@ export const routes: RouteObject[] = [
                   { path: "add", element: <AddOrganisation /> },
                   { path: "outlet", element: <OutletList /> },
                   { path: "outlet/add", element: <AddOutlet /> },
+                  { path: "outlet/user", element: <UserList /> },
+                  { path: "outlet/user/add", element: <AddOutletUser /> },
                 ],
               },
             ],

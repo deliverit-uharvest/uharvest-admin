@@ -148,7 +148,19 @@ const Outlet = {
         "Content-Type": "application/json",
       },
     }),
- 
+
+    getByOrganisation: (org_id: number) =>
+    requests.get<ApiResponse<any>>(`/outlet/by-org?org_id=${org_id}`),
+
+    getUser: (config = {}) =>
+    axios.get<ApiResponse<any>>("/outlet-user/get", config).then(responseBody),
+
+    createuser: (data: any) =>
+    axios.post("/outlet-user/create", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
 };
 
 const SubCategory = {
