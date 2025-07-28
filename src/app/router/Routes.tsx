@@ -25,6 +25,8 @@ import Salesreturn from "../../features/salesReturn";
 import AddCategory from "../../features/category/addCategory";
 import UpdateSubCategory from "../../features/subCategory/updatesubcategory";
 import AddSubCategory from "../../features/subCategory/Addsubcategory";
+import UserList from "../../features/outlet/UserList";
+import AddOutletUser from "../../features/outlet/addUser";
 
 export const routes: RouteObject[] = [
   {
@@ -108,6 +110,8 @@ export const routes: RouteObject[] = [
                   { path: "add", element: <AddOrganisation /> },
                   { path: "outlet", element: <OutletList /> },
                   { path: "outlet/add", element: <AddOutlet /> },
+                  { path: "outlet/user", element: <UserList /> },
+                  { path: "outlet/user/add", element: <AddOutletUser /> },
                 ],
               },
             ],

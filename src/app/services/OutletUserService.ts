@@ -1,31 +1,18 @@
 import agent from "../api/agent";
 
-export interface Outlet {
+export interface OutletUser {
   id: number;
-  name: string;
+  name:string;
   created_at: string;
-  email: string;
-  mobile: string;
-  pan_number: string;
-  gst_number: string;
-  shipping_addressline1: string;
-  shippingpincode: string;
-
-  shippingCity?: {
-    name: string;
-  };
-
-  shippingState?: {
-    name: string;
-  };
+  
 }
 
 
-export const fetchOutlet = async (filters?: {
+export const fetchOutletUser = async (filters?: {
   startDate?: string;
   endDate?: string;
   statusId?: number | "";
-  orderId?: string;
+  //orderId?: string;
 }): Promise<any> => {
   const params: Record<string, string> = {};
 
@@ -33,10 +20,10 @@ export const fetchOutlet = async (filters?: {
   if (filters?.endDate) params.end_date = filters.endDate;
   if (filters?.statusId !== "" && filters?.statusId !== undefined)
     params.status_id = filters.statusId.toString();
-  if (filters?.orderId) params.order_id = filters.orderId;
+  //if (filters?.orderId) params.order_id = filters.orderId;
 
   
-  const response = await agent.Outlet.get({ params });
+  const response = await agent.Outlet.getUser({ params });
   return response;
 };
 
@@ -45,15 +32,15 @@ export const fetchOutlet = async (filters?: {
 //   return response;
 // };
 
-export const addOutlet = async (data: any): Promise<any> => {
-  const response = await agent.Outlet.create(data);
+export const addOutletUser = async (data: any): Promise<any> => {
+  const response = await agent.Outlet.createuser(data);
   return response;
 };
 
-export const fetchOutletByOrganisation = async (org_id: number): Promise<any> => {
-  const response = await agent.Outlet.getByOrganisation(org_id);
-  return response;
-};
+// export const fetchOutletByOrganisation = async (org_id: number): Promise<any> => {
+//   const response = await agent.Outlet.getByOrganisation(org_id);
+//   return response;
+// };
 
 
 // export const fetchOrdersStatus = async (): Promise<any> => {
