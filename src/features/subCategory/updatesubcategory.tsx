@@ -14,7 +14,7 @@ import {
 } from "../../app/services/CategoryService";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import { getSubCategoryById, updateSubCategory } from "../../app/services/subcatagoryservice";
+import { getSubCategoryById, updateSubCategory } from "../../app/services/SubCatagoryService";
 
 
 const UpdateSubCategory: React.FC = () => {
