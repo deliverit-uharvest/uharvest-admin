@@ -320,9 +320,7 @@ const AddProduct: React.FC = () => {
 
         {/* Description */}
         <Box>
-          <Typography fontWeight={500} mb={1}>
-            Description *
-          </Typography>
+         
           <Typography fontWeight={500} mb={1}>
             Description *
           </Typography>

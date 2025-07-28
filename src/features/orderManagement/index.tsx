@@ -20,7 +20,6 @@ import {
   updateOrderStatus,
 } from "../../app/services/OrdersService";
 
-// 👇 import your skeleton loader
 import TableSkeleton from "../loader/TableSkeleton";
 
 const OrderManagement = () => {
@@ -37,10 +36,8 @@ const OrderManagement = () => {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  ///const [selectedStatus, setSelectedStatus] = useState<number | "">("");
   const [orderId, setOrderId] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<number | "">("");
-  
 
   const columns: GridColDef[] = [
     {
@@ -49,10 +46,10 @@ const OrderManagement = () => {
       flex: 1,
       sortable: false,
       renderCell: (params) => {
-          const dateStr = params.value;
-          const formattedDate = new Date(dateStr).toISOString().split("T")[0];
-          return <span>{formattedDate}</span>;
-        },
+        const dateStr = params.value;
+        const formattedDate = new Date(dateStr).toISOString().split("T")[0];
+        return <span>{formattedDate}</span>;
+      },
     },
     {
       field: "unique_id",
@@ -64,7 +61,9 @@ const OrderManagement = () => {
       headerName: "Status",
       flex: 1,
       renderCell: (params) => (
-        <span>{params.row.statusHistory?.[0]?.status?.name || "No Status"}</span>
+        <span>
+          {params.row.statusHistory?.[0]?.status?.name || "No Status"}
+        </span>
       ),
     },
     {
@@ -119,7 +118,9 @@ const OrderManagement = () => {
                         ...order,
                         statusHistory: [
                           {
-                            status: statusList.find((s) => s.id === newStatusId) || {
+                            status: statusList.find(
+                              (s) => s.id === newStatusId
+                            ) || {
                               id: newStatusId,
                               name: "Unknown",
                             },
@@ -165,7 +166,9 @@ const OrderManagement = () => {
   ];
 
   const handleDelete = async (id: number) => {
-    const confirm = window.confirm("Are you sure you want to delete this order?");
+    const confirm = window.confirm(
+      "Are you sure you want to delete this order?"
+    );
     if (!confirm) return;
 
     try {
@@ -189,7 +192,11 @@ const OrderManagement = () => {
       console.log("Order response:", res);
 
       if (res?.status === "success") {
-        setCategories(res.data);
+        const sortedData = res.data.sort(
+          (a: Orders, b: Orders) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        setCategories(sortedData);
       } else {
         toast(res?.message || "Unknown error");
       }
@@ -222,7 +229,12 @@ const OrderManagement = () => {
 
   return (
     <Box p={2}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
         <Typography variant="h6" fontWeight={600}>
           Orders
         </Typography>

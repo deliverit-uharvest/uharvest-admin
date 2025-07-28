@@ -6,6 +6,7 @@ import {
   Typography,
   InputLabel,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { addCategory } from "../../app/services/CategoryService";
@@ -15,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleReset = () => {
@@ -35,6 +37,7 @@ const AddCategory = () => {
     }
 
     try {
+      setIsSubmitting(true);
       const response = await addCategory(formData);
 
       if (response.data.status === "success") {
@@ -46,6 +49,8 @@ const AddCategory = () => {
       }
     } catch (error) {
       toast("Failed to save category.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -141,6 +146,7 @@ const AddCategory = () => {
           <Button
             variant="outlined"
             onClick={handleReset}
+            disabled={isSubmitting}
             sx={{
               px: 4,
               py: 1.2,
@@ -158,6 +164,7 @@ const AddCategory = () => {
           <Button
             variant="contained"
             onClick={handleSubmit}
+            disabled={isSubmitting}
             sx={{
               px: 4,
               py: 1.2,
@@ -169,7 +176,18 @@ const AddCategory = () => {
               },
             }}
           >
-            Save
+            {isSubmitting ? (
+              <>
+                <CircularProgress
+                  size={18}
+                  sx={{ color: "#000", mr: 1 }}
+                  thickness={5}
+                />
+                Saving...
+              </>
+            ) : (
+              "Save"
+            )}
           </Button>
         </Box>
       </Paper>

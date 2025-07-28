@@ -32,10 +32,7 @@ export const fetchOrganisation = async (filters?: {
   return response;
 };
 
-export const addOrganisation = async (data: any): Promise<any> => {
-  const response = await agent.Organisation.create(data);
-  return response;
-};
+
 
 
 
