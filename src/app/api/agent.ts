@@ -134,7 +134,6 @@ const Organisation = {
         "Content-Type": "application/json",
       },
     }),
-
 };
 
 const Outlet = {

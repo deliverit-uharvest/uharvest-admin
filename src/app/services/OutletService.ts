@@ -2,9 +2,22 @@ import agent from "../api/agent";
 
 export interface Outlet {
   id: number;
-  name:string;
+  name: string;
   created_at: string;
-  
+  email: string;
+  mobile: string;
+  pan_number: string;
+  gst_number: string;
+  shipping_addressline1: string;
+  shippingpincode: string;
+
+  shippingCity?: {
+    name: string;
+  };
+
+  shippingState?: {
+    name: string;
+  };
 }
 
 
