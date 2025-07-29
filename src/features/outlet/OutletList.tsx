@@ -149,6 +149,7 @@ const OutletList = () => {
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
+                    
                   </TableCell>
                 </TableRow>
               ))}
