@@ -1,0 +1,42 @@
+{
+  "extends": [
+    "next/core-web-vitals"
+  ],
+  "rules": {
+    // Error for unused variables
+    "no-unused-vars": [
+      "off"
+    ],
+    // Prevent undefined variables
+    "no-undef": "off",
+    // Error on console.logs (except warnings and errors)
+    "no-console": [
+      "off",
+      {
+        "allow": [
+          "warn",
+          "error"
+        ]
+      }
+    ],
+    // Enforce consistent import order
+    "import/order": [
+      "off",
+      {
+        "newlines-between": "always"
+      }
+    ],
+    // Prevent missing key props in lists
+    "react/jsx-key": "error",
+    // Enforce strict accessibility rules
+    "jsx-a11y/alt-text": "error",
+    // React Hooks rules
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "off",
+    "no-new": "off"
+  },
+  "env": {
+    "browser": true,
+    "es2021": true
+  }
+}
