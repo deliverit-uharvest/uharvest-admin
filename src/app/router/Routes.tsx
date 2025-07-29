@@ -36,7 +36,7 @@ export const routes: RouteObject[] = [
       {
         element: <DashboardLayout />,
         children: [
-           { index: true, element: <Navigate to="/login" replace /> }, // 🔁 Add this line
+           { index: true, element: <Navigate to="/login" replace /> }, //  Add this line
           {
             element: <RequireAuth />,
             children: [
