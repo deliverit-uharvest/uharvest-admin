@@ -4,124 +4,112 @@ import {
   Typography,
   TextField,
   Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { toast } from "react-toastify";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import {
-  fetchOutletUser,
-  OutletUser,
-} from "../../app/services/OutletUserService";
-import TableSkeleton from "../loader/TableSkeleton"; 
+import TableSkeleton from "../loader/TableSkeleton";
+import { fetchOutletUser } from "../../app/services/OutletUserService";
+import { deleteOutletUser } from "../../app/services/OutletService";
 
-const UserList = () => {
+const OutletUserList = () => {
   const navigate = useNavigate();
 
-  const [categories, setCategories] = useState<OutletUser[]>([]);
-  const [filteredCategories, setFilteredCategories] = useState<OutletUser[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [users, setUsers] = useState<any[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
-  const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", flex: 1, 
-      sortable: false,
-      renderCell: (params) => (
-         <span>{params.row.user?.name ?? "No Data"}</span>
-       ),
-    
-    },
-    { field: "email", headerName: "Email", flex: 1,
-      renderCell: (params) => (
-         <span>{params.row.user?.email ?? "No Data"}</span>
-       ),
-     },
-    { field: "outlet", headerName: "Outlet", flex: 1, 
-      sortable: false,
-      renderCell: (params) => (
-         <span>{params.row.outlet?.name ?? "No Data"}</span>
-       ),
-    
-    },
-    // { field: "mobile", headerName: "Mobile", flex: 1 },
-    // { field: "pan_number", headerName: "Pan Number", flex: 1 },
-    // { field: "gst_number", headerName: "GST Number", flex: 1 },
-    // { field: "shipping_addressline1", headerName: "Address", flex: 1 },
-    // { field: "shippingpincode", headerName: "Pincode", flex: 1 },
-    // {
-    //   field: "shippingCity",
-    //   headerName: "City",
-    //   flex: 1,
-    //   renderCell: (params) => (
-    //     <span>{params.row.shippingCity?.name ?? "No Data"}</span>
-    //   ),
-    // },
-    // {
-    //   field: "shippingState",
-    //   headerName: "State",
-    //   flex: 1,
-    //   renderCell: (params) => (
-    //     <span>{params.row.shippingState?.name ?? "No Data"}</span>
-    //   ),
-    // },
-  ];
+  // const handleOpenDialog = (id: number) => {
+  //   setSelectedUserId(id);
+  //   setOpenDialog(true);
+  // };
 
-  const handleNavigate = (path: string) => {
-    navigate(path);
-  };
+  // const handleCloseDialog = () => {
+  //   setOpenDialog(false);
+  //   setSelectedUserId(null);
+  // };
 
-  const loadOutlets = async () => {
+  // const handleConfirmDelete = async () => {
+  //   if (!selectedUserId) return;
+
+  //   try {
+  //     await deleteOutletUser(selectedUserId);
+  //     setUsers((prev) => prev.filter((user) => user.id !== selectedUserId));
+  //     setFilteredUsers((prev) => prev.filter((user) => user.id !== selectedUserId));
+  //     toast.success("User deleted successfully.");
+  //   } catch (err) {
+  //     toast.error("Something went wrong while deleting.");
+  //   } finally {
+  //     handleCloseDialog();
+  //   }
+  // };
+
+  const loadUsers = async () => {
     try {
       setLoading(true);
       const res = await fetchOutletUser({});
       if (res.status === "success") {
-        setCategories(res.data);
-        setFilteredCategories(filterRows(res.data, searchText));
+        setUsers(res.data);
+        setFilteredUsers(filterRows(res.data, searchText));
       } else {
-        toast(res.message);
+        toast.error(res.message);
       }
     } catch (err) {
-      toast("Failed to load outlet user.");
+      toast.error("Failed to load users.");
     } finally {
       setLoading(false);
     }
   };
 
-  const filterRows = (rows: OutletUser[], query: string) => {
+  const filterRows = (rows: any[], query: string) => {
     if (!query) return rows;
     const lowercasedQuery = query.toLowerCase();
     return rows.filter((row) =>
-      Object.values(row).some((value) =>
-        typeof value === "object"
-          ? JSON.stringify(value).toLowerCase().includes(lowercasedQuery)
-          : value?.toString().toLowerCase().includes(lowercasedQuery)
+      [row.user?.name, row.user?.email, row.outlet?.name].some((value) =>
+        value?.toLowerCase().includes(lowercasedQuery)
       )
     );
   };
 
   useEffect(() => {
-    loadOutlets();
+    loadUsers();
   }, []);
 
   return (
-    <Box p={2}>
+    <Box px={1.5} py={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h6" fontWeight={600}>
-          Outlet
+        <Typography variant="h6" fontWeight={700} fontSize="18px">
+          Outlet Users
         </Typography>
-
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
-          onClick={() => handleNavigate("/organisation/outlet/user/add")}
+          onClick={() => navigate("/organisation/outlet/user/add")}
         >
           Add Outlet User
         </Button>
       </Box>
 
-      {/* Search Bar */}
       <Box display="flex" justifyContent="flex-start" mb={2}>
         <TextField
           label="Search"
@@ -130,44 +118,65 @@ const UserList = () => {
           onChange={(e) => {
             const value = e.target.value;
             setSearchText(value);
-            setFilteredCategories(filterRows(categories, value));
+            setFilteredUsers(filterRows(users, value));
           }}
           sx={{ minWidth: 300 }}
         />
       </Box>
 
-      <Box sx={{ width: "100%" }}>
+      <TableContainer component={Paper}>
         {loading ? (
-          <TableSkeleton rows={6} columns={9} /> // ✅ Applied loader here
-        ) : categories.length > 0 ? (
-          <DataGrid
-            autoHeight
-            loading={loading}
-            rows={filteredCategories}
-            columns={columns}
-            getRowId={(row) => row.id}
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 20, page: 0 },
-              },
-            }}
-            pageSizeOptions={[20, 50, 100]}
-            checkboxSelection={false}
-            disableRowSelectionOnClick
-            sx={{
-              backgroundColor: "#fff",
-              borderRadius: 2,
-              p: 2,
-            }}
-          />
-        ) : loading ? (
-          <Typography>Loading...</Typography>
+          <TableSkeleton rows={6} columns={4} />
+        ) : filteredUsers.length > 0 ? (
+          <Table size="small" sx={{ minWidth: 800 }}>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#f9f9f9" }}>
+                <TableCell sx={{ fontSize: "14px", fontWeight: 700 }}>Name</TableCell>
+                <TableCell sx={{ fontSize: "14px", fontWeight: 700 }}>Email</TableCell>
+                <TableCell sx={{ fontSize: "14px", fontWeight: 700 }}>Outlet Name</TableCell>
+                <TableCell sx={{ fontSize: "14px", fontWeight: 700 }} align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredUsers.map((row) => (
+                <TableRow key={row.id} hover>
+                  <TableCell sx={{ fontSize: "14px" }}>{row.user?.name || "—"}</TableCell>
+                  <TableCell sx={{ fontSize: "14px" }}>{row.user?.email || "—"}</TableCell>
+                  <TableCell sx={{ fontSize: "14px" }}>{row.outlet?.name || "—"}</TableCell>
+                  <TableCell align="center">
+                    <IconButton size="small" color="primary" onClick={() => console.log("Edit", row.id)}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    {/* <IconButton size="small" color="error" onClick={() => handleOpenDialog(row.id)}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton> */}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         ) : (
-          <Typography>No data found</Typography>
+          <Typography p={2}>No data found</Typography>
         )}
-      </Box>
+      </TableContainer>
+
+      {/* Delete Confirmation Dialog */}
+      {/* <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this user? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog> */}
     </Box>
   );
 };
 
-export default UserList;
+export default OutletUserList;

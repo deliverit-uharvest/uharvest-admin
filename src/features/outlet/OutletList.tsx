@@ -12,6 +12,11 @@ import {
   TableRow,
   IconButton,
   Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -19,7 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import { fetchOutlet, Outlet } from "../../app/services/OutletService";
+import { fetchOutlet, Outlet, deleteOutlet } from "../../app/services/OutletService";
 import TableSkeleton from "../loader/TableSkeleton";
 
 const OutletList = () => {
@@ -30,9 +35,38 @@ const OutletList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [searchText, setSearchText] = useState("");
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
   const handleNavigate = (path: string) => {
     navigate(path);
   };
+
+  const handleOpenDialog = (id: number) => {
+    setSelectedId(id);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedId(null);
+  };
+
+const handleConfirmDelete = async () => {
+  if (!selectedId) return;
+
+  try {
+    await deleteOutlet(selectedId);
+    setCategories((prev) => prev.filter((cat) => cat.id !== selectedId));
+    setFilteredCategories((prev) => prev.filter((cat) => cat.id !== selectedId)); // ✅ This ensures UI updates
+    toast.success("Outlet deleted successfully.");
+  } catch (err) {
+    toast.error("Something went wrong while deleting.");
+  } finally {
+    handleCloseDialog();
+  }
+};
+
 
   const loadOutlets = async () => {
     try {
@@ -66,6 +100,8 @@ const OutletList = () => {
   useEffect(() => {
     loadOutlets();
   }, []);
+
+
 
   return (
     <Box px={1.5} py={2}>
@@ -138,18 +174,17 @@ const OutletList = () => {
                     <IconButton
                       size="small"
                       color="primary"
-                      onClick={() => console.log("Edit", row.id)}
+                      onClick={() => handleNavigate(`/organisation/outlet/${row.id}`)}
                     >
                       <EditIcon fontSize="small" />
                     </IconButton>
                     <IconButton
                       size="small"
                       color="error"
-                      onClick={() => console.log("Delete", row.id)}
+                      onClick={() => handleOpenDialog(row.id)}
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
-                    
                   </TableCell>
                 </TableRow>
               ))}
@@ -159,6 +194,22 @@ const OutletList = () => {
           <Typography p={2}>No data found</Typography>
         )}
       </TableContainer>
+
+      {/* Delete Confirmation Dialog */}
+       <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this category? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

@@ -13,6 +13,10 @@ import {
   Paper,
   IconButton,
   Pagination,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -22,6 +26,7 @@ import { toast } from "react-toastify";
 import TableSkeleton from "../loader/TableSkeleton";
 import {
   fetchOrganisation,
+  deleteOrganisation,
   Organisation,
 } from "../../app/services/OrganisationService";
 
@@ -33,6 +38,7 @@ const OrganisationList = () => {
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState(1);
+  const [selectedIdToDelete, setSelectedIdToDelete] = useState<number | null>(null);
   const rowsPerPage = 10;
 
   const loadOrganisations = async () => {
@@ -66,17 +72,34 @@ const OrganisationList = () => {
       )
     );
     setFiltered(filteredRows);
-    setPage(1); // reset to page 1 on search
+    setPage(1);
   };
 
   const handleEdit = (id: number) => {
     console.log("Edit", id);
-    // navigate(`/organisation/edit/${id}`) // if you want
+    // navigate(`/organisation/edit/${id}`)
   };
 
-  const handleDelete = (id: number) => {
-    console.log("Delete", id);
-    // implement delete api later
+  const confirmDelete = (id: number) => {
+    setSelectedIdToDelete(id);
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedIdToDelete(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedIdToDelete === null) return;
+
+    try {
+      const res = await deleteOrganisation(selectedIdToDelete);
+      toast.success("Organisation deleted successfully");
+      loadOrganisations();
+    } catch (error) {
+      toast.error("Failed to delete organisation");
+    } finally {
+      setSelectedIdToDelete(null);
+    }
   };
 
   const paginatedData = filtered.slice(
@@ -84,19 +107,12 @@ const OrganisationList = () => {
     page * rowsPerPage
   );
 
-   const headerCellStyle = { padding: "8px 14px", fontSize: 14, fontWeight: 600 }; // Table style variable
-   const cellStyle = { padding: "8px 14px", fontSize: 14 };
-
+  const headerCellStyle = { padding: "8px 14px", fontSize: 14, fontWeight: 600 };
+  const cellStyle = { padding: "8px 14px", fontSize: 14 };
 
   return (
     <Box p={2}>
-      {/* Header */}
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6" fontWeight={600}>
           Organisation
         </Typography>
@@ -115,7 +131,6 @@ const OrganisationList = () => {
         </Button>
       </Box>
 
-      {/* Search */}
       <Box mb={2}>
         <TextField
           label="Search"
@@ -126,11 +141,6 @@ const OrganisationList = () => {
         />
       </Box>
 
-      {/* Table */}
-
-     
-
-
       {loading ? (
         <TableSkeleton rows={6} columns={8} />
       ) : (
@@ -138,52 +148,32 @@ const OrganisationList = () => {
           <TableContainer>
             <Table size="medium">
               <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
-  <TableRow>
-    <TableCell sx={headerCellStyle}>Name</TableCell>
-    <TableCell sx={headerCellStyle}>Legal Name</TableCell>
-    <TableCell sx={headerCellStyle}>Email</TableCell>
-    <TableCell sx={headerCellStyle}>Mobile</TableCell>
-    <TableCell sx={headerCellStyle}>Address</TableCell>
-    <TableCell sx={headerCellStyle}>PIN Code</TableCell>
-    <TableCell sx={headerCellStyle}>PAN Number</TableCell>
-    <TableCell sx={{ ...headerCellStyle }} align="center">Actions</TableCell>
-  </TableRow>
-</TableHead>
+                <TableRow>
+                  <TableCell sx={headerCellStyle}>Name</TableCell>
+                  <TableCell sx={headerCellStyle}>Legal Name</TableCell>
+                  <TableCell sx={headerCellStyle}>Email</TableCell>
+                  <TableCell sx={headerCellStyle}>Mobile</TableCell>
+                  <TableCell sx={headerCellStyle}>Address</TableCell>
+                  <TableCell sx={headerCellStyle}>PIN Code</TableCell>
+                  <TableCell sx={headerCellStyle}>PAN Number</TableCell>
+                  <TableCell sx={{ ...headerCellStyle }} align="center">Actions</TableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
                 {paginatedData.map((org) => (
                   <TableRow key={org.id}>
-                    <TableCell sx={ cellStyle}>
-                      {org.name}
-                    </TableCell>
-                    <TableCell sx={ cellStyle}>
-                      {org.legalname}
-                    </TableCell>
-                    <TableCell sx={ cellStyle}>
-                      {org.email}
-                    </TableCell>
-                    <TableCell sx={ cellStyle}>
-                      {org.mobile}
-                    </TableCell>
-                    <TableCell sx={ cellStyle}>
-                      {org.address}
-                    </TableCell>
-                    <TableCell sx={ cellStyle}>
-                      {org.pin_code}
-                    </TableCell>
-                    <TableCell sx={ cellStyle}>
-                      {org.pan_number}
-                    </TableCell>
-                    <TableCell sx={ cellStyle} align="center">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleEdit(org.id)}
-                      >
+                    <TableCell sx={cellStyle}>{org.name}</TableCell>
+                    <TableCell sx={cellStyle}>{org.legalname}</TableCell>
+                    <TableCell sx={cellStyle}>{org.email}</TableCell>
+                    <TableCell sx={cellStyle}>{org.mobile}</TableCell>
+                    <TableCell sx={cellStyle}>{org.address}</TableCell>
+                    <TableCell sx={cellStyle}>{org.pin_code}</TableCell>
+                    <TableCell sx={cellStyle}>{org.pan_number}</TableCell>
+                    <TableCell sx={cellStyle} align="center">
+                      <IconButton size="small" onClick={() => handleEdit(org.id)}>
                         <EditIcon fontSize="small" color="primary" />
                       </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleDelete(org.id)}
-                      >
+                      <IconButton size="small" onClick={() => confirmDelete(org.id)}>
                         <DeleteIcon fontSize="small" color="error" />
                       </IconButton>
                     </TableCell>
@@ -191,11 +181,7 @@ const OrganisationList = () => {
                 ))}
                 {paginatedData.length === 0 && (
                   <TableRow>
-                    <TableCell
-                      colSpan={8}
-                      align="center"
-                      sx={{ padding: "10px" }}
-                    >
+                    <TableCell colSpan={8} align="center" sx={{ padding: "10px" }}>
                       No data found
                     </TableCell>
                   </TableRow>
@@ -204,7 +190,6 @@ const OrganisationList = () => {
             </Table>
           </TableContainer>
 
-          {/* Pagination */}
           {filtered.length > rowsPerPage && (
             <Box display="flex" justifyContent="center" p={2}>
               <Pagination
@@ -217,6 +202,20 @@ const OrganisationList = () => {
           )}
         </Paper>
       )}
+
+      {/* Confirm Delete Dialog */}
+      <Dialog open={!!selectedIdToDelete} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete this organisation?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

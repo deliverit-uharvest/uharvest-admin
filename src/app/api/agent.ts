@@ -134,6 +134,8 @@ const Organisation = {
         "Content-Type": "application/json",
       },
     }),
+    updateOrganisation: (data: any) =>
+    requests.patch("/organisation", data),
 };
 
 const Outlet = {
@@ -150,6 +152,9 @@ const Outlet = {
 
     getByOrganisation: (org_id: number) =>
     requests.get<ApiResponse<any>>(`/outlet/by-org?org_id=${org_id}`),
+
+    deleteUser: (id: number) =>
+  axios.delete(`/outlet-user/delete/${id}`),
 
     getUser: (config = {}) =>
     axios.get<ApiResponse<any>>("/outlet-user/get", config).then(responseBody),

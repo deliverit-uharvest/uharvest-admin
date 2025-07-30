@@ -40,6 +40,17 @@ export const fetchOutlet = async (filters?: {
   return response;
 };
 
+
+export const deleteOutlet = async (id: number): Promise<any> => {
+  const response = await agent.Outlet.delete(id); // ✅ now correct
+  return response;
+};
+
+export const deleteOutletUser = async (id: number): Promise<any> => {
+  const response = await agent.Outlet.deleteUser(id); // ✅ now correct
+  return response;
+};
+
 // export const addOutlet = async (formData: FormData): Promise<any> => {
 //   const response = await agent.Organisation.create(formData);
 //   return response;
@@ -56,31 +67,10 @@ export const fetchOutletByOrganisation = async (org_id: number): Promise<any> =>
 };
 
 
+
+
 // export const fetchOrdersStatus = async (): Promise<any> => {
 //   const response = await agent.Orders.getstatus();
 //   return response;
 // };
 
-// export const getOrdersById = async (id: number): Promise<any> => {
-//   const response = await agent.Orders.getById(id);
-//   return response;
-// };
-
-// export const deleteOrders = async (id: number): Promise<any> => {
-//   const response = await agent.Orders.delete(id);
-//   return response.data;
-// };
-
-
-
-// export const updateOrders = async (formData: FormData): Promise<any> => {
-//   const response = await agent.Orders.update(formData);
-//   return response;
-// };
-
-// export const updateOrderStatus = async (
-//   order_id: string,
-//   status_id: number
-// ): Promise<any> => {
-//   return await agent.Orders.changeStatus({ order_id, status_id });
-// };

@@ -37,5 +37,15 @@ export const addOrganisation = async (data: any): Promise<any> => {
   return response;
 };
 
+export const deleteOrganisation = async (id: number): Promise<any> => {
+  const response = await agent.Organisation.delete(id);
+  return response.data;
+};
+
+export const updateOrganisation = async (data: any) => {
+  return await agent.Organisation.updateOrganisation(data);
+};
+
+
 
 

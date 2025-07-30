@@ -30,21 +30,7 @@ export default function Header() {
   // common header
   const mainHeader = (
     <Toolbar>
-      <IconButton
-        aria-label="open drawer"
-        onClick={() => handlerDrawerOpen(!drawerOpen)}
-        edge="start"
-        color="secondary"
-        variant="light"
-        sx={(theme: any) => ({
-          color: 'text.primary',
-          bgcolor: drawerOpen ? 'transparent' : 'grey.100',
-          ...theme.applyStyles('dark', { bgcolor: drawerOpen ? 'transparent' : 'background.default' }),
-          ml: { xs: 0, lg: -2 }
-        })}
-      >
-        {!drawerOpen ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </IconButton>
+      
       {headerContent}
     </Toolbar>
   );
