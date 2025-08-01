@@ -27,6 +27,7 @@ import UpdateSubCategory from "../../features/category/updateCategory";
 import AddSubCategory from "../../features/subCategory/Addsubcategory";
 import UserList from "../../features/outlet/UserList";
 import AddOutletUser from "../../features/outlet/addUser";
+import CustomProduct from "../../features/product/CustomProduct";
 
 export const routes: RouteObject[] = [
   {
@@ -67,6 +68,14 @@ export const routes: RouteObject[] = [
                     path: "product",
                     children: [
                       { index: true, element: <ProductList /> },
+                      { path: "add", element: <AddProduct /> },
+                      { path: "update/:id", element: <UpdateProduct /> },
+                    ],
+                  },
+                  {
+                    path: "product/custom",
+                    children: [
+                      { index: true, element: <CustomProduct /> },
                       { path: "add", element: <AddProduct /> },
                       { path: "update/:id", element: <UpdateProduct /> },
                     ],

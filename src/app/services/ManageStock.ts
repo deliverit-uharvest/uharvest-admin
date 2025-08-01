@@ -28,7 +28,7 @@ export const fetchOrganisation = async (filters?: {
   //   params.status_id = filters.statusId.toString();
   // if (filters?.orderId) params.order_id = filters.orderId;
 
-  const response = await agent.Organisation.get({ params });
+  const response = await agent.Organisation.get();
   return response;
 };
 
