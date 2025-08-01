@@ -27,7 +27,7 @@ import UpdateSubCategory from "../../features/category/updateCategory";
 import UserList from "../../features/outlet/UserList";
 import AddOutletUser from "../../features/outlet/addUser";
 import CustomProduct from "../../features/product/CustomProduct";
-import AddSubCategory from "../../features/subCategory/addSubCategory";
+import AddSubCategory from "../../features/subCategory/SubCategoryAdd";
 
 export const routes: RouteObject[] = [
   {
