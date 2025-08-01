@@ -20,12 +20,12 @@ const miscellaneos = {
           type: 'item',
           url: '/dashboard/sales'
         },
-        {
-          id: 'support-Ticket',
-          title: 'Support Ticket',
-          type: 'item',
-          url: '/dashboard/analytics'
-        },
+        // {
+        //   id: 'support-Ticket',
+        //   title: 'Support Ticket',
+        //   type: 'item',
+        //   url: '/dashboard/analytics'
+        // },
         {
           id: 'change-password',
           title: 'Change Password',
@@ -38,12 +38,12 @@ const miscellaneos = {
           type: 'item',
           url: '/dashboard/activity'
         },
-        {
-          id: 'my-notification',
-          title: 'My Notification',
-          type: 'item',
-          url: '/dashboard/activity'
-        },
+        // {
+        //   id: 'my-notification',
+        //   title: 'My Notification',
+        //   type: 'item',
+        //   url: '/dashboard/activity'
+        // },
         
       ]
     }

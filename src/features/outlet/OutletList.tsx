@@ -12,6 +12,11 @@ import {
   TableRow,
   IconButton,
   Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -19,7 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import { fetchOutlet, Outlet } from "../../app/services/OutletService";
+import { fetchOutlet, Outlet, deleteOutlet } from "../../app/services/OutletService";
 import TableSkeleton from "../loader/TableSkeleton";
 
 const OutletList = () => {
@@ -29,6 +34,8 @@ const OutletList = () => {
   const [filteredCategories, setFilteredCategories] = useState<Outlet[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchText, setSearchText] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedOutletId, setSelectedOutletId] = useState<number | null>(null);
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -48,6 +55,30 @@ const OutletList = () => {
       toast("Failed to load outlet.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleOpenDialog = (id: number) => {
+    setSelectedOutletId(id);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedOutletId(null);
+    setOpenDialog(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedOutletId) return;
+    try {
+      await deleteOutlet(selectedOutletId);
+      setCategories(prev => prev.filter(outlet => outlet.id !== selectedOutletId));
+      setFilteredCategories(prev => prev.filter(outlet => outlet.id !== selectedOutletId));
+      toast.success("Outlet deleted successfully.");
+    } catch (err) {
+      toast.error("Something went wrong while deleting.");
+    } finally {
+      handleCloseDialog();
     }
   };
 
@@ -104,22 +135,13 @@ const OutletList = () => {
           <Table size="small" sx={{ minWidth: 1100 }}>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f9f9f9" }}>
-                {[
-                  "Name",
-                  "Email",
-                  "Mobile",
-                  "PAN",
-                  "GST",
-                  "Address",
-                  "Pincode",
-                  "City",
-                  "State",
-                  "Actions",
-                ].map((head) => (
-                  <TableCell key={head} sx={{ fontSize: "14px", fontWeight: 600 }}>
-                    {head}
-                  </TableCell>
-                ))}
+                {["Name", "Email", "Mobile", "PAN", "GST", "Address", "Pincode", "City", "State", "Actions"].map(
+                  (head) => (
+                    <TableCell key={head} sx={{ fontSize: "14px", fontWeight: 600 }}>
+                      {head}
+                    </TableCell>
+                  )
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -145,11 +167,10 @@ const OutletList = () => {
                     <IconButton
                       size="small"
                       color="error"
-                      onClick={() => console.log("Delete", row.id)}
+                      onClick={() => handleOpenDialog(row.id)}
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
-                    
                   </TableCell>
                 </TableRow>
               ))}
@@ -159,6 +180,21 @@ const OutletList = () => {
           <Typography p={2}>No data found</Typography>
         )}
       </TableContainer>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this outlet? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
