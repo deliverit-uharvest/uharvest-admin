@@ -1,3 +1,5 @@
+// ProductList.ts
+
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -85,7 +87,7 @@ const ProductList: React.FC = () => {
   useEffect(() => {
     const filtered = products.filter((product) => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = !selectedCategory || String(product.category_id) === selectedCategory;
+      const matchesCategory = !selectedCategory || product.category_id === selectedCategory;
       return matchesSearch && matchesCategory;
     });
     setFilteredProducts(filtered);
