@@ -44,6 +44,13 @@ const catalog = {
           breadcrumbs:false,
         },
         {
+          id: 'productcustomchange',
+          title: 'Product by Organisation',
+          type: 'item',
+          url: '/catalog/product/custom',
+          breadcrumbs:false,
+        },
+        {
           id: 'managestock',
           title: 'Manage Stock',
           type: 'item',

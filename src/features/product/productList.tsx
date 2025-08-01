@@ -24,7 +24,6 @@ import {
   DialogActions,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +33,9 @@ import {
   changeStatus,
   deleteProduct,
   fetchProducts,
+  productOrganisationMap,
 } from "../../app/services/ProductService";
+import { fetchOrganisation, Organisation } from "../../app/services/OrganisationService";
 import TableSkeleton from "../loader/TableSkeleton";
 
 interface Image {
@@ -67,38 +68,15 @@ const ProductList: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
+  const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
+  const [organisationDialogOpen, setOrganisationDialogOpen] = useState(false);
+  const [organisations, setOrganisations] = useState<Organisation[]>([]);
+  const [selectedOrgIds, setSelectedOrgIds] = useState<number[]>([]);
+
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(
-    null
-  );
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const [categoryRes, productRes] = await Promise.all([
-        fetchCategories(),
-        fetchProducts(),
-      ]);
-
-      if ((categoryRes as any).status === "success") {
-        setCategories((categoryRes as any).data);
-      } else {
-        toast.error("Failed to load categories");
-      }
-
-      if ((productRes as any).status === "success") {
-        const data = (productRes as any).data;
-        setProducts(data);
-        setFilteredProducts(data);
-      } else {
-        toast.error((productRes as any).data?.message || "Failed to load products");
-      }
-    } catch (error) {
-      toast.error("Something went wrong while fetching data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const allSelected = filteredProducts.length > 0 && selectedProductIds.length === filteredProducts.length;
 
   useEffect(() => {
     loadData();
@@ -106,21 +84,82 @@ const ProductList: React.FC = () => {
 
   useEffect(() => {
     const filtered = products.filter((product) => {
-      const matchesSearch = product.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-
-      const matchesCategory =
-        !selectedCategory ||
-        String(product.category_id) === selectedCategory;
-
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = !selectedCategory || String(product.category_id) === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-
     setFilteredProducts(filtered);
   }, [searchTerm, selectedCategory, products]);
 
-  const handleNavigate = (path: string) => navigate(path);
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const [categoryRes, productRes] = await Promise.all([fetchCategories(), fetchProducts()]);
+      if ((categoryRes as any).status === "success") setCategories((categoryRes as any).data);
+      if ((productRes as any).status === "success") {
+        setProducts((productRes as any).data);
+        setFilteredProducts((productRes as any).data);
+      }
+    } catch (err) {
+      toast.error("Error loading data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleProductCheckboxChange = (id: number) => {
+    setSelectedProductIds((prev) =>
+      prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAllChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const allIds = filteredProducts.map((product) => product.id);
+      setSelectedProductIds(allIds);
+    } else {
+      setSelectedProductIds([]);
+    }
+  };
+
+  const handleOrgCheckboxChange = (id: number) => {
+    setSelectedOrgIds((prev) =>
+      prev.includes(id) ? prev.filter((oid) => oid !== id) : [...prev, id]
+    );
+  };
+
+  const handleOpenOrganisationDialog = async () => {
+    if (selectedProductIds.length === 0) return toast.warn("Select at least one product");
+    try {
+      const res = await fetchOrganisation();
+      if (res.status === "success") {
+        setOrganisations(res.data);
+        setSelectedOrgIds([]);
+        setOrganisationDialogOpen(true);
+      }
+    } catch (err) {
+      toast.error("Failed to load organisations");
+    }
+  };
+
+  const handleAttachProductsToOrgs = async () => {
+    try {
+      const payload = {
+        org_ids: selectedOrgIds,
+        product_ids: selectedProductIds,
+      };
+      const res = await productOrganisationMap(payload);
+      if (res.data.status === "success") {
+        toast.success("Products attached to organisations successfully");
+        setOrganisationDialogOpen(false);
+        setSelectedProductIds([]);
+      } else {
+        toast.error("Failed to attach");
+      }
+    } catch (err) {
+      toast.error("Error submitting data");
+    }
+  };
 
   const handleToggleStatus = async (productId: number) => {
     try {
@@ -167,12 +206,7 @@ const ProductList: React.FC = () => {
 
   return (
     <Box p={3}>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={3}
-      >
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <TextField
           variant="outlined"
           placeholder="Search by Name..."
@@ -190,16 +224,15 @@ const ProductList: React.FC = () => {
 
         <Button
           variant="contained"
-          startIcon={<AddIcon />}
-          sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
-          onClick={() => handleNavigate("/catalog/product/add")}
+          sx={{ backgroundColor: "#1976d2", fontWeight: 600 }}
+          disabled={selectedProductIds.length === 0}
+          onClick={handleOpenOrganisationDialog}
         >
-          Add Product
+          Map Organisations
         </Button>
       </Box>
 
-      {/* Category Filter */}
-      <Box display="flex" gap={2} mb={3}>
+      <Box display="flex" gap={2} mb={2}>
         <Box>
           <Typography fontWeight={600} mb={1}>
             Category
@@ -220,7 +253,6 @@ const ProductList: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Table or Skeleton Loader */}
       {loading ? (
         <TableSkeleton rows={6} columns={7} />
       ) : (
@@ -228,6 +260,16 @@ const ProductList: React.FC = () => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    checked={allSelected}
+                    indeterminate={
+                      selectedProductIds.length > 0 &&
+                      selectedProductIds.length < filteredProducts.length
+                    }
+                    onChange={handleSelectAllChange}
+                  />
+                </TableCell>
                 <TableCell><strong>Name</strong></TableCell>
                 <TableCell><strong>SKU</strong></TableCell>
                 <TableCell><strong>Image</strong></TableCell>
@@ -240,6 +282,12 @@ const ProductList: React.FC = () => {
             <TableBody>
               {filteredProducts.map((product) => (
                 <TableRow key={product.id}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selectedProductIds.includes(product.id)}
+                      onChange={() => handleProductCheckboxChange(product.id)}
+                    />
+                  </TableCell>
                   <TableCell>{product.name}</TableCell>
                   <TableCell>{product.sku}</TableCell>
                   <TableCell>
@@ -258,34 +306,56 @@ const ProductList: React.FC = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    <IconButton
-                      color="info"
-                      onClick={() => handleUpdate(product.id)}
-                    >
+                    <IconButton color="info" onClick={() => handleUpdate(product.id)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleOpenDialog(product.id)}
-                    >
+                    <IconButton color="error" onClick={() => handleOpenDialog(product.id)}>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
-              {filteredProducts.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={7} align="center">
-                    No products found.
-                  </TableCell>
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>
       )}
 
-      {/* Delete Confirmation Dialog */}
+      <Dialog open={organisationDialogOpen} onClose={() => setOrganisationDialogOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Select Organisations</DialogTitle>
+        <DialogContent dividers>
+          {organisations.length === 0 ? (
+            <Typography>No organisations found.</Typography>
+          ) : (
+            <Table>
+              <TableBody>
+                {organisations.map((org) => (
+                  <TableRow key={org.id}>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedOrgIds.includes(org.id)}
+                        onChange={() => handleOrgCheckboxChange(org.id)}
+                      />
+                    </TableCell>
+                    <TableCell>{org.name}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOrganisationDialogOpen(false)}>Cancel</Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAttachProductsToOrgs}
+            disabled={selectedOrgIds.length === 0 || selectedProductIds.length === 0}
+          >
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
