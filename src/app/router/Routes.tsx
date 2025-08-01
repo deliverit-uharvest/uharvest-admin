@@ -29,6 +29,7 @@ import AddOutletUser from "../../features/outlet/addUser";
 import CustomProduct from "../../features/product/CustomProduct";
 import AddSubCategory from "../../features/subCategory/SubCategoryAdd";
 
+//test
 export const routes: RouteObject[] = [
   {
     path: "/",
