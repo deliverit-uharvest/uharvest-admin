@@ -44,6 +44,13 @@ const UserList = () => {
        ),
     
     },
+    { field: "organisation", headerName: "Organisation", flex: 1, 
+      sortable: false,
+      renderCell: (params) => (
+         <span>{params.row.org?.name ?? "No Data"}</span>
+       ),
+    
+    }
     // { field: "mobile", headerName: "Mobile", flex: 1 },
     // { field: "pan_number", headerName: "Pan Number", flex: 1 },
     // { field: "gst_number", headerName: "GST Number", flex: 1 },

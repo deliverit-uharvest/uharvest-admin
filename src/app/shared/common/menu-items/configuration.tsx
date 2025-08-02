@@ -36,30 +36,30 @@ const configuration = {
           type: 'item',
           url: '/dashboard/performance'
         },
-        {
-          id: 'warehouse',
-          title: 'Warehouse',
-          type: 'item',
-          url: '/dashboard/activity'
-        },
-        {
-          id: 'warehouse-manager',
-          title: 'Manage Stock',
-          type: 'item',
-          url: '/dashboard/activity'
-        },
+        // {
+        //   id: 'warehouse',
+        //   title: 'Warehouse',
+        //   type: 'item',
+        //   url: '/dashboard/activity'
+        // },
+        // {
+        //   id: 'warehouse-manager',
+        //   title: 'Manage Stock',
+        //   type: 'item',
+        //   url: '/dashboard/activity'
+        // },
         {
           id: 'manager-version',
           title: 'Manager Version',
           type: 'item',
           url: '/dashboard/activity'
         },
-        {
-          id: 'warehouse-zone',
-          title: 'Warehouse Zone',
-          type: 'item',
-          url: '/dashboard/activity'
-        },
+        // {
+        //   id: 'warehouse-zone',
+        //   title: 'Warehouse Zone',
+        //   type: 'item',
+        //   url: '/dashboard/activity'
+        // },
         
       ]
     }

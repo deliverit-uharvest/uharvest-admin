@@ -162,6 +162,10 @@ const Organisation = {
         "Content-Type": "application/json",
       },
     }),
+    getById: (id: number) => requests.get(`/organisation/${id}`),
+
+    updateOrganisation: (data: FormData, id: number) =>
+    requests.patch(`organisation/update/${id}`, data),
 };
 
 const Outlet = {
