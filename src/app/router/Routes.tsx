@@ -23,11 +23,15 @@ import ComingSoon from "../../features/managestock";
 import ComingSoon2 from "../../features/overview";
 import Salesreturn from "../../features/salesReturn";
 import AddCategory from "../../features/category/addCategory";
-import UpdateSubCategory from "../../features/category/updateCategory";
-import AddSubCategory from "../../features/subCategory/Addsubcategory";
+//import UpdateSubCategory from "../../features/category/updateCategory";
+import UpdateSubCategory from "../../features/subCategory/updateSubCategory";
 import UserList from "../../features/outlet/UserList";
 import AddOutletUser from "../../features/outlet/addUser";
+import CustomProduct from "../../features/product/CustomProduct";
+import AddSubCategory from "../../features/subCategory/SubCategoryAdd";
+import UpdateOrganisation from "../../features/organisationOnboard/updateOrganisation";
 
+//test
 export const routes: RouteObject[] = [
   {
     path: "/",
@@ -36,6 +40,7 @@ export const routes: RouteObject[] = [
       {
         element: <DashboardLayout />,
         children: [
+           { index: true, element: <Navigate to="/login" replace /> }, //  Add this line
           {
             element: <RequireAuth />,
             children: [
@@ -66,6 +71,14 @@ export const routes: RouteObject[] = [
                     path: "product",
                     children: [
                       { index: true, element: <ProductList /> },
+                      { path: "add", element: <AddProduct /> },
+                      { path: "update/:id", element: <UpdateProduct /> },
+                    ],
+                  },
+                  {
+                    path: "product/custom",
+                    children: [
+                      { index: true, element: <CustomProduct /> },
                       { path: "add", element: <AddProduct /> },
                       { path: "update/:id", element: <UpdateProduct /> },
                     ],
@@ -112,6 +125,7 @@ export const routes: RouteObject[] = [
                   { path: "outlet/add", element: <AddOutlet /> },
                   { path: "outlet/user", element: <UserList /> },
                   { path: "outlet/user/add", element: <AddOutletUser /> },
+                  { path: ":id", element: <UpdateOrganisation /> },
                 ],
               },
             ],

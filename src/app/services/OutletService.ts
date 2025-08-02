@@ -55,6 +55,11 @@ export const fetchOutletByOrganisation = async (org_id: number): Promise<any> =>
   return response;
 };
 
+export const deleteOutlet = async (id: number): Promise<any> => {
+  const response = await agent.Outlet.delete(id);
+  return response.data;
+};
+
 
 // export const fetchOrdersStatus = async (): Promise<any> => {
 //   const response = await agent.Orders.getstatus();

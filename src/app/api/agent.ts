@@ -75,6 +75,7 @@ const Product = {
       category_id?: number;
       sub_category_id?: number;
       name?: string;
+      org_id?: number;
     } = {}
   ) => requests.post("/product", filters),
   getProduct: (id: number) => requests.get(`product/${id}`),
@@ -83,6 +84,23 @@ const Product = {
   createProduct: (data: FormData) => requests.post("/product/create", data),
   updateProduct: (data: FormData, id: number) =>
     requests.patch(`product/update/${id}`, data),
+
+  productOrganisationMap: (data: any) =>
+    axios.post("/product-mapper/attach-to-org", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
+    updateProductMapper: (id: number, data: any) =>
+      axios.patch(`/product-mapper/update/${id}`, data),
+
+    productOrganisationUnMap: (data: any) =>
+    axios.post("/product-mapper/remove-attached-products", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
+
 };
 
 const Customer = {};
@@ -124,8 +142,18 @@ const Orders = {
 };
 
 const Organisation = {
-  get: (config = {}) =>
-    axios.get<ApiResponse<any>>("/organisation", config).then(responseBody),
+  // get: (config = {}) =>
+  //   requests.post<ApiResponse<any>>("/organisation", config),
+
+  get: (
+    filters: {
+      category_id?: number;
+      sub_category_id?: number;
+      name?: string;
+      org_id?: number;
+    } = {}
+  ) => requests.post("/organisation", filters),
+
   //getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
   delete: (id: number) => axios.delete(`/organisation/${id}`),
   create: (data: any) =>
@@ -134,6 +162,10 @@ const Organisation = {
         "Content-Type": "application/json",
       },
     }),
+    getById: (id: number) => requests.get(`/organisation/${id}`),
+
+    updateOrganisation: (data: FormData, id: number) =>
+    requests.patch(`organisation/update/${id}`, data),
 };
 
 const Outlet = {

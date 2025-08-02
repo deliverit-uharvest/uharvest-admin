@@ -28,12 +28,26 @@ export const fetchOrganisation = async (filters?: {
   //   params.status_id = filters.statusId.toString();
   // if (filters?.orderId) params.order_id = filters.orderId;
 
-  const response = await agent.Organisation.get({ params });
+  const response = await agent.Organisation.get();
   return response;
 };
 
 export const addOrganisation = async (data: any): Promise<any> => {
   const response = await agent.Organisation.create(data);
+  return response;
+};
+
+export const deleteOrganisation = async (id: number): Promise<any> => {
+  const response = await agent.Organisation.delete(id);
+  return response.data;
+};
+export const getOrganisationById = async (id: number): Promise<any> => {
+  const response = await agent.Organisation.getById(id);
+  return response;
+};
+
+export const updateOrganisation = async (data: any): Promise<any> => {
+  const response = await agent.Organisation.getById(data);
   return response;
 };
 

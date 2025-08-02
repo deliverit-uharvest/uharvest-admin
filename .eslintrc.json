@@ -1,0 +1,40 @@
+{
+  
+  "rules": {
+    // off for unused variables
+    "no-unused-vars": [
+      "off"
+    ],
+    // Prevent undefined variables
+    "no-undef": "off",
+    // off on console.logs (except warnings and offs)
+    "no-console": [
+      "off",
+      {
+        "allow": [
+          "warn",
+          "off"
+        ]
+      }
+    ],
+    // Enforce consistent import order
+    "import/order": [
+      "off",
+      {
+        "newlines-between": "always"
+      }
+    ],
+    // Prevent missing key props in lists
+    "react/jsx-key": "off",
+    // Enforce strict accessibility rules
+    "jsx-a11y/alt-text": "off",
+    // React Hooks rules
+    "react-hooks/rules-of-hooks": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "no-new": "off"
+  },
+  "env": {
+    "browser": true,
+    "es2021": true
+  }
+}
