@@ -17,7 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getSubCategoryById, updateSubCategory } from "../../app/services/subcatagoryservice";
 
 
-const UpdateSubCategory: React.FC = () => {
+const SubCategoryUpdate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // 🔥 Get subcategory id from URL
   const [categories, setCategories] = useState<Category[]>([]);
@@ -180,4 +180,4 @@ const UpdateSubCategory: React.FC = () => {
   );
 };
 
-export default UpdateSubCategory;
+export default SubCategoryUpdate;
