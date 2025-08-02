@@ -27,6 +27,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { fetchCategories } from "../../app/services/CategoryService";
@@ -206,8 +207,13 @@ const ProductList: React.FC = () => {
     navigate(`/catalog/product/update/${id}`);
   };
 
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <Box p={3}>
+    
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <TextField
           variant="outlined"
@@ -226,12 +232,15 @@ const ProductList: React.FC = () => {
 
         <Button
           variant="contained"
-          sx={{ backgroundColor: "#1976d2", fontWeight: 600 }}
-          disabled={selectedProductIds.length === 0}
-          onClick={handleOpenOrganisationDialog}
+          startIcon={<AddIcon />}
+          sx={{ backgroundColor: "#fcb500", color: "#000", fontWeight: 600 }}
+          onClick={() => handleNavigate("/catalog/product/add")}
         >
-          Map Organisations
+          Add Product
         </Button>
+
+
+        
       </Box>
 
       <Box display="flex" gap={2} mb={2}>
@@ -252,6 +261,19 @@ const ProductList: React.FC = () => {
               </MenuItem>
             ))}
           </Select>
+        </Box>
+      </Box>
+
+      <Box display="flex" gap={2} mb={2}>
+        <Box>
+          <Button
+          variant="contained"
+          sx={{ backgroundColor: "#1976d2", fontWeight: 600 }}
+          disabled={selectedProductIds.length === 0}
+          onClick={handleOpenOrganisationDialog}
+        >
+          Map Organisations
+        </Button>
         </Box>
       </Box>
 
