@@ -50,12 +50,7 @@ const catalog = {
           url: '/catalog/product/custom',
           breadcrumbs:false,
         },
-        {
-          id: 'managestock',
-          title: 'Manage Stock',
-          type: 'item',
-          url: '/catalog/stock-management'
-        },
+        
         // {
         //   id: 'req-product',
         //   title: 'Request New Product',
