@@ -23,6 +23,7 @@ const UpdateProduct: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     productName: "",
+    productBaseName: "",
     sku: "",
     mrp: "",
     price: "",
@@ -73,6 +74,7 @@ const UpdateProduct: React.FC = () => {
   const handleReset = () => {
     setFormData({
       productName: "",
+      productBaseName: "",
       sku: "",
       mrp: "",
       price: "",
@@ -94,6 +96,8 @@ const UpdateProduct: React.FC = () => {
 
     if (!formData.productName.trim())
       return toast.error("Product name is required");
+    if (!formData.productName.trim())
+      return toast.error("Product base name is required");
     if (!formData.sku.trim()) return toast.error("SKU is required");
     if (!formData.mrp) return toast.error("MRP is required");
     if (!formData.hsnCode.trim()) return toast.error("HSN Code is required");
@@ -108,6 +112,7 @@ const UpdateProduct: React.FC = () => {
     try {
       const data = new FormData();
       data.append("name", formData.productName);
+      data.append("base_product", formData.productBaseName);      
       data.append("sku", formData.sku);
       data.append("base_mrp", formData.mrp);
       data.append("base_price", formData.price);
@@ -150,6 +155,7 @@ const UpdateProduct: React.FC = () => {
         const product = (res as any).data;
         setFormData({
           productName: product.name || "",
+          productBaseName: product.base_product || "",
           sku: product.sku || "",
           mrp: product.base_mrp || "",
           price: product.base_price || "",
@@ -206,6 +212,14 @@ const UpdateProduct: React.FC = () => {
               label="Product Name"
               name="productName"
               value={formData.productName}
+              onChange={handleChange}
+              fullWidth
+            />
+            <TextField
+              required
+              label="Product Base Name"
+              name="productBaseName"
+              value={formData.productBaseName}
               onChange={handleChange}
               fullWidth
             />

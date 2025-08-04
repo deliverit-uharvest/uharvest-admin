@@ -154,18 +154,27 @@ const CustomProduct = () => {
   };
 
   const getDisplayPrice = (product: Product): string => {
-    const mapper = product.product_mappers?.[0];
-    const today = new Date();
-    const start = mapper?.start_date ? new Date(mapper.start_date) : null;
-    const end = mapper?.end_date ? new Date(mapper.end_date) : null;
+      const mapper = product.product_mappers?.[0];
 
-    const isActive =
-      mapper?.custom_price && start && today >= start && (!end || today <= end);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Clear time
 
-    return isActive
-      ? mapper.custom_price?.toString() ?? "-"
-      : product.base_price?.toString() ?? "-";
-  };
+      const start = mapper?.start_date ? new Date(mapper.start_date) : null;
+      const end = mapper?.end_date ? new Date(mapper.end_date) : null;
+
+      if (start) start.setHours(0, 0, 0, 0);
+      if (end) end.setHours(0, 0, 0, 0);
+
+      const isActive =
+        mapper?.custom_price &&
+        start &&
+        today >= start &&
+        (!end || today <= end);
+
+      return isActive
+        ? mapper.custom_price?.toString() ?? "-"
+        : product.base_price?.toString() ?? "-";
+    };
 
   const toggleProductSelection = (id: number) => {
     setSelectedProductIds((prev) =>

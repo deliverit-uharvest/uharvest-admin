@@ -109,6 +109,7 @@ const User = {
   login: (credentials: LoginRequest) =>
     requests.post<ApiResponse<LoginResponse>>("/auth/login", credentials),
   current: () => requests.get("/auth/profile"),
+  getUserRole: () => requests.get<ApiResponse<LoginResponse>>("/auth/roles"),
 };
 
 const Category = {
@@ -157,7 +158,7 @@ const Organisation = {
   //getstatus: () => requests.get<ApiResponse<LoginResponse>>("/orders/status"),
   delete: (id: number) => axios.delete(`/organisation/${id}`),
   create: (data: any) =>
-    axios.post("/organisation", data, {
+    axios.post("/organisation/create", data, {
       headers: {
         "Content-Type": "application/json",
       },

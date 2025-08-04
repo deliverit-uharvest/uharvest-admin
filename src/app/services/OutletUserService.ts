@@ -37,6 +37,11 @@ export const addOutletUser = async (data: any): Promise<any> => {
   return response;
 };
 
+export const fetchUserRole = async (data: any): Promise<any> => {
+  const response = await agent.User.getUserRole();
+  return response;
+};
+
 // export const fetchOutletByOrganisation = async (org_id: number): Promise<any> => {
 //   const response = await agent.Outlet.getByOrganisation(org_id);
 //   return response;

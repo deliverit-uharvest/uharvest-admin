@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { fetchStates, States } from "../../app/services/StatesService";
 import { fetchCitiesByState, City } from "../../app/services/CitiesService";
 import { fetchOutletByOrganisation, Outlet } from "../../app/services/OutletService";
+import { fetchUserRole } from "../../app/services/OutletUserService";
 
 const AddOutlet = () => {
   const [name, setName] = useState("");
@@ -51,6 +52,10 @@ const AddOutlet = () => {
 
   const [outletList, setOutletList] = useState<Outlet[]>([]);
   const [selectedOutlet, setSelectedOutlet] = useState("");
+
+  const [roleList, setRoleList] = useState<{ id: number; name: string }[]>([]);
+  //const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState<{ id: number; name: string } | null>(null);
 
   const [openingTime, setOpeningTime] = useState("09:00:00");
   const [closingTime, setClosingTime] = useState("21:00:00");
@@ -123,9 +128,10 @@ const AddOutlet = () => {
     const payload = {
                   name,
                   org_id: selectedOrganisation,
-                  outlet_id: selectedOutlet,
+                  outlet_id: selectedRole?.name === "User" ? selectedOutlet : null,
                   email,
-                  password
+                  password,
+                  role_id: selectedRole?.id,
                   
                 };
 
@@ -209,6 +215,21 @@ const AddOutlet = () => {
     loadOrganisation();
   }, [selectedOrganisation]);
 
+  useEffect(() => {
+  const loadRoles = async () => {
+    try {
+      const res = await fetchUserRole({});
+      if (res?.status === "success") {
+        setRoleList(res.data);
+      }
+    } catch (err) {
+      toast("Failed to load user roles");
+    }
+  };
+
+  loadRoles();
+}, []);
+
   return (
     <Box
       minHeight="20vh"
@@ -260,23 +281,49 @@ const AddOutlet = () => {
 
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
-            Outlet <span style={{ color: "red" }}>*</span>
+            User Role <span style={{ color: "red" }}>*</span>
           </InputLabel>
           <Select
             fullWidth
             displayEmpty
-            value={selectedOutlet}
-            onChange={(e) => setSelectedOutlet(e.target.value)}
-            disabled={!outletList.length}
+            value={selectedRole?.id || ""}
+            onChange={(e) => {
+              const selected = roleList.find((role) => role.id === e.target.value);
+              setSelectedRole(selected || null);
+            }}
           >
-            <MenuItem value="" disabled>Select a outlet</MenuItem>
-            {outletList.map((out) => (
-              <MenuItem key={out.id} value={out.id}>
-                {out.name}
-              </MenuItem>
+            <MenuItem value="" disabled>Select a role</MenuItem>
+            {roleList
+              .filter((role) => role.name.toLowerCase() !== "super admin")
+              .map((role) => (
+                <MenuItem key={role.id} value={role.id}>
+                  {role.name}
+                </MenuItem>
             ))}
           </Select>
         </Box>
+
+        {selectedRole?.name === "User" && (
+          <Box mb={3}>
+            <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>
+              Outlet <span style={{ color: "red" }}>*</span>
+            </InputLabel>
+            <Select
+              fullWidth
+              displayEmpty
+              value={selectedOutlet}
+              onChange={(e) => setSelectedOutlet(e.target.value)}
+              disabled={!outletList.length}
+            >
+              <MenuItem value="" disabled>Select an outlet</MenuItem>
+              {outletList.map((out) => (
+                <MenuItem key={out.id} value={out.id}>
+                  {out.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </Box>
+        )}
 
         <Box mb={3}>
           <InputLabel sx={{ fontWeight: 600, fontSize: "1rem", mb: 1 }}>

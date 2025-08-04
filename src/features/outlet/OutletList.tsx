@@ -157,13 +157,13 @@ const OutletList = () => {
                   <TableCell sx={{ fontSize: "14px" }}>{row.shippingCity?.name || "—"}</TableCell>
                   <TableCell sx={{ fontSize: "14px" }}>{row.shippingState?.name || "—"}</TableCell>
                   <TableCell align="center">
-                    <IconButton
+                    {/* <IconButton
                       size="small"
                       color="primary"
                       onClick={() => console.log("Edit", row.id)}
                     >
                       <EditIcon fontSize="small" />
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                       size="small"
                       color="error"

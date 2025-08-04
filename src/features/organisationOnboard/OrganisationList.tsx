@@ -182,13 +182,13 @@ const OrganisationList = () => {
                       {/* <IconButton size="small" onClick={() => handleEdit(org.id)}>
                         <EditIcon fontSize="small" color="primary" />
                       </IconButton> */}
-                      <IconButton
+                      {/* <IconButton
                         size="small"
                         color="primary"
                         onClick={() => handleNavigate(`/organisation/${org.id}`)}
                       >
                         <EditIcon />
-                      </IconButton>
+                      </IconButton> */}
                       <IconButton size="small" onClick={() => handleOpenDialog(org.id)}>
                         <DeleteIcon fontSize="small" color="error" />
                       </IconButton>
