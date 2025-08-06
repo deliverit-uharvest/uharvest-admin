@@ -55,6 +55,17 @@ const OrderManagement = () => {
       field: "unique_id",
       headerName: "Order Id",
       flex: 2,
+      renderCell: (params) => {
+        const id = params.value;
+        return (
+          <span
+            style={{ color: "#1976d2", cursor: "pointer", textDecoration: "underline" }}
+            onClick={() => navigate(`/orders/${id}`)}
+          >
+            {id}
+          </span>
+        );
+      },
     },
     {
       field: "statusName",
@@ -75,19 +86,31 @@ const OrderManagement = () => {
       ),
     },
     {
+      field: "item",
+      headerName: "Item",
+      flex: 1,
+      renderCell: (params) => (
+        <span>{params.row.items?.length ?? "No Data"}</span>
+      ),
+    },
+    {
       field: "qty",
       headerName: "Qty",
       flex: 1,
-      renderCell: (params) => (
-        <span>{params.row.items?.[0]?.quantity ?? "No Data"}</span>
-      ),
+      renderCell: (params) => {
+        const totalQty = params.row.items?.reduce(
+          (sum: number, item: any) => sum + (item.quantity || 0),
+          0
+        );
+        return <span>{totalQty ?? "No Data"}</span>;
+      },
     },
     {
       field: "mobile",
       headerName: "Mobile",
       flex: 1,
       renderCell: (params) => (
-        <span>{params.row.customer?.mobile ?? "No Data"}</span>
+        <span>{params.row.user?.mobile ?? "No Data"}</span>
       ),
     },
     {

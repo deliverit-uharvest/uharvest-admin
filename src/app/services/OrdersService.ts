@@ -48,10 +48,16 @@ export const fetchOrdersStatus = async (): Promise<any> => {
   return response;
 };
 
-export const getOrdersById = async (id: number): Promise<any> => {
-  const response = await agent.Orders.getById(id);
-  return response;
-};
+ export const getOrdersById = async (id: number): Promise<any> => {
+   const response = await agent.Orders.getById(id);
+   return response;
+ };
+
+
+// export const getOrdersById = async (id:number) => {
+//   const result = await agent.Orders.getById(id);
+//   return result;
+// };
 
 export const deleteOrders = async (id: number): Promise<any> => {
   const response = await agent.Orders.delete(id);
