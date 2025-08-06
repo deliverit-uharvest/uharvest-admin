@@ -28,6 +28,7 @@ import AddOutletUser from "../../features/outlet/addUser";
 import CustomProduct from "../../features/product/CustomProduct";
 import AddSubCategory from "../../features/subCategory/SubCategoryAdd";
 import SubCategoryUpdate from "../../features/subCategory/subCategoryUpdate";
+import GetOrdersData from "../../features/orderManagement/getOrdersData";
 
 //test
 export const routes: RouteObject[] = [
@@ -102,16 +103,11 @@ export const routes: RouteObject[] = [
                 ],
               },
 
-
-
-
-              //
-
               {
                 path: "Orders",
                 children: [
                   { index: true, element: <OrderManagement /> },
-                  { path: "sales", element: <Salesreturn /> },
+                  { path: ":id", element: <GetOrdersData/> },
                 ],
               },
               {
