@@ -167,6 +167,7 @@ const Organisation = {
 
     updateOrganisation: (data: FormData, id: number) =>
     requests.patch(`organisation/update/${id}`, data),
+    
 };
 
 const Outlet = {
@@ -193,6 +194,11 @@ const Outlet = {
         "Content-Type": "application/json",
       },
     }),
+
+    getById: (id: number) => requests.get(`/outlet/${id}`),
+
+    updateOutlet: (data: FormData, id: number) =>
+    requests.patch(`outlet/update/${id}`, data),
 };
 
 const SubCategory = {

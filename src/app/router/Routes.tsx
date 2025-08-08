@@ -29,6 +29,8 @@ import CustomProduct from "../../features/product/CustomProduct";
 import AddSubCategory from "../../features/subCategory/SubCategoryAdd";
 import SubCategoryUpdate from "../../features/subCategory/subCategoryUpdate";
 import GetOrdersData from "../../features/orderManagement/getOrdersData";
+import UpdateOrganisation from "../../features/organisationOnboard/updateOrganisation";
+import UpdateOutlet from "../../features/outlet/updateOutlet";
 
 //test
 export const routes: RouteObject[] = [
@@ -119,6 +121,8 @@ export const routes: RouteObject[] = [
                   { path: "outlet/add", element: <AddOutlet /> },
                   { path: "outlet/user", element: <UserList /> },
                   { path: "outlet/user/add", element: <AddOutletUser /> },
+                  { path: "update/:id", element: <UpdateOrganisation /> },
+                  { path: "outlet/update/:id", element: <UpdateOutlet /> },
                 ],
               },
             ],

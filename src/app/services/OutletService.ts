@@ -60,6 +60,16 @@ export const deleteOutlet = async (id: number): Promise<any> => {
   return response.data;
 };
 
+export const getOutletById = async (id: number): Promise<any> => {
+  const response = await agent.Outlet.getById(id);
+  return response;
+};
+
+export const updateOutlet = async (data: any, id: number): Promise<any> => {
+  const response = await agent.Outlet.updateOutlet(data, id);
+  return response;
+};
+
 
 // export const fetchOrdersStatus = async (): Promise<any> => {
 //   const response = await agent.Orders.getstatus();

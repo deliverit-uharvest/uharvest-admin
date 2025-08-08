@@ -46,8 +46,8 @@ export const getOrganisationById = async (id: number): Promise<any> => {
   return response;
 };
 
-export const updateOrganisation = async (data: any): Promise<any> => {
-  const response = await agent.Organisation.getById(data);
+export const updateOrganisation = async (data: any, id: number): Promise<any> => {
+  const response = await agent.Organisation.updateOrganisation(data, id);
   return response;
 };
 

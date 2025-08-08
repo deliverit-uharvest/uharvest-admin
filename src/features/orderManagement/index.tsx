@@ -127,7 +127,9 @@ const OrderManagement = () => {
         const currentStatusId = params.row.statusHistory?.[0]?.status?.id || "";
         const currentStatusName = params.row.statusHistory?.[0]?.status?.name || "";
 
-        const isCancelled = currentStatusName.toLowerCase() === "cancelled";
+        const isActionDisabled = ["cancelled", "delivered", "returned"].includes(
+          currentStatusName.toLowerCase()
+        );
 
         const handleStatusChange = async (event: any) => {
           const newStatusId = event.target.value;
@@ -171,7 +173,7 @@ const OrderManagement = () => {
               <Select
                 value={currentStatusId}
                 onChange={handleStatusChange}
-                disabled={isCancelled}
+                disabled={isActionDisabled}
               >
                 {statusList.map((status) => (
                   <MenuItem key={status.id} value={status.id}>

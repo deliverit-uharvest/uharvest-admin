@@ -21,7 +21,7 @@ const UpdateOrganisation = () => {
 
   const [name, setName] = useState("");
   const [legalName, setLegalName] = useState("");
-  const [email, setEmail] = useState("");
+  //const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [secmobile, setSecMobile] = useState("");
   const [panNumber, setPanNumber] = useState("");
@@ -58,7 +58,7 @@ const UpdateOrganisation = () => {
           const data = res.data;
           setName(data.name);
           setLegalName(data.legalname);
-          setEmail(data.email);
+          //setEmail(data.email);
           setMobile(data.mobile);
           setSecMobile(data.secondary_mobile);
           setPanNumber(data.pan_number);
@@ -103,10 +103,10 @@ const UpdateOrganisation = () => {
 
   const handleSubmit = async () => {
     const payload = {
-      id: Number(id),
+      //id: Number(id),
       name,
       legalname: legalName,
-      email,
+      //email,
       mobile,
       secondary_mobile: secmobile,
       pan_number: panNumber,
@@ -121,8 +121,8 @@ const UpdateOrganisation = () => {
     };
 
     try {
-      const response = await updateOrganisation(payload);
-      if (response.data.status === "success") {
+      const response = await updateOrganisation(payload, Number(id));
+      if (response.status === "success") {
         toast("Organisation updated successfully!");
         navigate("/organisation");
       } else {
@@ -142,7 +142,7 @@ const UpdateOrganisation = () => {
 
         <Box mb={3}><InputLabel>Name</InputLabel><TextField fullWidth value={name} onChange={(e) => setName(e.target.value)} /></Box>
         <Box mb={3}><InputLabel>Legal Name</InputLabel><TextField fullWidth value={legalName} onChange={(e) => setLegalName(e.target.value)} /></Box>
-        <Box mb={3}><InputLabel>Email</InputLabel><TextField fullWidth value={email} onChange={(e) => setEmail(e.target.value)} /></Box>
+        {/* <Box mb={3}><InputLabel>Email</InputLabel><TextField fullWidth value={email} onChange={(e) => setEmail(e.target.value)} /></Box> */}
         <Box mb={3}><InputLabel>Mobile</InputLabel><TextField fullWidth value={mobile} onChange={(e) => setMobile(e.target.value)} /></Box>
         <Box mb={3}><InputLabel>Secondary Mobile</InputLabel><TextField fullWidth value={secmobile} onChange={(e) => setSecMobile(e.target.value)} /></Box>
         <Box mb={3}><InputLabel>PAN Number</InputLabel><TextField fullWidth value={panNumber} onChange={(e) => setPanNumber(e.target.value)} /></Box>
