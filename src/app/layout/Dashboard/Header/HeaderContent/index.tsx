@@ -10,8 +10,6 @@ import Profile from './Profile';
 import Notification from './Notification';
 import MobileSection from './MobileSection';
 
-// project import
-import { GithubOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@mui/icons-material';
 
 // ==============================|| HEADER - CONTENT ||============================== //
@@ -23,19 +21,6 @@ export default function HeaderContent() {
     <>
       {!downLG && <Search />}
       {downLG && <Box sx={{ width: '100%', ml: 1 }} />}
-      <IconButton
-        component={Link}
-        href="/dashboard"
-        // target="_blank"
-        disableRipple
-        color="secondary"
-        title="Download Free Version"
-        sx={{ color: 'text.primary', bgcolor: 'grey.100' }}
-      >
-        {/* <GithubOutlined /> */}
-        <ShoppingCartOutlined />
-      </IconButton>
-
       <Notification />
       {!downLG && <Profile />}
       {downLG && <MobileSection />}
