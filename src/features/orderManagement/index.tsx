@@ -125,6 +125,9 @@ const OrderManagement = () => {
       renderCell: (params) => {
         const orderId = params.row.unique_id;
         const currentStatusId = params.row.statusHistory?.[0]?.status?.id || "";
+        const currentStatusName = params.row.statusHistory?.[0]?.status?.name || "";
+
+        const isCancelled = currentStatusName.toLowerCase() === "cancelled";
 
         const handleStatusChange = async (event: any) => {
           const newStatusId = event.target.value;
@@ -165,7 +168,11 @@ const OrderManagement = () => {
         return (
           <Box>
             <FormControl fullWidth size="medium">
-              <Select value={currentStatusId} onChange={handleStatusChange}>
+              <Select
+                value={currentStatusId}
+                onChange={handleStatusChange}
+                disabled={isCancelled}
+              >
                 {statusList.map((status) => (
                   <MenuItem key={status.id} value={status.id}>
                     <Box display="flex" alignItems="center" gap={1}>
@@ -211,8 +218,6 @@ const OrderManagement = () => {
         statusId: selectedStatus === "" ? null : selectedStatus,
         orderId,
       });
-
-      console.log("Order response:", res);
 
       if (res?.status === "success") {
         const sortedData = res.data.sort(

@@ -11,11 +11,13 @@ import {
   Paper,
   Divider,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import { getOrdersById } from "../../app/services/OrdersService";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
+// ✅ Interfaces (moved to the top)
 interface Order {
   id: number;
   unique_id: string;
@@ -45,6 +47,7 @@ interface Order {
       packaging_type: string;
       base_unit: string;
       base_mrp: string;
+      quantity: string
     };
   }[];
 }
@@ -54,26 +57,41 @@ const GetOrdersData: React.FC = () => {
   const navigate = useNavigate();
   const [orderData, setOrderData] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [quantities, setQuantities] = useState<{ [index: number]: number }>({});
 
   useEffect(() => {
-  const fetchOrder = async () => {
-    try {
-      if (!id) return;
-      const res = await getOrdersById(Number(id));
-      if (res.status === "success") {
-        setOrderData(res.data);
-      } else {
+    const fetchOrder = async () => {
+      try {
+        if (!id) return;
+        const res = await getOrdersById(Number(id));
+        if (res.status === "success") {
+          setOrderData(res.data);
+
+          // Set initial quantity state
+          const qtyMap = res.data.items.reduce((acc: any, item: any, idx: number) => {
+            acc[idx] = item.quantity;
+            return acc;
+          }, {});
+          setQuantities(qtyMap);
+        } else {
+          toast("Failed to fetch order");
+        }
+      } catch (error) {
         toast("Failed to fetch order");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      toast("Failed to fetch order");
-    } finally {
-      setLoading(false); 
+    };
+
+    fetchOrder();
+  }, [id]);
+
+  const handleQuantityChange = (index: number, value: string) => {
+    const parsed = parseInt(value, 10);
+    if (!isNaN(parsed) && parsed >= 0) {
+      setQuantities({ ...quantities, [index]: parsed });
     }
   };
-
-  fetchOrder();
-}, [id]);
 
   if (loading) {
     return (
@@ -128,17 +146,32 @@ const GetOrdersData: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderData.items.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell>{item.product.name}</TableCell>
-                <TableCell>{item.product.sku}</TableCell>
-                <TableCell>{item.product.packaging_type}</TableCell>
-                <TableCell>₹{item.product.base_mrp}</TableCell>
-                <TableCell>{item.quantity} {item.product.base_unit}</TableCell>
-                <TableCell>₹{item.price}</TableCell>
-                <TableCell>₹{item.total}</TableCell>
-              </TableRow>
-            ))}
+            {orderData.items.map((item: Order["items"][0], index: number) => {
+              const quantity = quantities[index] ?? item.quantity;
+              const total = (parseFloat(item.price) * quantity).toFixed(2);
+
+              return (
+                <TableRow key={index}>
+                  <TableCell>{item.product.name}</TableCell>
+                  <TableCell>{item.product.sku}</TableCell>
+                  <TableCell>{item.product.packaging_type}</TableCell>
+                  <TableCell>₹{item.product.base_mrp}</TableCell>
+                  <TableCell>
+                    <TextField
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => handleQuantityChange(index, e.target.value)}
+                      size="small"
+                      InputProps={{ inputProps: { min: 0 } }}
+                      sx={{ width: 80 }}
+                    />{" "}
+                    {item.product.base_unit}
+                  </TableCell>
+                  <TableCell>₹{item.price}</TableCell>
+                  <TableCell>₹{total}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
